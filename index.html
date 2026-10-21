@@ -96,20 +96,20 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <nav class="max-w-2xl mx-auto px-4 flex border-t border-paper-200/60 text-xs sm:text-sm">
-            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+        <nav class="max-w-2xl mx-auto px-4 flex border-t border-paper-200/60 text-xs sm:text-sm overflow-x-auto custom-scrollbar">
+            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
                 <i data-lucide="timer" class="w-4 h-4"></i>
                 Foco
             </button>
-            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
                 <i data-lucide="calendar" class="w-4 h-4"></i>
                 Meu planejamento
             </button>
-            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
                 <i data-lucide="sun" class="w-4 h-4"></i>
                 Meu dia
             </button>
-            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
                 <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                 Meu progresso
             </button>
@@ -215,24 +215,50 @@
             </section>
         </div>
 
-        <!-- SECTION 2: MEU PLANEJAMENTO (DAILY PLANNING) -->
+        <!-- SECTION 2: MEU PLANEJAMENTO (DAILY PLANNING & MONTHLY CALENDAR) -->
         <div id="section-planejamento" class="hidden space-y-6">
-            <!-- Date Controller -->
-            <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl flex items-center justify-between">
-                <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Dia Anterior">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                </button>
-                <div class="text-center">
-                    <h2 id="plan-date-display" class="font-serif-title font-bold text-base text-charcoal-900">Hoje</h2>
-                    <span id="plan-subdate-display" class="text-[11px] text-charcoal-800 opacity-60">21 de Outubro</span>
+            <!-- Mode Toggle & Date Controller -->
+            <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between border-b border-paper-200/80 pb-2.5">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Planejamento Diário</span>
+                    <button id="btn-toggle-calendar-view" type="button" class="text-xs text-forest-900 font-medium hover:underline flex items-center gap-1">
+                        <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
+                        <span id="calendar-toggle-label">Ver Calendário Mensal</span>
+                    </button>
                 </div>
-                <div class="flex items-center gap-1">
-                    <button id="plan-today-btn" type="button" class="text-[11px] font-semibold bg-paper-200 hover:bg-paper-200/80 px-2.5 py-1 rounded-md text-charcoal-900 transition-colors hidden">
-                        Ir para Hoje
+
+                <!-- Day Controller -->
+                <div id="day-navigation-bar" class="flex items-center justify-between pt-1">
+                    <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Dia Anterior">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
                     </button>
-                    <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Próximo Dia">
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                    </button>
+                    <div class="text-center">
+                        <h2 id="plan-date-display" class="font-serif-title font-bold text-base text-charcoal-900">Hoje</h2>
+                        <span id="plan-subdate-display" class="text-[11px] text-charcoal-800 opacity-60">21 de Outubro</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button id="plan-today-btn" type="button" class="text-[11px] font-semibold bg-paper-200 hover:bg-paper-200/80 px-2.5 py-1 rounded-md text-charcoal-900 transition-colors hidden">
+                            Ir para Hoje
+                        </button>
+                        <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Próximo Dia">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURE 1: MONTHLY CALENDAR GRID (Hidden by default) -->
+            <div id="monthly-calendar-container" class="hidden bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <button id="cal-prev-month" type="button" class="p-1.5 hover:bg-paper-200 rounded-lg text-charcoal-900"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <h3 id="cal-month-year-label" class="font-serif-title font-bold text-sm text-charcoal-900">Outubro 2026</h3>
+                    <button id="cal-next-month" type="button" class="p-1.5 hover:bg-paper-200 rounded-lg text-charcoal-900"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-charcoal-800 opacity-60 uppercase">
+                    <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+                </div>
+                <div id="cal-grid-days" class="grid grid-cols-7 gap-1 text-center text-xs">
+                    <!-- Dynamic Month Days -->
                 </div>
             </div>
 
@@ -299,11 +325,27 @@
             </div>
         </div>
 
-        <!-- SECTION 4: MEU PROGRESSO -->
+        <!-- SECTION 4: MEU PROGRESSO & REVISÃO SEMANAL -->
         <div id="section-meu-progresso" class="hidden space-y-6">
             <div>
                 <h2 class="text-xl font-serif-title font-bold text-charcoal-900">Meu Progresso</h2>
                 <p class="text-xs text-charcoal-800 opacity-60">Visão acumulada do seu esforço</p>
+            </div>
+
+            <!-- FEATURE 2: WEEKLY REVIEW DASHBOARD -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <div class="bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Foco na Semana</span>
+                    <p id="rev-week-time" class="text-base font-bold text-forest-900">0 min</p>
+                </div>
+                <div class="bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Vitórias (7d)</span>
+                    <p id="rev-week-count" class="text-base font-bold text-charcoal-900">0 conquistas</p>
+                </div>
+                <div class="col-span-2 sm:col-span-1 bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Dia Mais Ativo</span>
+                    <p id="rev-peak-day" class="text-base font-bold text-forest-900">-</p>
+                </div>
             </div>
 
             <!-- Weekly Bar Chart -->
@@ -316,11 +358,18 @@
 
             <!-- All Entries Ledger -->
             <div class="space-y-3">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between flex-wrap gap-2">
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
-                    <button id="btn-export-backup" type="button" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1">
-                        <i data-lucide="download" class="w-3 h-3"></i> Backup JSON
-                    </button>
+                    <div class="flex items-center gap-3">
+                        <!-- FEATURE 3: IMPORT & EXPORT JSON -->
+                        <button id="btn-export-backup" type="button" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-medium">
+                            <i data-lucide="download" class="w-3 h-3"></i> Backup JSON
+                        </button>
+                        <label class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-medium cursor-pointer">
+                            <i data-lucide="upload" class="w-3 h-3"></i> Importar JSON
+                            <input type="file" id="input-import-json" accept=".json" class="hidden">
+                        </label>
+                    </div>
                 </div>
                 <div id="all-entries-list" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1">
                     <!-- Dynamic Content -->
@@ -468,6 +517,7 @@
         let currentTask = '';
 
         let selectedPlanDate = new Date();
+        let calendarCurrentMonth = new Date();
 
         const statToday = document.getElementById('stat-today');
         const statTotal = document.getElementById('stat-total');
@@ -512,9 +562,9 @@
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(t => {
                 if (t.dataset.nav === target) {
-                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors';
+                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0';
                 } else {
-                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors';
+                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0';
                 }
             });
 
@@ -588,6 +638,29 @@
 
             btnAddPlan.addEventListener('click', handleSavePlanTask);
 
+            // Toggle Monthly Calendar Grid
+            document.getElementById('btn-toggle-calendar-view')?.addEventListener('click', () => {
+                const grid = document.getElementById('monthly-calendar-container');
+                const isHidden = grid.classList.contains('hidden');
+                if (isHidden) {
+                    grid.classList.remove('hidden');
+                    document.getElementById('calendar-toggle-label').textContent = 'Ocultar Calendário';
+                    renderMonthlyCalendar();
+                } else {
+                    grid.classList.add('hidden');
+                    document.getElementById('calendar-toggle-label').textContent = 'Ver Calendário Mensal';
+                }
+            });
+
+            document.getElementById('cal-prev-month')?.addEventListener('click', () => {
+                calendarCurrentMonth.setMonth(calendarCurrentMonth.getMonth() - 1);
+                renderMonthlyCalendar();
+            });
+            document.getElementById('cal-next-month')?.addEventListener('click', () => {
+                calendarCurrentMonth.setMonth(calendarCurrentMonth.getMonth() + 1);
+                renderMonthlyCalendar();
+            });
+
             document.getElementById('btn-add-manual')?.addEventListener('click', () => {
                 document.getElementById('form-manual-entry')?.classList.toggle('hidden');
             });
@@ -604,7 +677,9 @@
                 updateAllDisplays();
             });
 
+            // Backup Export & Import Handlers
             document.getElementById('btn-export-backup')?.addEventListener('click', exportBackup);
+            document.getElementById('input-import-json')?.addEventListener('change', importBackup);
         });
 
         // --- TIMER LOGIC ---
@@ -778,7 +853,63 @@
             safeCreateIcons();
         }
 
-        // --- DIRECT ACTION: START FOCUS FROM PLAN TASK ---
+        // --- FEATURE 1: MONTHLY CALENDAR RENDER ---
+        function renderMonthlyCalendar() {
+            const label = document.getElementById('cal-month-year-label');
+            const grid = document.getElementById('cal-grid-days');
+            if (!label || !grid) return;
+
+            const year = calendarCurrentMonth.getFullYear();
+            const month = calendarCurrentMonth.getMonth();
+
+            label.textContent = calendarCurrentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const planData = getPlanData();
+            const selectedKey = getFormattedDateKey(selectedPlanDate);
+            const todayKey = getFormattedDateKey(new Date());
+
+            let html = '';
+
+            // Empty cells before first day
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div class="p-2"></div>`;
+            }
+
+            // Days of the month
+            for (let day = 1; day <= totalDaysInMonth; day++) {
+                const currentObj = new Date(year, month, day);
+                const dKey = getFormattedDateKey(currentObj);
+                const dayTasks = planData[dKey] || [];
+                const count = dayTasks.length;
+
+                const isSelected = (dKey === selectedKey);
+                const isToday = (dKey === todayKey);
+
+                let bgClass = 'hover:bg-paper-200 text-charcoal-900';
+                if (isSelected) bgClass = 'bg-forest-900 text-paper-50 font-bold';
+                else if (isToday) bgClass = 'bg-forest-900/10 text-forest-900 font-bold border border-forest-900/30';
+
+                html += `
+                    <button type="button" onclick="selectDateFromCalendar('${dKey}')" class="p-2 rounded-lg flex flex-col items-center justify-center transition-all ${bgClass}">
+                        <span>${day}</span>
+                        ${count > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-paper-50' : 'bg-forest-900'} mt-0.5"></span>` : '<span class="w-1.5 h-1.5 mt-0.5"></span>'}
+                    </button>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        window.selectDateFromCalendar = function(dateKeyStr) {
+            const parts = dateKeyStr.split('-');
+            selectedPlanDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            renderPlanningSection();
+            renderMonthlyCalendar();
+        };
+
         window.startFocusFromPlan = function(taskTitle) {
             switchNavTab('foco');
             taskInput.value = taskTitle;
@@ -817,6 +948,7 @@
             planTitleInput.value = '';
             planDescInput.value = '';
             renderPlanningSection();
+            renderMonthlyCalendar();
         }
 
         window.togglePlanTaskComplete = function(dateKey, taskId) {
@@ -858,10 +990,11 @@
                 planData[dateKey] = planData[dateKey].filter(t => t.id !== taskId);
                 savePlanData(planData);
                 renderPlanningSection();
+                renderMonthlyCalendar();
             }
         };
 
-        // --- RENDER OTHER SECTIONS ---
+        // --- RENDER OTHER SECTIONS & FEATURE 2: WEEKLY REVIEW ---
         function renderTodaySection() {
             const entries = getJournalEntries();
             const todayStr = new Date().toLocaleDateString('pt-BR');
@@ -885,14 +1018,54 @@
 
         function renderProgressSection() {
             const entries = getJournalEntries();
-            const chartContainer = document.getElementById('weekly-chart');
+            
+            // Generate 7-day stats for Weekly Review
             const days = [];
+            let weekTotalSecs = 0;
+            let weekTotalCount = 0;
+            let dayCounts = {};
+
             for (let i = 6; i >= 0; i--) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
                 days.push(d);
             }
 
+            days.forEach(d => {
+                const dStr = d.toLocaleDateString('pt-BR');
+                const dayEntries = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr);
+                
+                weekTotalCount += dayEntries.length;
+                dayCounts[dStr] = dayEntries.length;
+
+                dayEntries.forEach(e => {
+                    weekTotalSecs += (e.duration || 0);
+                });
+            });
+
+            // Feature 2 UI Bindings
+            const revTimeEl = document.getElementById('rev-week-time');
+            const revCountEl = document.getElementById('rev-week-count');
+            const revPeakEl = document.getElementById('rev-peak-day');
+
+            if (revTimeEl) revTimeEl.textContent = `${Math.round(weekTotalSecs / 60)} min`;
+            if (revCountEl) revCountEl.textContent = `${weekTotalCount} vitória(s)`;
+
+            // Peak Day Calculation
+            let maxCount = 0;
+            let peakDayName = '-';
+            Object.keys(dayCounts).forEach(dStr => {
+                if (dayCounts[dStr] > maxCount) {
+                    maxCount = dayCounts[dStr];
+                    const parts = dStr.split('/');
+                    const dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
+                    peakDayName = dateObj.toLocaleDateString('pt-BR', { weekday: 'short' });
+                }
+            });
+            if (revPeakEl) revPeakEl.textContent = maxCount > 0 ? `${peakDayName} (${maxCount})` : '-';
+
+            // Weekly Bar Chart
+            const chartContainer = document.getElementById('weekly-chart');
             const maxVal = Math.max(...days.map(d => {
                 const dStr = d.toLocaleDateString('pt-BR');
                 return entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
@@ -913,6 +1086,7 @@
                 `;
             }).join('');
 
+            // Ledger
             const listContainer = document.getElementById('all-entries-list');
             if (entries.length === 0) {
                 listContainer.innerHTML = `<div class="p-6 text-center text-xs text-charcoal-800 opacity-60 bg-paper-100 rounded-2xl">Histórico vazio.</div>`;
@@ -938,6 +1112,7 @@
             statTotal.textContent = entries.length;
         }
 
+        // --- FEATURE 3: EXPORT & IMPORT BACKUP JSON ---
         function exportBackup() {
             const dump = {};
             for (let i = 0; i < localStorage.length; i++) {
@@ -949,6 +1124,33 @@
             a.href = URL.createObjectURL(blob);
             a.download = `focusmicro-backup-${new Date().toISOString().slice(0, 10)}.json`;
             a.click();
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (confirm('Deseja restaurar este backup? Os seus dados locais atuais serão sobrescritos.')) {
+                        Object.keys(data).forEach(key => {
+                            if (key.startsWith('focusmicro')) {
+                                localStorage.setItem(key, data[key]);
+                            }
+                        });
+                        alert('Backup restaurado com sucesso!');
+                        updateAllDisplays();
+                        renderPlanningSection();
+                        renderTodaySection();
+                        renderProgressSection();
+                    }
+                } catch(err) {
+                    alert('Erro ao ler o ficheiro JSON. Certifique-se de que é um backup válido do FocusMicro.');
+                }
+            };
+            reader.readAsText(file);
         }
 
         function escapeHtml(str) {
