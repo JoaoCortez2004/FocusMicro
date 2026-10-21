@@ -209,34 +209,20 @@
                         </button>
                     </div>
 
-                    <!-- NOVO PLAYER DE SOM AMBIENTE REAL -->
-                    <div class="bg-paper-100 border border-paper-200 rounded-xl p-3 space-y-2 text-left">
-                        <div class="flex items-center justify-between">
+                    <!-- BOTÃO ÚNICO PEDIDO NO WHATSAPP: LOFI + CHUVA -->
+                    <div class="bg-paper-100 border border-paper-200 rounded-xl p-3 space-y-2">
+                        <button id="btn-toggle-lofi" type="button" class="w-full bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs text-charcoal-900 transition-all font-medium">
                             <div class="flex items-center gap-2">
-                                <i data-lucide="headphones" class="w-4 h-4 text-forest-900"></i>
-                                <span class="text-xs font-semibold text-charcoal-900">Som Ambiente de Foco</span>
+                                <i data-lucide="music" class="w-4 h-4 text-forest-900"></i>
+                                <span>Som Ambiente (Lofi + Chuva Baixinho)</span>
                             </div>
-                            <span id="sound-status-badge" class="text-[10px] font-medium text-charcoal-800 opacity-60">Desativado</span>
-                        </div>
+                            <span id="lofi-status-badge" class="opacity-60 text-[11px]">Desativado</span>
+                        </button>
 
-                        <!-- Opções de Sons Naturais -->
-                        <div class="grid grid-cols-3 gap-1.5 pt-1">
-                            <button type="button" onclick="playAmbientTrack('rain')" id="btn-sound-rain" class="sound-track-btn bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-lg py-2 px-1.5 text-[11px] text-charcoal-900 flex items-center justify-center gap-1 transition-all">
-                                🌧️ <span>Chuva</span>
-                            </button>
-                            <button type="button" onclick="playAmbientTrack('cafe')" id="btn-sound-cafe" class="sound-track-btn bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-lg py-2 px-1.5 text-[11px] text-charcoal-900 flex items-center justify-center gap-1 transition-all">
-                                ☕ <span>Café</span>
-                            </button>
-                            <button type="button" onclick="playAmbientTrack('forest')" id="btn-sound-forest" class="sound-track-btn bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-lg py-2 px-1.5 text-[11px] text-charcoal-900 flex items-center justify-center gap-1 transition-all">
-                                🌲 <span>Floresta</span>
-                            </button>
-                        </div>
-
-                        <!-- Controle de Volume -->
                         <div id="volume-control-box" class="flex items-center gap-2 pt-1 hidden">
-                            <i data-lucide="volume-2" class="w-3.5 h-3.5 text-charcoal-800 opacity-60"></i>
-                            <input type="range" id="sound-volume-range" min="0" max="1" step="0.05" value="0.4" class="w-full h-1 bg-paper-200 rounded-lg appearance-none cursor-pointer">
-                            <button type="button" onclick="stopAmbientAudio()" class="text-[10px] text-terracotta-600 font-semibold hover:underline shrink-0">Parar</button>
+                            <i data-lucide="volume-1" class="w-3.5 h-3.5 text-charcoal-800 opacity-60"></i>
+                            <input type="range" id="sound-volume-range" min="0" max="1" step="0.05" value="0.25" class="w-full h-1 bg-paper-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-[10px] text-charcoal-800 opacity-60 font-mono">Volume</span>
                         </div>
                     </div>
                 </div>
@@ -419,84 +405,66 @@
             }
         }
 
-        // --- SISTEMA DE ÁUDIO AMBIENTE REAL E DESTRAVAMENTO MOBILE ---
-        const audioTracks = {
-            rain: 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_8a2d1d2b82.mp3',
-            cafe: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3',
-            forest: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3'
-        };
+        // --- SISTEMA DE ÁUDIO LOFI + CHUVA SUAVE ---
+        // Áudio Lofi relaxante com textura de chuva ambiente
+        const LOFI_RAIN_URL = 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3';
+        
+        let lofiAudio = null;
+        let isLofiPlaying = false;
 
-        let currentAudio = null;
-        let activeTrackKey = null;
-
-        // Unlock mobile audio policy on user interaction
-        function unlockMobileAudio() {
-            if (currentAudio) {
-                currentAudio.play().then(() => {}).catch(() => {});
-            }
-        }
-        document.addEventListener('touchstart', unlockMobileAudio, { once: true });
-        document.addEventListener('click', unlockMobileAudio, { once: true });
-
-        window.playAmbientTrack = function(trackKey) {
+        function toggleLofiAudio() {
+            const statusBadge = document.getElementById('lofi-status-badge');
+            const btn = document.getElementById('btn-toggle-lofi');
             const volumeBox = document.getElementById('volume-control-box');
-            const statusBadge = document.getElementById('sound-status-badge');
-            const trackBtns = document.querySelectorAll('.sound-track-btn');
 
-            if (activeTrackKey === trackKey && currentAudio && !currentAudio.paused) {
-                stopAmbientAudio();
-                return;
+            if (!lofiAudio) {
+                lofiAudio = new Audio(LOFI_RAIN_URL);
+                lofiAudio.loop = true;
+                lofiAudio.volume = parseFloat(document.getElementById('sound-volume-range').value || 0.25);
             }
 
-            stopAmbientAudio();
-
-            currentAudio = new Audio(audioTracks[trackKey]);
-            currentAudio.loop = true;
-            currentAudio.volume = parseFloat(document.getElementById('sound-volume-range').value || 0.4);
-
-            currentAudio.play().then(() => {
-                activeTrackKey = trackKey;
-                volumeBox.classList.remove('hidden');
-
-                trackBtns.forEach(btn => {
-                    btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
-                    btn.classList.add('bg-paper-50', 'text-charcoal-900');
-                });
-
-                const activeBtn = document.getElementById(`btn-sound-${trackKey}`);
-                if (activeBtn) {
-                    activeBtn.classList.remove('bg-paper-50', 'text-charcoal-900');
-                    activeBtn.classList.add('bg-forest-900', 'text-paper-50', 'border-forest-900');
-                }
-
-                const names = { rain: '🌧️ Chuva', cafe: '☕ Café', forest: '🌲 Floresta' };
-                statusBadge.textContent = `Tocando: ${names[trackKey]}`;
-                statusBadge.className = 'text-[10px] font-bold text-forest-900';
-            }).catch(err => {
-                alert('Toque novamente na tela para liberar o som no celular!');
-            });
-        };
-
-        window.stopAmbientAudio = function() {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-                currentAudio = null;
-            }
-            activeTrackKey = null;
-            
-            document.getElementById('volume-control-box')?.classList.add('hidden');
-            const statusBadge = document.getElementById('sound-status-badge');
-            if (statusBadge) {
+            if (isLofiPlaying) {
+                lofiAudio.pause();
+                isLofiPlaying = false;
                 statusBadge.textContent = 'Desativado';
-                statusBadge.className = 'text-[10px] font-medium text-charcoal-800 opacity-60';
-            }
-
-            document.querySelectorAll('.sound-track-btn').forEach(btn => {
+                statusBadge.className = 'opacity-60 text-[11px]';
                 btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
                 btn.classList.add('bg-paper-50', 'text-charcoal-900');
-            });
-        };
+                volumeBox.classList.add('hidden');
+            } else {
+                lofiAudio.play().then(() => {
+                    isLofiPlaying = true;
+                    statusBadge.textContent = 'A tocar baixinho 🌧️';
+                    statusBadge.className = 'text-forest-900 font-bold text-[11px]';
+                    btn.classList.remove('bg-paper-50', 'text-charcoal-900');
+                    btn.classList.add('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                    volumeBox.classList.remove('hidden');
+                }).catch(err => {
+                    alert('Toque na tela para autorizar o áudio no celular!');
+                });
+            }
+        }
+
+        function stopLofiAudio() {
+            if (lofiAudio) {
+                lofiAudio.pause();
+                lofiAudio.currentTime = 0;
+            }
+            isLofiPlaying = false;
+            const statusBadge = document.getElementById('lofi-status-badge');
+            const btn = document.getElementById('btn-toggle-lofi');
+            const volumeBox = document.getElementById('volume-control-box');
+
+            if (statusBadge) {
+                statusBadge.textContent = 'Desativado';
+                statusBadge.className = 'opacity-60 text-[11px]';
+            }
+            if (btn) {
+                btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                btn.classList.add('bg-paper-50', 'text-charcoal-900');
+            }
+            if (volumeBox) volumeBox.classList.add('hidden');
+        }
 
         // --- APP STATE & KEYS ---
         const HISTORY_KEY = 'focusmicro_history';
@@ -594,8 +562,9 @@
             btnReset.addEventListener('click', resetToSetup);
             btnCompleteNow?.addEventListener('click', onTimerComplete);
 
+            document.getElementById('btn-toggle-lofi')?.addEventListener('click', toggleLofiAudio);
             document.getElementById('sound-volume-range')?.addEventListener('input', (e) => {
-                if (currentAudio) currentAudio.volume = parseFloat(e.target.value);
+                if (lofiAudio) lofiAudio.volume = parseFloat(e.target.value);
             });
 
             btnSaveVictory.addEventListener('click', () => {
@@ -710,8 +679,8 @@
         function togglePause() {
             isPaused = !isPaused;
             btnPauseText.textContent = isPaused ? 'Continuar' : 'Pausar';
-            if (isPaused && currentAudio) currentAudio.pause();
-            else if (!isPaused && currentAudio) currentAudio.play().catch(()=>{});
+            if (isPaused && lofiAudio) lofiAudio.pause();
+            else if (!isPaused && lofiAudio && isLofiPlaying) lofiAudio.play().catch(()=>{});
         }
 
         function extendTime(sec) {
@@ -722,7 +691,7 @@
 
         function resetToSetup() {
             clearInterval(timerInterval);
-            stopAmbientAudio();
+            stopLofiAudio();
             document.title = 'FocusMicro - Caderno de Progresso Pessoal';
             timeRemaining = initialDuration;
             viewTimer.classList.add('hidden');
@@ -731,7 +700,7 @@
 
         function onTimerComplete() {
             clearInterval(timerInterval);
-            stopAmbientAudio();
+            stopLofiAudio();
             document.title = '🎉 Micro-Vitória!';
             modalTaskName.textContent = `"${currentTask}"`;
             modalCelebration.classList.remove('hidden');
