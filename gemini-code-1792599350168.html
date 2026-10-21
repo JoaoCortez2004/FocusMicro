@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusMicro - Caderno de Progresso Pessoal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: {
+                            50: '#FAF8F5',
+                            100: '#F4F0EA',
+                            200: '#E8E2D8',
+                        },
+                        forest: {
+                            800: '#23382B',
+                            900: '#19281F',
+                        },
+                        terracotta: {
+                            600: '#C05A46',
+                            700: '#A34634',
+                        },
+                        charcoal: {
+                            800: '#2B2C2C',
+                            900: '#1C1D1D',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['DM Sans', 'sans-serif'],
+                        mono: ['DM Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #FAF8F5;
+            color: #1C1D1D;
+            background-image: radial-gradient(#E8E2D8 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+        .font-mono-timer {
+            font-family: 'DM Mono', monospace;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.02);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #E8E2D8;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-forest-800 selection:text-paper-50">
+
+    <!-- HEADER & NAV -->
+    <header class="border-b border-paper-200 bg-paper-50/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="switchNavTab('foco')">
+                <div class="w-7 h-7 rounded-md bg-forest-900 text-paper-50 flex items-center justify-center font-serif-title font-bold text-sm">
+                    F
+                </div>
+                <span class="font-serif-title font-bold text-lg text-charcoal-900 tracking-tight">FocusMicro</span>
+            </div>
+
+            <!-- Stats Header Badge -->
+            <div class="flex items-center gap-2 text-xs">
+                <div class="bg-paper-100 border border-paper-200 px-3 py-1 rounded-full flex items-center gap-2">
+                    <span class="text-charcoal-800 opacity-70">Hoje:</span>
+                    <span id="stat-today" class="font-bold text-forest-900">0</span>
+                </div>
+                <div class="bg-paper-100 border border-paper-200 px-3 py-1 rounded-full flex items-center gap-2">
+                    <span class="text-charcoal-800 opacity-70">Total:</span>
+                    <span id="stat-total" class="font-bold text-charcoal-900">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="max-w-2xl mx-auto px-4 flex border-t border-paper-200/60 text-xs sm:text-sm">
+            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+                <i data-lucide="timer" class="w-4 h-4"></i>
+                Foco
+            </button>
+            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                Meu planejamento
+            </button>
+            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+                <i data-lucide="sun" class="w-4 h-4"></i>
+                Meu dia
+            </button>
+            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors">
+                <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                Meu progresso
+            </button>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-xl mx-auto w-full px-4 py-6 flex-1 flex flex-col justify-center">
+
+        <!-- SECTION 1: FOCO (TIMER) -->
+        <div id="section-foco" class="space-y-6">
+            
+            <!-- Setup View -->
+            <section id="view-setup" class="space-y-6">
+                <div class="text-center space-y-2">
+                    <span class="inline-block px-3 py-1 rounded-full bg-paper-100 border border-paper-200 text-forest-900 text-xs font-medium">
+                        ✦ Vencendo a inércia em pequenos passos
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-serif-title font-bold text-charcoal-900 leading-snug">
+                        Comece pelo que dá <br><span class="text-forest-900 italic font-normal">pra fazer agora.</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-charcoal-800 opacity-75 max-w-sm mx-auto">
+                        Qual é a menor ação possível neste momento? Reduza a resistência ao mínimo.
+                    </p>
+                </div>
+
+                <div class="bg-paper-100 border border-paper-200 p-5 rounded-2xl shadow-sm space-y-5">
+                    <div class="space-y-1.5">
+                        <label for="task-input" class="block text-xs font-semibold text-charcoal-800 uppercase tracking-wider">Sua Micro-Tarefa</label>
+                        <input type="text" id="task-input" placeholder="Ex: Lavar 2 copos, abrir o projeto..." 
+                            class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-3 text-charcoal-900 placeholder-charcoal-800/40 focus:outline-none focus:border-forest-900 transition-all text-sm">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-semibold text-charcoal-800 uppercase tracking-wider">Tempo Estimado</label>
+                        <div class="grid grid-cols-3 gap-2.5">
+                            <button type="button" data-time="120" class="btn-time-preset py-2.5 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-200/50 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center">
+                                <span class="font-bold text-sm">2 min</span>
+                                <span class="text-[10px] opacity-60">Direto ao ponto</span>
+                            </button>
+                            <button type="button" data-time="180" class="btn-time-preset active py-2.5 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center">
+                                <span class="font-bold text-sm">3 min</span>
+                                <span class="text-[10px] text-forest-900/80">Recomendado</span>
+                            </button>
+                            <button type="button" data-time="300" class="btn-time-preset py-2.5 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-200/50 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center">
+                                <span class="font-bold text-sm">5 min</span>
+                                <span class="text-[10px] opacity-60">Aprofundado</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="btn-start" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-medium py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
+                        <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                        <span>Iniciar Foco</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Timer Running View -->
+            <section id="view-timer" class="hidden space-y-6 text-center">
+                <div class="bg-paper-100 border border-paper-200 rounded-2xl p-4">
+                    <span class="text-[11px] uppercase tracking-wider text-charcoal-800 opacity-60 font-medium block mb-0.5">Em Foco</span>
+                    <p id="timer-task-display" class="text-charcoal-900 font-serif-title font-bold text-lg line-clamp-2">"Lavar 2 copos"</p>
+                </div>
+
+                <div class="py-4 space-y-2">
+                    <div id="timer-countdown" class="font-mono-timer text-7xl font-bold tracking-tight text-charcoal-900">
+                        03:00
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-xs">
+                        <span id="timer-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-900/10 text-forest-900 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-forest-900 animate-pulse"></span>
+                            Em andamento
+                        </span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-center gap-2">
+                        <button id="btn-pause" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-medium py-3 px-4 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs">
+                            <i id="pause-icon" data-lucide="pause" class="w-4 h-4"></i>
+                            <span id="btn-pause-text">Pausar</span>
+                        </button>
+
+                        <button id="btn-add-2min" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-forest-900 font-medium py-3 px-4 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>+2 Min</span>
+                        </button>
+
+                        <button id="btn-reset" type="button" class="bg-paper-100 hover:bg-terracotta-600/10 hover:text-terracotta-600 text-charcoal-800 font-medium p-3 rounded-xl transition-all border border-paper-200" title="Descartar Sessão">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <button id="btn-toggle-sound" type="button" class="w-full bg-paper-100 hover:bg-paper-200 border border-paper-200 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs text-charcoal-800 transition-all">
+                        <div class="flex items-center gap-2">
+                            <i id="sound-icon" data-lucide="volume-x" class="w-4 h-4 opacity-50"></i>
+                            <span>Som Ambiente (Ruído Suave)</span>
+                        </div>
+                        <span id="sound-status" class="opacity-60 font-medium">Desativado</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- SECTION 2: MEU PLANEJAMENTO (DAILY PLANNING) -->
+        <div id="section-planejamento" class="hidden space-y-6">
+            <!-- Date Controller -->
+            <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl flex items-center justify-between">
+                <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Dia Anterior">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <div class="text-center">
+                    <h2 id="plan-date-display" class="font-serif-title font-bold text-base text-charcoal-900">Hoje</h2>
+                    <span id="plan-subdate-display" class="text-[11px] text-charcoal-800 opacity-60">21 de Outubro</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <button id="plan-today-btn" type="button" class="text-[11px] font-semibold bg-paper-200 hover:bg-paper-200/80 px-2.5 py-1 rounded-md text-charcoal-900 transition-colors hidden">
+                        Ir para Hoje
+                    </button>
+                    <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Próximo Dia">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Task Form -->
+            <div id="plan-form-container" class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800">Planejar Micro-Tarefa (Máx 3)</span>
+                    <span id="plan-counter-badge" class="text-xs font-bold text-forest-900">0/3</span>
+                </div>
+                <input type="text" id="plan-title-input" placeholder="O que você precisa fazer?" 
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2.5 text-sm text-charcoal-900 placeholder-charcoal-800/40 focus:outline-none focus:border-forest-900">
+                <input type="text" id="plan-desc-input" placeholder="Detalhe opcional ou instrução rápida..." 
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2 text-xs text-charcoal-900 placeholder-charcoal-800/40 focus:outline-none focus:border-forest-900">
+                <button id="btn-add-plan" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-medium py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span id="btn-plan-submit-label">Adicionar ao Planejamento</span>
+                </button>
+            </div>
+
+            <!-- Notice when limit reached -->
+            <div id="plan-limit-msg" class="hidden bg-forest-900/10 border border-forest-900/20 p-3 rounded-xl text-xs text-forest-900 flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+                <span>Limite diário de 3 tarefas atingido. Conclua ou edite uma para adicionar outra.</span>
+            </div>
+
+            <!-- Task List -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Tarefas do Dia</h3>
+                <div id="plan-task-list" class="space-y-2">
+                    <!-- Dynamic tasks -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: MEU DIA -->
+        <div id="section-meu-dia" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-serif-title font-bold text-charcoal-900">Meu Dia</h2>
+                    <p class="text-xs text-charcoal-800 opacity-60">Suas vitórias e registros de hoje</p>
+                </div>
+                <button id="btn-add-manual" type="button" class="bg-paper-100 border border-paper-200 hover:bg-paper-200 text-charcoal-900 text-xs font-medium py-2 px-3 rounded-xl flex items-center gap-1.5 transition-colors">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    <span>Registro Manual</span>
+                </button>
+            </div>
+
+            <!-- Manual Entry Form (Hidden by default) -->
+            <form id="form-manual-entry" class="hidden bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Novo Registro Manual</h3>
+                <input type="text" id="manual-task-input" placeholder="O que você concluiu?" required
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-forest-900">
+                <textarea id="manual-note-input" placeholder="Anotação opcional..." rows="2"
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-forest-900"></textarea>
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="bg-forest-900 text-paper-50 text-xs font-medium px-3 py-2 rounded-lg">Salvar</button>
+                    <button type="button" id="btn-cancel-manual" class="text-xs text-charcoal-800 opacity-60 px-2 py-2">Cancelar</button>
+                </div>
+            </form>
+
+            <!-- Today's Entries -->
+            <div id="today-entries-list" class="space-y-2">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <!-- SECTION 4: MEU PROGRESSO -->
+        <div id="section-meu-progresso" class="hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-serif-title font-bold text-charcoal-900">Meu Progresso</h2>
+                <p class="text-xs text-charcoal-800 opacity-60">Visão acumulada do seu esforço</p>
+            </div>
+
+            <!-- Weekly Bar Chart -->
+            <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Últimos 7 dias</span>
+                <div id="weekly-chart" class="flex items-end justify-between gap-2 h-28 pt-4">
+                    <!-- Dynamic Bars -->
+                </div>
+            </div>
+
+            <!-- All Entries Ledger -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
+                    <button id="btn-export-backup" type="button" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1">
+                        <i data-lucide="download" class="w-3 h-3"></i> Backup JSON
+                    </button>
+                </div>
+                <div id="all-entries-list" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-paper-200/60 py-4 text-center text-xs text-charcoal-800 opacity-50">
+        <p>FocusMicro — um dia de cada vez, sem pressa nem culpa.</p>
+    </footer>
+
+    <!-- CELEBRATION MODAL -->
+    <div id="modal-celebration" class="fixed inset-0 bg-charcoal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-paper-50 border border-paper-200 rounded-2xl p-6 max-w-sm w-full shadow-xl text-center space-y-5">
+            <div class="w-12 h-12 bg-forest-900/10 text-forest-900 rounded-full flex items-center justify-center mx-auto">
+                <i data-lucide="award" class="w-6 h-6"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-serif-title font-bold text-xl text-charcoal-900">Micro-vitória concluída!</h3>
+                <p id="modal-task-name" class="text-xs text-charcoal-800 opacity-80 italic">"..."</p>
+            </div>
+            <div class="space-y-2">
+                <button id="btn-save-victory" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-medium py-3 rounded-xl transition-all">
+                    Guardar no Diário
+                </button>
+                <button id="btn-extend-victory" type="button" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-medium py-2.5 rounded-xl border border-paper-200 transition-all">
+                    +2 min de impulso
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIO ENGINE & SCRIPT -->
+    <script>
+        function safeCreateIcons() {
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                try { window.lucide.createIcons(); } catch(e) {}
+            }
+        }
+
+        // --- SOUND ENGINE (WEB AUDIO API) ---
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.noiseNode = null;
+                this.gainNode = null;
+                this.isNoisePlaying = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioCtx();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            toggleAmbientNoise() {
+                this.init();
+                if (this.isNoisePlaying) {
+                    this.stopAmbientNoise();
+                    return false;
+                }
+
+                const bufferSize = 2 * this.ctx.sampleRate;
+                const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+
+                let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+                for (let i = 0; i < bufferSize; i++) {
+                    const white = Math.random() * 2 - 1;
+                    b0 = 0.99886 * b0 + white * 0.0555179;
+                    b1 = 0.99332 * b1 + white * 0.0750759;
+                    b2 = 0.96900 * b2 + white * 0.1538520;
+                    b3 = 0.86650 * b3 + white * 0.3104856;
+                    b4 = 0.55000 * b4 + white * 0.5329522;
+                    b5 = -0.7616 * b5 - white * 0.0168980;
+                    output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                    output[i] *= 0.01;
+                    b6 = white * 0.115926;
+                }
+
+                this.noiseNode = this.ctx.createBufferSource();
+                this.noiseNode.buffer = noiseBuffer;
+                this.noiseNode.loop = true;
+
+                this.gainNode = this.ctx.createGain();
+                this.gainNode.gain.setValueAtTime(0.05, this.ctx.currentTime);
+
+                this.noiseNode.connect(this.gainNode);
+                this.gainNode.connect(this.ctx.destination);
+
+                this.noiseNode.start();
+                this.isNoisePlaying = true;
+                return true;
+            }
+
+            stopAmbientNoise() {
+                if (this.noiseNode) {
+                    try {
+                        this.noiseNode.stop();
+                        this.noiseNode.disconnect();
+                    } catch(e) {}
+                    this.noiseNode = null;
+                }
+                this.isNoisePlaying = false;
+            }
+
+            playChime() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.8);
+
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 2.0);
+            }
+        }
+
+        // --- APP STATE & KEYS ---
+        const soundEngine = new SoundEngine();
+        const HISTORY_KEY = 'focusmicro_history';
+        const PLAN_KEY = 'focusmicro_plan_v1';
+
+        let timerInterval = null;
+        let timeRemaining = 180;
+        let initialDuration = 180;
+        let isPaused = false;
+        let currentTask = '';
+
+        let selectedPlanDate = new Date();
+
+        const statToday = document.getElementById('stat-today');
+        const statTotal = document.getElementById('stat-total');
+
+        const viewSetup = document.getElementById('view-setup');
+        const viewTimer = document.getElementById('view-timer');
+        const taskInput = document.getElementById('task-input');
+        const timePresetBtns = document.querySelectorAll('.btn-time-preset');
+        const btnStart = document.getElementById('btn-start');
+
+        const timerCountdown = document.getElementById('timer-countdown');
+        const timerTaskDisplay = document.getElementById('timer-task-display');
+        const btnPause = document.getElementById('btn-pause');
+        const btnPauseText = document.getElementById('btn-pause-text');
+        const btnAdd2Min = document.getElementById('btn-add-2min');
+        const btnReset = document.getElementById('btn-reset');
+
+        const btnToggleSound = document.getElementById('btn-toggle-sound');
+        const soundStatus = document.getElementById('sound-status');
+
+        const modalCelebration = document.getElementById('modal-celebration');
+        const modalTaskName = document.getElementById('modal-task-name');
+        const btnSaveVictory = document.getElementById('btn-save-victory');
+        const btnExtendVictory = document.getElementById('btn-extend-victory');
+
+        const planDateDisplay = document.getElementById('plan-date-display');
+        const planSubdateDisplay = document.getElementById('plan-subdate-display');
+        const planTodayBtn = document.getElementById('plan-today-btn');
+        const planPrevDate = document.getElementById('plan-prev-date');
+        const planNextDate = document.getElementById('plan-next-date');
+        const planTitleInput = document.getElementById('plan-title-input');
+        const planDescInput = document.getElementById('plan-desc-input');
+        const btnAddPlan = document.getElementById('btn-add-plan');
+        const planCounterBadge = document.getElementById('plan-counter-badge');
+        const planLimitMsg = document.getElementById('plan-limit-msg');
+        const planTaskList = document.getElementById('plan-task-list');
+
+        let editingPlanId = null;
+
+        // --- GLOBAL NAVIGATION ---
+        window.switchNavTab = function(target) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(t => {
+                if (t.dataset.nav === target) {
+                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors';
+                } else {
+                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors';
+                }
+            });
+
+            document.getElementById('section-foco').classList.add('hidden');
+            document.getElementById('section-planejamento').classList.add('hidden');
+            document.getElementById('section-meu-dia').classList.add('hidden');
+            document.getElementById('section-meu-progresso').classList.add('hidden');
+
+            const activeSection = document.getElementById(`section-${target}`);
+            if (activeSection) activeSection.classList.remove('hidden');
+
+            if (target === 'planejamento') renderPlanningSection();
+            if (target === 'meu-dia') renderTodaySection();
+            if (target === 'meu-progresso') renderProgressSection();
+        };
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            safeCreateIcons();
+            updateAllDisplays();
+
+            timePresetBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    timePresetBtns.forEach(b => {
+                        b.className = 'btn-time-preset py-2.5 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-200/50 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center';
+                    });
+                    btn.className = 'btn-time-preset active py-2.5 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center';
+                    timeRemaining = parseInt(btn.dataset.time);
+                    initialDuration = timeRemaining;
+                });
+            });
+
+            btnStart.addEventListener('click', startSession);
+            taskInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') startSession(); });
+            btnPause.addEventListener('click', togglePause);
+            btnAdd2Min.addEventListener('click', () => extendTime(120));
+            btnReset.addEventListener('click', resetToSetup);
+
+            btnToggleSound.addEventListener('click', () => {
+                const isPlaying = soundEngine.toggleAmbientNoise();
+                soundStatus.textContent = isPlaying ? 'Ativado' : 'Desativado';
+                soundStatus.className = isPlaying ? 'text-forest-900 font-semibold' : 'opacity-60 font-medium';
+            });
+
+            btnSaveVictory.addEventListener('click', () => {
+                saveJournalEntry(currentTask, initialDuration);
+                closeModal();
+                resetToSetup();
+            });
+
+            btnExtendVictory.addEventListener('click', () => {
+                saveJournalEntry(currentTask, initialDuration);
+                closeModal();
+                timeRemaining = 120;
+                initialDuration = 120;
+                startTimerLoop();
+            });
+
+            planPrevDate.addEventListener('click', () => {
+                selectedPlanDate.setDate(selectedPlanDate.getDate() - 1);
+                renderPlanningSection();
+            });
+            planNextDate.addEventListener('click', () => {
+                selectedPlanDate.setDate(selectedPlanDate.getDate() + 1);
+                renderPlanningSection();
+            });
+            planTodayBtn.addEventListener('click', () => {
+                selectedPlanDate = new Date();
+                renderPlanningSection();
+            });
+
+            btnAddPlan.addEventListener('click', handleSavePlanTask);
+
+            document.getElementById('btn-add-manual')?.addEventListener('click', () => {
+                document.getElementById('form-manual-entry')?.classList.toggle('hidden');
+            });
+            document.getElementById('btn-cancel-manual')?.addEventListener('click', () => {
+                document.getElementById('form-manual-entry')?.classList.add('hidden');
+            });
+            document.getElementById('form-manual-entry')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const task = document.getElementById('manual-task-input').value;
+                const note = document.getElementById('manual-note-input').value;
+                saveJournalEntry(task, 0, note);
+                document.getElementById('form-manual-entry').reset();
+                document.getElementById('form-manual-entry').classList.add('hidden');
+                updateAllDisplays();
+            });
+
+            document.getElementById('btn-export-backup')?.addEventListener('click', exportBackup);
+        });
+
+        // --- TIMER LOGIC ---
+        function startSession() {
+            currentTask = taskInput.value.trim() || 'Micro-Ação Sem Nome';
+            timerTaskDisplay.textContent = `"${currentTask}"`;
+            
+            viewSetup.classList.add('hidden');
+            viewTimer.classList.remove('hidden');
+            isPaused = false;
+            btnPauseText.textContent = 'Pausar';
+            
+            updateTimerDisplay();
+            startTimerLoop();
+        }
+
+        function startTimerLoop() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                    if (timeRemaining <= 0) {
+                        clearInterval(timerInterval);
+                        onTimerComplete();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            timerCountdown.textContent = formatted;
+            document.title = `(${formatted}) FocusMicro`;
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            btnPauseText.textContent = isPaused ? 'Continuar' : 'Pausar';
+        }
+
+        function extendTime(sec) {
+            timeRemaining += sec;
+            initialDuration += sec;
+            updateTimerDisplay();
+        }
+
+        function resetToSetup() {
+            clearInterval(timerInterval);
+            soundEngine.stopAmbientNoise();
+            document.title = 'FocusMicro - Caderno de Progresso Pessoal';
+            timeRemaining = initialDuration;
+            viewTimer.classList.add('hidden');
+            viewSetup.classList.remove('hidden');
+        }
+
+        function onTimerComplete() {
+            soundEngine.stopAmbientNoise();
+            soundEngine.playChime();
+            document.title = '🎉 Micro-Vitória!';
+            modalTaskName.textContent = `"${currentTask}"`;
+            modalCelebration.classList.remove('hidden');
+            setTimeout(() => modalCelebration.classList.remove('opacity-0'), 10);
+        }
+
+        function closeModal() {
+            modalCelebration.classList.add('opacity-0');
+            setTimeout(() => modalCelebration.classList.add('hidden'), 300);
+        }
+
+        // --- LOCAL STORAGE (JOURNAL) ---
+        function getJournalEntries() {
+            try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+            catch(e) { return []; }
+        }
+
+        function saveJournalEntry(task, duration, note = '') {
+            const entries = getJournalEntries();
+            const now = new Date();
+            const newEntry = {
+                id: 'j-' + Date.now(),
+                task: task,
+                note: note,
+                duration: duration,
+                timestamp: now.toISOString(),
+                dateStr: now.toLocaleDateString('pt-BR')
+            };
+            entries.unshift(newEntry);
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(entries));
+            updateAllDisplays();
+        }
+
+        // --- LOCAL STORAGE (PLANNING) ---
+        function getPlanData() {
+            try { return JSON.parse(localStorage.getItem(PLAN_KEY)) || {}; }
+            catch(e) { return {}; }
+        }
+
+        function savePlanData(data) {
+            localStorage.setItem(PLAN_KEY, JSON.stringify(data));
+        }
+
+        function getFormattedDateKey(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        // --- RENDER PLANNING SECTION ---
+        function renderPlanningSection() {
+            const dateKey = getFormattedDateKey(selectedPlanDate);
+            const todayKey = getFormattedDateKey(new Date());
+            const isToday = (dateKey === todayKey);
+
+            if (isToday) {
+                planDateDisplay.textContent = 'Hoje';
+                planTodayBtn.classList.add('hidden');
+            } else {
+                planDateDisplay.textContent = selectedPlanDate.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' });
+                planTodayBtn.classList.remove('hidden');
+            }
+            planSubdateDisplay.textContent = selectedPlanDate.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            const planData = getPlanData();
+            const dayTasks = planData[dateKey] || [];
+
+            planCounterBadge.textContent = `${dayTasks.length}/3`;
+            if (dayTasks.length >= 3 && !editingPlanId) {
+                planLimitMsg.classList.remove('hidden');
+                document.getElementById('plan-form-container').classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                planLimitMsg.classList.add('hidden');
+                document.getElementById('plan-form-container').classList.remove('opacity-50', 'pointer-events-none');
+            }
+
+            if (dayTasks.length === 0) {
+                planTaskList.innerHTML = `
+                    <div class="bg-paper-100/50 border border-dashed border-paper-200 p-6 rounded-xl text-center text-xs text-charcoal-800 opacity-60">
+                        Nenhuma micro-tarefa planejada para este dia.
+                    </div>
+                `;
+            } else {
+                planTaskList.innerHTML = dayTasks.map(item => `
+                    <div class="bg-paper-100 border border-paper-200 p-3 rounded-xl flex items-center justify-between gap-2">
+                        <div class="flex items-start gap-2.5 flex-1 min-w-0">
+                            <button type="button" onclick="togglePlanTaskComplete('${dateKey}', '${item.id}')" class="mt-0.5 p-1 rounded hover:bg-paper-200 transition-colors shrink-0" title="Marcar como concluído">
+                                <i data-lucide="${item.completed ? 'check-square' : 'square'}" class="w-4 h-4 ${item.completed ? 'text-forest-900' : 'text-charcoal-800 opacity-40'}"></i>
+                            </button>
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-semibold truncate ${item.completed ? 'line-through text-charcoal-800 opacity-50' : 'text-charcoal-900'}">${escapeHtml(item.title)}</h4>
+                                ${item.desc ? `<p class="text-[11px] text-charcoal-800 opacity-70 mt-0.5 truncate">${escapeHtml(item.desc)}</p>` : ''}
+                                ${item.journalId ? `<span class="inline-flex items-center gap-1 text-[10px] text-forest-900 font-medium mt-1">✦ Salvo no Diário</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0">
+                            ${!item.completed ? `
+                                <button type="button" onclick="startFocusFromPlan('${escapeHtml(item.title)}')" class="bg-forest-900 hover:bg-forest-800 text-paper-50 px-2 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors" title="Focar nesta tarefa agora">
+                                    <i data-lucide="play" class="w-3 h-3 fill-current"></i>
+                                    <span>Focar</span>
+                                </button>
+                                <button type="button" onclick="editPlanTask('${dateKey}', '${item.id}')" class="p-1 hover:bg-paper-200 rounded text-charcoal-800 opacity-60" title="Editar"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                            ` : ''}
+                            <button type="button" onclick="deletePlanTask('${dateKey}', '${item.id}')" class="p-1 hover:bg-terracotta-600/10 hover:text-terracotta-600 rounded text-charcoal-800 opacity-60" title="Excluir"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            safeCreateIcons();
+        }
+
+        // --- DIRECT ACTION: START FOCUS FROM PLAN TASK ---
+        window.startFocusFromPlan = function(taskTitle) {
+            switchNavTab('foco');
+            taskInput.value = taskTitle;
+            taskInput.focus();
+        };
+
+        function handleSavePlanTask() {
+            const title = planTitleInput.value.trim();
+            const desc = planDescInput.value.trim();
+            if (!title) return;
+
+            const dateKey = getFormattedDateKey(selectedPlanDate);
+            const planData = getPlanData();
+            if (!planData[dateKey]) planData[dateKey] = [];
+
+            if (editingPlanId) {
+                const idx = planData[dateKey].findIndex(t => t.id === editingPlanId);
+                if (idx !== -1) {
+                    planData[dateKey][idx].title = title;
+                    planData[dateKey][idx].desc = desc;
+                }
+                editingPlanId = null;
+                document.getElementById('btn-plan-submit-label').textContent = 'Adicionar ao Planejamento';
+            } else {
+                if (planData[dateKey].length >= 3) return;
+                planData[dateKey].push({
+                    id: 'p-' + Date.now(),
+                    title: title,
+                    desc: desc,
+                    completed: false,
+                    createdDate: new Date().toISOString()
+                });
+            }
+
+            savePlanData(planData);
+            planTitleInput.value = '';
+            planDescInput.value = '';
+            renderPlanningSection();
+        }
+
+        window.togglePlanTaskComplete = function(dateKey, taskId) {
+            const planData = getPlanData();
+            const tasks = planData[dateKey] || [];
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            task.completed = !task.completed;
+
+            if (task.completed && !task.journalId) {
+                if (confirm(`Deseja salvar "${task.title}" como uma conquista no seu Diário?`)) {
+                    saveJournalEntry(task.title, 0, task.desc || 'Concluído do Planejamento Diário');
+                    task.journalId = true;
+                }
+            }
+
+            savePlanData(planData);
+            renderPlanningSection();
+        };
+
+        window.editPlanTask = function(dateKey, taskId) {
+            const planData = getPlanData();
+            const tasks = planData[dateKey] || [];
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            planTitleInput.value = task.title;
+            planDescInput.value = task.desc || '';
+            editingPlanId = taskId;
+            document.getElementById('btn-plan-submit-label').textContent = 'Salvar Alteração';
+            planTitleInput.focus();
+        };
+
+        window.deletePlanTask = function(dateKey, taskId) {
+            if (!confirm('Excluir esta tarefa planejada?')) return;
+            const planData = getPlanData();
+            if (planData[dateKey]) {
+                planData[dateKey] = planData[dateKey].filter(t => t.id !== taskId);
+                savePlanData(planData);
+                renderPlanningSection();
+            }
+        };
+
+        // --- RENDER OTHER SECTIONS ---
+        function renderTodaySection() {
+            const entries = getJournalEntries();
+            const todayStr = new Date().toLocaleDateString('pt-BR');
+            const todayEntries = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === todayStr);
+
+            const container = document.getElementById('today-entries-list');
+            if (todayEntries.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-xs text-charcoal-800 opacity-60 bg-paper-100 rounded-2xl">Nenhuma conquista registrada hoje ainda.</div>`;
+                return;
+            }
+
+            container.innerHTML = todayEntries.map(e => `
+                <div class="bg-paper-100 border border-paper-200 p-3 rounded-xl flex items-center justify-between">
+                    <div>
+                        <h4 class="text-xs font-semibold text-charcoal-900">${escapeHtml(e.task)}</h4>
+                        <span class="text-[10px] text-charcoal-800 opacity-60">${new Date(e.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProgressSection() {
+            const entries = getJournalEntries();
+            const chartContainer = document.getElementById('weekly-chart');
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d);
+            }
+
+            const maxVal = Math.max(...days.map(d => {
+                const dStr = d.toLocaleDateString('pt-BR');
+                return entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
+            }), 1);
+
+            chartContainer.innerHTML = days.map(d => {
+                const dStr = d.toLocaleDateString('pt-BR');
+                const count = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
+                const heightPct = Math.max((count / maxVal) * 100, 8);
+                const dayLabel = d.toLocaleDateString('pt-BR', { weekday: 'narrow' });
+
+                return `
+                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                        <span class="text-[10px] font-bold text-forest-900">${count > 0 ? count : ''}</span>
+                        <div style="height: ${heightPct}%" class="w-full bg-forest-900/80 hover:bg-forest-900 rounded-t-md transition-all"></div>
+                        <span class="text-[10px] text-charcoal-800 opacity-60 font-medium">${dayLabel}</span>
+                    </div>
+                `;
+            }).join('');
+
+            const listContainer = document.getElementById('all-entries-list');
+            if (entries.length === 0) {
+                listContainer.innerHTML = `<div class="p-6 text-center text-xs text-charcoal-800 opacity-60 bg-paper-100 rounded-2xl">Histórico vazio.</div>`;
+                return;
+            }
+
+            listContainer.innerHTML = entries.map(e => `
+                <div class="bg-paper-100 border border-paper-200 p-3 rounded-xl flex items-center justify-between">
+                    <div>
+                        <h4 class="text-xs font-semibold text-charcoal-900">${escapeHtml(e.task)}</h4>
+                        <span class="text-[10px] text-charcoal-800 opacity-60">${new Date(e.timestamp).toLocaleDateString('pt-BR')} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateAllDisplays() {
+            const entries = getJournalEntries();
+            const todayStr = new Date().toLocaleDateString('pt-BR');
+            const todayCount = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === todayStr).length;
+
+            statToday.textContent = todayCount;
+            statTotal.textContent = entries.length;
+        }
+
+        function exportBackup() {
+            const dump = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k.startsWith('focusmicro')) dump[k] = localStorage.getItem(k);
+            }
+            const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `focusmicro-backup-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+        }
+
+        function escapeHtml(str) {
+            return (str || '').replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+    </script>
+</body>
+</html>
