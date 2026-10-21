@@ -188,7 +188,6 @@
                 </div>
 
                 <div class="space-y-3">
-                    <!-- BOTÃO PRINCIPAL DE CONCLUIR TAREFA PEDIDO PELO SEU AMIGO -->
                     <button id="btn-complete-now" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-medium py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                         <span>Concluir Tarefa Agora</span>
@@ -210,20 +209,42 @@
                         </button>
                     </div>
 
-                    <button id="btn-toggle-sound" type="button" class="w-full bg-paper-100 hover:bg-paper-200 border border-paper-200 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs text-charcoal-800 transition-all">
-                        <div class="flex items-center gap-2">
-                            <i id="sound-icon" data-lucide="volume-x" class="w-4 h-4 opacity-50"></i>
-                            <span>Som Ambiente (Ruído Suave)</span>
+                    <!-- NOVO PLAYER DE SOM AMBIENTE REAL -->
+                    <div class="bg-paper-100 border border-paper-200 rounded-xl p-3 space-y-2 text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="headphones" class="w-4 h-4 text-forest-900"></i>
+                                <span class="text-xs font-semibold text-charcoal-900">Som Ambiente de Foco</span>
+                            </div>
+                            <span id="sound-status-badge" class="text-[10px] font-medium text-charcoal-800 opacity-60">Desativado</span>
                         </div>
-                        <span id="sound-status" class="opacity-60 font-medium">Desativado</span>
-                    </button>
+
+                        <!-- Opções de Sons Naturais -->
+                        <div class="grid grid-cols-3 gap-1.5 pt-1">
+                            <button type="button" onclick="playAmbientTrack('rain')" id="btn-sound-rain" class="sound-track-btn bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-lg py-2 px-1.5 text-[11px] text-charcoal-900 flex items-center justify-center gap-1 transition-all">
+                                🌧️ <span>Chuva</span>
+                            </button>
+                            <button type="button" onclick="playAmbientTrack('cafe')" id="btn-sound-cafe" class="sound-track-btn bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-lg py-2 px-1.5 text-[11px] text-charcoal-900 flex items-center justify-center gap-1 transition-all">
+                                ☕ <span>Café</span>
+                            </button>
+                            <button type="button" onclick="playAmbientTrack('forest')" id="btn-sound-forest" class="sound-track-btn bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-lg py-2 px-1.5 text-[11px] text-charcoal-900 flex items-center justify-center gap-1 transition-all">
+                                🌲 <span>Floresta</span>
+                            </button>
+                        </div>
+
+                        <!-- Controle de Volume -->
+                        <div id="volume-control-box" class="flex items-center gap-2 pt-1 hidden">
+                            <i data-lucide="volume-2" class="w-3.5 h-3.5 text-charcoal-800 opacity-60"></i>
+                            <input type="range" id="sound-volume-range" min="0" max="1" step="0.05" value="0.4" class="w-full h-1 bg-paper-200 rounded-lg appearance-none cursor-pointer">
+                            <button type="button" onclick="stopAmbientAudio()" class="text-[10px] text-terracotta-600 font-semibold hover:underline shrink-0">Parar</button>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
 
-        <!-- SECTION 2: MEU PLANEJAMENTO (DAILY PLANNING & MONTHLY CALENDAR) -->
+        <!-- SECTION 2: MEU PLANEJAMENTO -->
         <div id="section-planejamento" class="hidden space-y-6">
-            <!-- Mode Toggle & Date Controller -->
             <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
                 <div class="flex items-center justify-between border-b border-paper-200/80 pb-2.5">
                     <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Planejamento Diário</span>
@@ -233,7 +254,6 @@
                     </button>
                 </div>
 
-                <!-- Day Controller -->
                 <div id="day-navigation-bar" class="flex items-center justify-between pt-1">
                     <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Dia Anterior">
                         <i data-lucide="chevron-left" class="w-4 h-4"></i>
@@ -253,7 +273,6 @@
                 </div>
             </div>
 
-            <!-- MONTHLY CALENDAR GRID -->
             <div id="monthly-calendar-container" class="hidden bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
                 <div class="flex items-center justify-between">
                     <button id="cal-prev-month" type="button" class="p-1.5 hover:bg-paper-200 rounded-lg text-charcoal-900"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
@@ -263,12 +282,9 @@
                 <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-charcoal-800 opacity-60 uppercase">
                     <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                 </div>
-                <div id="cal-grid-days" class="grid grid-cols-7 gap-1 text-center text-xs">
-                    <!-- Dynamic Month Days -->
-                </div>
+                <div id="cal-grid-days" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
             </div>
 
-            <!-- Add Task Form -->
             <div id="plan-form-container" class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800">Planejar Micro-Tarefa (Máx 3)</span>
@@ -284,18 +300,14 @@
                 </button>
             </div>
 
-            <!-- Notice when limit reached -->
             <div id="plan-limit-msg" class="hidden bg-forest-900/10 border border-forest-900/20 p-3 rounded-xl text-xs text-forest-900 flex items-center gap-2">
                 <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
                 <span>Limite diário de 3 tarefas atingido. Conclua ou edite uma para adicionar outra.</span>
             </div>
 
-            <!-- Task List -->
             <div class="space-y-3">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Tarefas do Dia</h3>
-                <div id="plan-task-list" class="space-y-2">
-                    <!-- Dynamic tasks -->
-                </div>
+                <div id="plan-task-list" class="space-y-2"></div>
             </div>
         </div>
 
@@ -312,7 +324,6 @@
                 </button>
             </div>
 
-            <!-- Manual Entry Form (Hidden by default) -->
             <form id="form-manual-entry" class="hidden bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Novo Registro Manual</h3>
                 <input type="text" id="manual-task-input" placeholder="O que você concluiu?" required
@@ -325,20 +336,16 @@
                 </div>
             </form>
 
-            <!-- Today's Entries -->
-            <div id="today-entries-list" class="space-y-2">
-                <!-- Dynamic Content -->
-            </div>
+            <div id="today-entries-list" class="space-y-2"></div>
         </div>
 
-        <!-- SECTION 4: MEU PROGRESSO & REVISÃO SEMANAL -->
+        <!-- SECTION 4: MEU PROGRESSO -->
         <div id="section-meu-progresso" class="hidden space-y-6">
             <div>
                 <h2 class="text-xl font-serif-title font-bold text-charcoal-900">Meu Progresso</h2>
                 <p class="text-xs text-charcoal-800 opacity-60">Visão acumulada do seu esforço</p>
             </div>
 
-            <!-- WEEKLY REVIEW DASHBOARD -->
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 <div class="bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
                     <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Foco na Semana</span>
@@ -354,15 +361,11 @@
                 </div>
             </div>
 
-            <!-- Weekly Bar Chart -->
             <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
                 <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Últimos 7 dias</span>
-                <div id="weekly-chart" class="flex items-end justify-between gap-2 h-28 pt-4">
-                    <!-- Dynamic Bars -->
-                </div>
+                <div id="weekly-chart" class="flex items-end justify-between gap-2 h-28 pt-4"></div>
             </div>
 
-            <!-- All Entries Ledger -->
             <div class="space-y-3">
                 <div class="flex items-center justify-between flex-wrap gap-2">
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
@@ -376,9 +379,7 @@
                         </label>
                     </div>
                 </div>
-                <div id="all-entries-list" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1">
-                    <!-- Dynamic Content -->
-                </div>
+                <div id="all-entries-list" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1"></div>
             </div>
         </div>
 
@@ -418,100 +419,86 @@
             }
         }
 
-        // --- SOUND ENGINE (WEB AUDIO API) ---
-        class SoundEngine {
-            constructor() {
-                this.ctx = null;
-                this.noiseNode = null;
-                this.gainNode = null;
-                this.isNoisePlaying = false;
-            }
+        // --- SISTEMA DE ÁUDIO AMBIENTE REAL E DESTRAVAMENTO MOBILE ---
+        const audioTracks = {
+            rain: 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_8a2d1d2b82.mp3',
+            cafe: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3',
+            forest: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3'
+        };
 
-            init() {
-                if (!this.ctx) {
-                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    this.ctx = new AudioCtx();
-                }
-                if (this.ctx.state === 'suspended') {
-                    this.ctx.resume();
-                }
-            }
+        let currentAudio = null;
+        let activeTrackKey = null;
 
-            toggleAmbientNoise() {
-                this.init();
-                if (this.isNoisePlaying) {
-                    this.stopAmbientNoise();
-                    return false;
-                }
-
-                const bufferSize = 2 * this.ctx.sampleRate;
-                const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-                const output = noiseBuffer.getChannelData(0);
-
-                let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-                for (let i = 0; i < bufferSize; i++) {
-                    const white = Math.random() * 2 - 1;
-                    b0 = 0.99886 * b0 + white * 0.0555179;
-                    b1 = 0.99332 * b1 + white * 0.0750759;
-                    b2 = 0.96900 * b2 + white * 0.1538520;
-                    b3 = 0.86650 * b3 + white * 0.3104856;
-                    b4 = 0.55000 * b4 + white * 0.5329522;
-                    b5 = -0.7616 * b5 - white * 0.0168980;
-                    output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-                    output[i] *= 0.01;
-                    b6 = white * 0.115926;
-                }
-
-                this.noiseNode = this.ctx.createBufferSource();
-                this.noiseNode.buffer = noiseBuffer;
-                this.noiseNode.loop = true;
-
-                this.gainNode = this.ctx.createGain();
-                this.gainNode.gain.setValueAtTime(0.05, this.ctx.currentTime);
-
-                this.noiseNode.connect(this.gainNode);
-                this.gainNode.connect(this.ctx.destination);
-
-                this.noiseNode.start();
-                this.isNoisePlaying = true;
-                return true;
-            }
-
-            stopAmbientNoise() {
-                if (this.noiseNode) {
-                    try {
-                        this.noiseNode.stop();
-                        this.noiseNode.disconnect();
-                    } catch(e) {}
-                    this.noiseNode = null;
-                }
-                this.isNoisePlaying = false;
-            }
-
-            playChime() {
-                this.init();
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, now);
-                osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.8);
-
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
-
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-
-                osc.start(now);
-                osc.stop(now + 2.0);
+        // Unlock mobile audio policy on user interaction
+        function unlockMobileAudio() {
+            if (currentAudio) {
+                currentAudio.play().then(() => {}).catch(() => {});
             }
         }
+        document.addEventListener('touchstart', unlockMobileAudio, { once: true });
+        document.addEventListener('click', unlockMobileAudio, { once: true });
+
+        window.playAmbientTrack = function(trackKey) {
+            const volumeBox = document.getElementById('volume-control-box');
+            const statusBadge = document.getElementById('sound-status-badge');
+            const trackBtns = document.querySelectorAll('.sound-track-btn');
+
+            if (activeTrackKey === trackKey && currentAudio && !currentAudio.paused) {
+                stopAmbientAudio();
+                return;
+            }
+
+            stopAmbientAudio();
+
+            currentAudio = new Audio(audioTracks[trackKey]);
+            currentAudio.loop = true;
+            currentAudio.volume = parseFloat(document.getElementById('sound-volume-range').value || 0.4);
+
+            currentAudio.play().then(() => {
+                activeTrackKey = trackKey;
+                volumeBox.classList.remove('hidden');
+
+                trackBtns.forEach(btn => {
+                    btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                    btn.classList.add('bg-paper-50', 'text-charcoal-900');
+                });
+
+                const activeBtn = document.getElementById(`btn-sound-${trackKey}`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('bg-paper-50', 'text-charcoal-900');
+                    activeBtn.classList.add('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                }
+
+                const names = { rain: '🌧️ Chuva', cafe: '☕ Café', forest: '🌲 Floresta' };
+                statusBadge.textContent = `Tocando: ${names[trackKey]}`;
+                statusBadge.className = 'text-[10px] font-bold text-forest-900';
+            }).catch(err => {
+                alert('Toque novamente na tela para liberar o som no celular!');
+            });
+        };
+
+        window.stopAmbientAudio = function() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+            activeTrackKey = null;
+            
+            document.getElementById('volume-control-box')?.classList.add('hidden');
+            const statusBadge = document.getElementById('sound-status-badge');
+            if (statusBadge) {
+                statusBadge.textContent = 'Desativado';
+                statusBadge.className = 'text-[10px] font-medium text-charcoal-800 opacity-60';
+            }
+
+            document.querySelectorAll('.sound-track-btn').forEach(btn => {
+                btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                btn.classList.add('bg-paper-50', 'text-charcoal-900');
+            });
+        };
 
         // --- APP STATE & KEYS ---
-        const soundEngine = new SoundEngine();
         const HISTORY_KEY = 'focusmicro_history';
         const PLAN_KEY = 'focusmicro_plan_v1';
 
@@ -540,9 +527,6 @@
         const btnAdd2Min = document.getElementById('btn-add-2min');
         const btnReset = document.getElementById('btn-reset');
         const btnCompleteNow = document.getElementById('btn-complete-now');
-
-        const btnToggleSound = document.getElementById('btn-toggle-sound');
-        const soundStatus = document.getElementById('sound-status');
 
         const modalCelebration = document.getElementById('modal-celebration');
         const modalTaskName = document.getElementById('modal-task-name');
@@ -610,10 +594,8 @@
             btnReset.addEventListener('click', resetToSetup);
             btnCompleteNow?.addEventListener('click', onTimerComplete);
 
-            btnToggleSound.addEventListener('click', () => {
-                const isPlaying = soundEngine.toggleAmbientNoise();
-                soundStatus.textContent = isPlaying ? 'Ativado' : 'Desativado';
-                soundStatus.className = isPlaying ? 'text-forest-900 font-semibold' : 'opacity-60 font-medium';
+            document.getElementById('sound-volume-range')?.addEventListener('input', (e) => {
+                if (currentAudio) currentAudio.volume = parseFloat(e.target.value);
             });
 
             btnSaveVictory.addEventListener('click', () => {
@@ -647,7 +629,6 @@
 
             btnAddPlan.addEventListener('click', handleSavePlanTask);
 
-            // Toggle Monthly Calendar Grid
             document.getElementById('btn-toggle-calendar-view')?.addEventListener('click', () => {
                 const grid = document.getElementById('monthly-calendar-container');
                 const isHidden = grid.classList.contains('hidden');
@@ -686,7 +667,6 @@
                 updateAllDisplays();
             });
 
-            // Backup Export & Import Handlers
             document.getElementById('btn-export-backup')?.addEventListener('click', exportBackup);
             document.getElementById('input-import-json')?.addEventListener('change', importBackup);
         });
@@ -730,6 +710,8 @@
         function togglePause() {
             isPaused = !isPaused;
             btnPauseText.textContent = isPaused ? 'Continuar' : 'Pausar';
+            if (isPaused && currentAudio) currentAudio.pause();
+            else if (!isPaused && currentAudio) currentAudio.play().catch(()=>{});
         }
 
         function extendTime(sec) {
@@ -740,7 +722,7 @@
 
         function resetToSetup() {
             clearInterval(timerInterval);
-            soundEngine.stopAmbientNoise();
+            stopAmbientAudio();
             document.title = 'FocusMicro - Caderno de Progresso Pessoal';
             timeRemaining = initialDuration;
             viewTimer.classList.add('hidden');
@@ -749,8 +731,7 @@
 
         function onTimerComplete() {
             clearInterval(timerInterval);
-            soundEngine.stopAmbientNoise();
-            soundEngine.playChime();
+            stopAmbientAudio();
             document.title = '🎉 Micro-Vitória!';
             modalTaskName.textContent = `"${currentTask}"`;
             modalCelebration.classList.remove('hidden');
