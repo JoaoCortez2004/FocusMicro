@@ -150,6 +150,24 @@
             align-items: center;
             min-height: 100vh;
         }
+
+        /* ===== Dark Mode (aplicado em <html>, não é sobrescrito pelos temas do body) ===== */
+        html.fm-dark body {
+            --bg-paper-50: #161718; --bg-paper-100: #1F2123; --bg-paper-200: #2E3134; --bg-paper-300: #43474B;
+            --txt-primary: #F2EFE9; --txt-secondary: #B4B8BC;
+            --color-accent: #8FCBA8; --color-accent-dark: #7DB896;
+            --pattern-bg: radial-gradient(#26292B 1px, transparent 1px); --pattern-size: 20px 20px;
+            color-scheme: dark;
+        }
+        html.fm-dark body.accent-terracotta { --color-accent: #E58B77; --color-accent-dark: #D97762; }
+        html.fm-dark body.accent-nanquim { --color-accent: #8DB3D9; --color-accent-dark: #7AA2CA; }
+        html.fm-dark body.accent-vinho { --color-accent: #D9909C; --color-accent-dark: #C97E8B; }
+        html.fm-dark [class*="bg-charcoal-900"] { background-color: rgba(0,0,0,.65) !important; }
+        html.fm-dark .ico-moon, html:not(.fm-dark) .ico-sun { display: none; }
+        input[type="email"], input[type="password"], input[type="date"] {
+            background-color: var(--bg-paper-50); border: 1px solid var(--bg-paper-200); color: var(--txt-primary);
+        }
+        input[type="email"]:focus, input[type="password"]:focus, input[type="date"]:focus { border-color: var(--color-accent); outline: none; }
     </style>
 </head>
 <body class="theme-dots min-h-full flex flex-col justify-between selection:bg-forest-900 selection:text-paper-50 antialiased">
@@ -188,6 +206,16 @@
                     </select>
                 </div>
 
+                <!-- DARK MODE + USUÁRIO -->
+                <button id="btn-dark" type="button" onclick="toggleDarkMode()" title="Alternar modo escuro" class="bg-paper-100/80 border border-paper-200/90 p-1.5 rounded-full shadow-xs hover:bg-paper-200/60 transition-colors cursor-pointer text-charcoal-800">
+                    <i data-lucide="moon" class="ico-moon w-3.5 h-3.5"></i><i data-lucide="sun" class="ico-sun w-3.5 h-3.5"></i>
+                </button>
+                <div id="user-chip" class="hidden bg-paper-100/80 border border-paper-200/90 pl-3 pr-1.5 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-charcoal-700 opacity-70"></i>
+                    <span id="user-name" class="font-semibold text-charcoal-800 text-[11px] max-w-[80px] truncate"></span>
+                    <button type="button" onclick="FM_AUTH.logout()" title="Sair" class="p-1 rounded-full hover:bg-terracotta-600/10 hover:text-terracotta-600 cursor-pointer"><i data-lucide="log-out" class="w-3.5 h-3.5"></i></button>
+                </div>
+
                 <!-- STREAK / OFENSIVA SUAVE -->
                 <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs" title="Dias seguidos com registro de foco">
                     <span class="text-xs">🔥</span>
@@ -223,6 +251,10 @@
             <button data-nav="loja" onclick="switchNavTab('loja')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
                 <i data-lucide="palette" class="w-4 h-4"></i>
                 <span id="nav-loja">Personalização</span>
+            </button>
+            <button data-nav="academia" onclick="switchNavTab('academia')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
+                <i data-lucide="dumbbell" class="w-4 h-4"></i>
+                <span id="nav-academia">Academia</span>
             </button>
         </nav>
     </header>
@@ -648,6 +680,15 @@
             </div>
         </div>
 
+        <!-- SECTION 6: ACADEMIA -->
+        <div id="section-academia" class="hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-serif-title font-bold text-charcoal-900">Academia</h2>
+                <p class="text-xs text-charcoal-700 opacity-70">Treinos, progressão de carga e evolução semanal</p>
+            </div>
+            <div id="gym-root" class="space-y-6"></div>
+        </div>
+
     </main>
 
     <!-- FOOTER -->
@@ -746,6 +787,168 @@
             </div>
         </div>
     </div>
+
+    <!-- AUTENTICAÇÃO (LOGIN / CADASTRO) -->
+    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-paper-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-sm space-y-5">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 mx-auto rounded-xl bg-forest-900 text-paper-50 flex items-center justify-center font-serif-title font-bold text-2xl shadow-xs">F</div>
+                <h1 class="font-serif-title font-bold text-3xl text-charcoal-900">FocusMicro</h1>
+                <p id="auth-sub" class="text-xs text-charcoal-700 opacity-70">Entre para acessar o seu caderno</p>
+            </div>
+            <form id="auth-form" novalidate class="bg-paper-50 border border-paper-200 p-6 rounded-2xl shadow-xs space-y-3.5">
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" id="auth-tab-login" class="py-2 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs cursor-pointer">Entrar</button>
+                    <button type="button" id="auth-tab-register" class="py-2 rounded-xl border border-paper-200 text-charcoal-900 font-bold text-xs cursor-pointer">Cadastrar</button>
+                </div>
+                <input id="auth-name" type="text" placeholder="Seu nome" autocomplete="name" class="hidden w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none">
+                <input id="auth-email" type="email" placeholder="E-mail" autocomplete="email" class="w-full rounded-xl px-4 py-2.5 text-sm">
+                <input id="auth-pass" type="password" placeholder="Senha (mín. 8 caracteres)" autocomplete="current-password" class="w-full rounded-xl px-4 py-2.5 text-sm">
+                <label class="flex items-center gap-2 text-[11px] text-charcoal-800 cursor-pointer"><input id="auth-remember" type="checkbox" class="accent-current"> Manter conectado neste dispositivo (30 dias)</label>
+                <p id="auth-error" class="hidden text-xs text-terracotta-700 font-medium"></p>
+                <button id="auth-submit" type="submit" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-3 rounded-xl text-sm transition-all cursor-pointer">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    /* ===== MÓDULO DE AUTENTICAÇÃO JWT + ISOLAMENTO DE DADOS POR USUÁRIO =====
+       API_BASE_URL vazio  → modo local: usuários, senha (PBKDF2) e JWT (HS256) simulados no navegador.
+       API_BASE_URL = 'https://sua-api/api' → usa backend real: POST /auth/register, POST /auth/login
+       (retornam { token, user }) e GET /auth/me. O token vai sempre em "Authorization: Bearer <token>". */
+    (function () {
+        const API_BASE_URL = '';
+        const LS = window.localStorage, SS = window.sessionStorage, P = Storage.prototype;
+        const rg = P.getItem, rs = P.setItem, rr = P.removeItem;
+        const raw = { get: k => rg.call(LS, k), set: (k, v) => rs.call(LS, k, v), del: k => rr.call(LS, k) };
+        let uid = null, user = null;
+
+        // Todo dado do app (chaves "focusmicro*") passa a ficar sob o ID do usuário logado
+        const isApp = k => typeof k === 'string' && k.startsWith('focusmicro'), nk = k => 'fmu:' + uid + ':' + k;
+        P.getItem = function (k) { return (this === LS && isApp(k)) ? (uid ? rg.call(this, nk(k)) : null) : rg.call(this, k); };
+        P.setItem = function (k, v) { if (this === LS && isApp(k)) { if (uid) rs.call(this, nk(k), v); return; } return rs.call(this, k, v); };
+        P.removeItem = function (k) { if (this === LS && isApp(k)) { if (uid) rr.call(this, nk(k)); return; } return rr.call(this, k); };
+
+        // Dark mode
+        const root = document.documentElement;
+        function applyDark(d, persist) {
+            root.classList.toggle('fm-dark', d);
+            raw.set('fm_auth_theme', d ? 'dark' : 'light');
+            if (persist) LS.setItem('focusmicro_darkmode', d ? '1' : '0');
+        }
+        window.toggleDarkMode = () => applyDark(!root.classList.contains('fm-dark'), true);
+        applyDark(raw.get('fm_auth_theme') === 'dark', false);
+
+        // JWT (HS256 via WebCrypto)
+        const enc = new TextEncoder(), rnd = n => crypto.getRandomValues(new Uint8Array(n));
+        const b64u = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        const ub64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+        const parse = t => { try { return JSON.parse(new TextDecoder().decode(ub64(t.split('.')[1]))); } catch (e) { return null; } };
+        const secret = () => { let s = raw.get('fm_auth_secret'); if (!s) { s = b64u(rnd(32)); raw.set('fm_auth_secret', s); } return s; };
+        const hmacKey = () => crypto.subtle.importKey('raw', ub64(secret()), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
+        async function sign(pl) {
+            const h = b64u(enc.encode(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))), p = b64u(enc.encode(JSON.stringify(pl)));
+            return h + '.' + p + '.' + b64u(await crypto.subtle.sign('HMAC', await hmacKey(), enc.encode(h + '.' + p)));
+        }
+        async function verify(t) {
+            const [h, p, s] = t.split('.'); if (!s) return null;
+            const ok = await crypto.subtle.verify('HMAC', await hmacKey(), ub64(s), enc.encode(h + '.' + p)), pl = parse(t);
+            return ok && pl && pl.exp * 1000 > Date.now() ? pl : null;
+        }
+        async function hashPw(pw, salt) {
+            const k = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']);
+            return b64u(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations: 150000, hash: 'SHA-256' }, k, 256));
+        }
+
+        // Token: sessionStorage (sessão) ou localStorage (manter conectado)
+        const getTok = () => SS.getItem('fm_auth_token') || raw.get('fm_auth_token');
+        const clearTok = () => { SS.removeItem('fm_auth_token'); raw.del('fm_auth_token'); };
+        const setTok = (t, rem) => { clearTok(); rem ? raw.set('fm_auth_token', t) : SS.setItem('fm_auth_token', t); };
+        const users = () => { try { return JSON.parse(raw.get('fm_auth_users') || '[]'); } catch (e) { return []; } };
+        const logout = () => { clearTok(); location.reload(); };
+        async function apiFetch(path, opt = {}) {
+            const t = getTok();
+            return fetch(API_BASE_URL + path, { ...opt, headers: { ...(opt.headers || {}), ...(t ? { Authorization: 'Bearer ' + t } : {}) } });
+        }
+
+        async function doAuth(mode, f) {
+            const email = f.email.trim().toLowerCase();
+            if (!/^\S+@\S+\.\S+$/.test(email)) throw new Error('Informe um e-mail válido.');
+            if (mode === 'register' && !f.name.trim()) throw new Error('Informe seu nome.');
+            if (mode === 'register' && f.pass.length < 8) throw new Error('A senha deve ter ao menos 8 caracteres.');
+            if (API_BASE_URL) {
+                const r = await fetch(API_BASE_URL + (mode === 'login' ? '/auth/login' : '/auth/register'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: f.name.trim(), email, password: f.pass }) });
+                const d = await r.json().catch(() => ({}));
+                if (!r.ok || !d.token) throw new Error(d.message || 'Falha na autenticação.');
+                return d.token;
+            }
+            if (!window.crypto || !crypto.subtle) throw new Error('Criptografia indisponível: abra via HTTPS ou localhost.');
+            const list = users(); let u;
+            if (mode === 'register') {
+                if (list.some(x => x.email === email)) throw new Error('Este e-mail já está cadastrado.');
+                const salt = rnd(16);
+                u = { id: b64u(rnd(9)), name: f.name.trim(), email, salt: b64u(salt), hash: await hashPw(f.pass, salt) };
+                if (!list.length) { // primeiro cadastro adota os dados antigos (pré-login)
+                    const legacy = []; for (let i = 0; i < LS.length; i++) { const k = LS.key(i); if (isApp(k)) legacy.push(k); }
+                    legacy.forEach(k => { rs.call(LS, 'fmu:' + u.id + ':' + k, rg.call(LS, k)); rr.call(LS, k); });
+                }
+                list.push(u); raw.set('fm_auth_users', JSON.stringify(list));
+            } else {
+                u = list.find(x => x.email === email);
+                if (!u || (await hashPw(f.pass, ub64(u.salt))) !== u.hash) throw new Error('E-mail ou senha inválidos.');
+            }
+            const now = Math.floor(Date.now() / 1000);
+            return sign({ sub: u.id, name: u.name, email: u.email, iat: now, exp: now + (f.remember ? 30 : 1) * 86400 });
+        }
+
+        // Sessão atual (decodifica de forma síncrona para o namespace; assinatura é validada logo após)
+        const tok = getTok(), pl = tok && parse(tok);
+        if (pl && pl.exp * 1000 > Date.now()) {
+            uid = pl.sub; user = { id: pl.sub, name: pl.name, email: pl.email };
+            const d = LS.getItem('focusmicro_darkmode'); if (d !== null) applyDark(d === '1', false);
+        }
+        window.FM_AUTH = {
+            get user() { return user; }, apiFetch, logout, getToken: getTok,
+            dump() { const d = {}, p = 'fmu:' + uid + ':'; for (let i = 0; i < LS.length; i++) { const k = LS.key(i); if (k.startsWith(p)) d[k.slice(p.length)] = rg.call(LS, k); } return d; }
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const $ = id => document.getElementById(id), ov = $('auth-overlay');
+            if (user) {
+                let ok = false;
+                try { ok = API_BASE_URL ? (await apiFetch('/auth/me')).ok : !!(await verify(tok)); } catch (e) { ok = !!API_BASE_URL; }
+                if (!ok) { clearTok(); location.reload(); return; }
+                ov.classList.add('hidden');
+                $('user-name').textContent = user.name.split(' ')[0]; $('user-chip').classList.remove('hidden');
+                setTimeout(logout, Math.min(pl.exp * 1000 - Date.now(), 2147483000)); // expira o JWT
+                if (window.lucide) try { lucide.createIcons(); } catch (e) {}
+                return;
+            }
+            let mode = 'login';
+            const setMode = m => {
+                mode = m; const reg = m === 'register';
+                $('auth-name').classList.toggle('hidden', !reg);
+                $('auth-submit').textContent = reg ? 'Criar conta' : 'Entrar';
+                $('auth-sub').textContent = reg ? 'Crie sua conta para salvar seu progresso' : 'Entre para acessar o seu caderno';
+                $('auth-pass').autocomplete = reg ? 'new-password' : 'current-password';
+                const on = 'border-forest-900 bg-forest-900/10 text-forest-900', off = 'border-paper-200 text-charcoal-900';
+                $('auth-tab-login').className = 'py-2 rounded-xl border font-bold text-xs cursor-pointer ' + (reg ? off : on);
+                $('auth-tab-register').className = 'py-2 rounded-xl border font-bold text-xs cursor-pointer ' + (reg ? on : off);
+                $('auth-error').classList.add('hidden');
+            };
+            $('auth-tab-login').onclick = () => setMode('login');
+            $('auth-tab-register').onclick = () => setMode('register');
+            $('auth-form').onsubmit = async e => {
+                e.preventDefault();
+                const btn = $('auth-submit'), err = $('auth-error'); btn.disabled = true; err.classList.add('hidden');
+                try {
+                    const t = await doAuth(mode, { name: $('auth-name').value, email: $('auth-email').value, pass: $('auth-pass').value, remember: $('auth-remember').checked });
+                    setTok(t, $('auth-remember').checked); location.reload();
+                } catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); btn.disabled = false; }
+            };
+        });
+    })();
+    </script>
 
     <!-- AUDIO ENGINE & SCRIPT -->
     <script>
@@ -2842,11 +3045,7 @@
         };
 
         window.exportBackup = function() {
-            const dump = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const k = localStorage.key(i);
-                if (k.startsWith('focusmicro')) dump[k] = localStorage.getItem(k);
-            }
+            const dump = (window.FM_AUTH && FM_AUTH.user) ? FM_AUTH.dump() : {};
             const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -2887,6 +3086,195 @@
                 return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
             });
         }
+    </script>
+
+    <script>
+    /* ===== MÓDULO ACADEMIA ===== */
+    (function () {
+        const GK = 'focusmicro_gym_v1', TK = 'focusmicro_gym_timer', $ = id => document.getElementById(id), esc = s => escapeHtml(String(s ?? ''));
+        const MET = { Esteira: 7, Corrida: 9.8, Bike: 7.5, Outro: 6 }, STR = 5; // gasto = MET × peso(kg) × horas
+        const DAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+        const G = () => { let g = {}; try { g = JSON.parse(localStorage.getItem(GK) || '{}'); } catch (e) {} return { profile: g.profile || {}, plan: g.plan || {}, workouts: g.workouts || [] }; };
+        const S = g => localStorage.setItem(GK, JSON.stringify(g));
+        const T = () => { try { return JSON.parse(localStorage.getItem(TK) || 'null') || { acc: 0, start: null }; } catch (e) { return { acc: 0, start: null }; } };
+        const ST = t => localStorage.setItem(TK, JSON.stringify(t));
+        const el = t => t.acc + (t.start ? (Date.now() - t.start) / 1000 : 0);
+        const fmt = s => { s = Math.floor(s); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? String(h).padStart(2, '0') + ':' : '') + String(m).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+        const today = () => getFormattedDateKey(new Date());
+        const dow = d => (new Date(d + 'T12:00:00').getDay() + 6) % 7;
+        const wk = d => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() - dow(d)); return getFormattedDateKey(x); };
+        const vol = w => w.exercises.reduce((a, e) => a + e.sets.reduce((s, x) => s + (+x.reps || 0) * (+x.load || 0), 0), 0);
+        const kcal = (wt, sec, cardio) => {
+            wt = +wt; if (!wt) return 0;
+            const cm = cardio.reduce((a, c) => a + (+c.min || 0), 0);
+            let k = STR * wt * Math.max(sec / 60 - cm, 0) / 60;
+            cardio.forEach(c => k += (MET[c.type] || 6) * wt * (+c.min || 0) / 60);
+            return Math.round(k);
+        };
+        let D = null;
+        const draft = () => D || (D = { name: (G().plan[dow(today())] || '').replace(/^descanso$/i, ''), date: today(), ex: [{ name: '', sets: [{ reps: '', load: '' }] }], cardio: [] });
+
+        const C = 'bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-3';
+        const I = 'w-full rounded-lg px-3 py-2 text-xs';
+        const B1 = 'bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all cursor-pointer';
+        const B2 = 'bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-semibold py-2 px-3 rounded-lg border border-paper-200 cursor-pointer';
+        const H = t => `<span class="text-xs font-bold uppercase tracking-wider text-charcoal-800">${t}</span>`;
+        const KPI = (l, v) => `<div class="bg-paper-100/60 border border-paper-200 p-3 rounded-xl"><span class="text-[10px] uppercase font-bold text-charcoal-700 opacity-60 tracking-wider">${l}</span><p class="text-lg font-bold font-mono text-forest-900">${v}</p></div>`;
+
+        function report() {
+            const g = G(), td = today(), cw = wk(td), pd = new Date(cw + 'T12:00:00'); pd.setDate(pd.getDate() - 7);
+            const pw = getFormattedDateKey(pd), W = g.workouts;
+            const cur = W.filter(w => wk(w.date) === cw), prev = W.filter(w => wk(w.date) === pw);
+            const byName = {}; cur.forEach(w => { const n = w.name || 'Treino'; byName[n] = (byName[n] || 0) + vol(w); });
+            const curVol = cur.reduce((a, w) => a + vol(w), 0), prevVol = prev.reduce((a, w) => a + vol(w), 0);
+            const recent = W.filter(w => (new Date(td) - new Date(w.date)) / 864e5 <= 28);
+            const timed = recent.filter(w => w.duration > 0);
+            const avgDur = timed.length ? timed.reduce((a, w) => a + w.duration, 0) / timed.length : 0;
+            const days = new Set(cur.map(w => w.date));
+            const weekKcal = cur.reduce((a, w) => a + (w.kcal || 0), 0);
+            const avgKcal = recent.length ? Math.round(recent.reduce((a, w) => a + (w.kcal || 0), 0) / recent.length) : 0;
+            const P = {}; [...W].sort((a, b) => a.date.localeCompare(b.date)).forEach(w => w.exercises.forEach(e => {
+                const m = Math.max(0, ...e.sets.map(s => +s.load || 0)), k = e.name.trim().toLowerCase(); if (!k || !m) return;
+                (P[k] = P[k] || { n: e.name.trim(), h: [] }).h.push(m);
+            }));
+            const tips = [];
+            if (!(+g.profile.weight)) tips.push('Informe seu peso no perfil para calcular as calorias gastas.');
+            if (days.size < 3) tips.push(`Você treinou ${days.size}x nesta semana. Mirar em 3–5 dias ajuda na consistência.`);
+            else if (days.size >= 6) tips.push('Seis ou mais dias de treino: inclua ao menos 1 dia de descanso para recuperar.');
+            if (avgDur && avgDur < 1800) tips.push('Suas sessões duram menos de 30 min: avalie incluir mais séries ou exercícios.');
+            if (avgDur > 6000) tips.push('Sessões acima de 100 min: reduza descansos longos ou o número de exercícios.');
+            if (prevVol > 0) {
+                const pct = (curVol - prevVol) / prevVol * 100;
+                if (pct < -10) tips.push(`O volume de carga caiu ${Math.abs(Math.round(pct))}% vs. semana passada. Se não foi deload planejado, retome a progressão.`);
+                else if (pct > 25) tips.push(`O volume subiu ${Math.round(pct)}% em uma semana: aumento rápido, atenção à recuperação.`);
+                else tips.push('Volume semanal estável: ótimo momento para tentar +1 repetição ou +2,5% de carga.');
+            }
+            if (!cur.some(w => w.cardio.length)) tips.push('Sem cardio nesta semana: 2 sessões de 20–30 min melhoram o condicionamento.');
+            Object.values(P).forEach(p => { const h = p.h.slice(-3); if (h.length === 3 && h[0] === h[1] && h[1] === h[2]) tips.push(`Carga de "${esc(p.n)}" estagnada em ${h[2]} kg: tente +2,5% ou mais 1–2 repetições.`); });
+            if (!tips.length) tips.push('Ótimo ritmo! Continue registrando para acompanhar sua evolução.');
+            return { g, byName, curVol, prevVol, avgDur, days, weekKcal, avgKcal, P, tips, cw, W };
+        }
+
+        function render() {
+            const root = $('gym-root'); if (!root) return;
+            const r = report(), g = r.g, d = draft(), t = T(), running = !!t.start;
+            const w = +g.profile.weight, hgt = +g.profile.height, bmi = w && hgt ? (w / Math.pow(hgt / 100, 2)).toFixed(1) : null;
+            const names = [...new Set(r.W.flatMap(x => x.exercises.map(e => e.name.trim())).filter(Boolean))];
+            const maxVol = Math.max(1, ...Object.values(r.byName));
+            root.innerHTML = `
+            <div class="${C}">
+                ${H('Perfil físico')}
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="text-[11px] font-semibold text-charcoal-800 space-y-1 block">Peso atual (kg)<input type="number" min="20" max="400" step="0.1" value="${esc(g.profile.weight)}" onchange="gymProfile('weight',this.value)" class="${I}"></label>
+                    <label class="text-[11px] font-semibold text-charcoal-800 space-y-1 block">Altura (cm)<input type="number" min="100" max="250" value="${esc(g.profile.height)}" onchange="gymProfile('height',this.value)" class="${I}"></label>
+                </div>
+                <p class="text-[11px] text-charcoal-700 opacity-80">${w ? `IMC ${bmi || '—'} · Estimativa: musculação ≈ ${Math.round(STR * w)} kcal/h, corrida ≈ ${Math.round(9.8 * w)} kcal/h.` : 'Preencha o peso para calcular o gasto calórico dos treinos.'}</p>
+            </div>
+
+            <div class="${C}">
+                ${H('Plano da semana')}
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${DAYS.map((n, i) => `<label class="text-[10px] font-bold uppercase text-charcoal-700 opacity-80 space-y-1 block ${i === dow(today()) ? 'text-forest-900 opacity-100' : ''}">${n}<input type="text" value="${esc(g.plan[i])}" placeholder="Descanso" onchange="gymPlan(${i},this.value)" class="${I} normal-case font-normal"></label>`).join('')}</div>
+                <p class="text-[10px] text-charcoal-700 opacity-60">Ex.: Treino A - Peito/Tríceps · Treino B - Costas/Bíceps · Treino C - Pernas</p>
+            </div>
+
+            <div class="${C}">
+                <div class="flex items-center justify-between">${H('Treino de hoje')}<span class="text-[10px] text-charcoal-700 opacity-60">${DAYS[dow(d.date)]}</span></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" value="${esc(d.name)}" placeholder="Treino A - Peito/Tríceps" oninput="gymD('name',this.value)" class="${I} col-span-2">
+                    <input type="date" value="${d.date}" onchange="gymD('date',this.value);gymRender()" class="${I}">
+                </div>
+                <div class="flex items-center gap-3 bg-paper-100/60 border border-paper-200 rounded-xl p-3">
+                    <span id="gym-timer" class="font-mono-timer text-3xl font-bold text-forest-900 flex-1">${fmt(el(t))}</span>
+                    <button type="button" onclick="gymTimer()" class="${B1} px-5 flex items-center gap-2"><i data-lucide="${running ? 'square' : 'play'}" class="w-4 h-4"></i>${running ? 'Parar' : (el(t) > 0 ? 'Retomar' : 'Iniciar')}</button>
+                </div>
+                <datalist id="gym-ex-names">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+                ${d.ex.map((e, i) => `
+                <div class="border border-paper-200 rounded-xl p-3 space-y-2">
+                    <div class="flex gap-2"><input type="text" list="gym-ex-names" value="${esc(e.name)}" placeholder="Exercício (ex.: Supino reto)" oninput="gymEx(${i},this.value)" class="${I} font-semibold"><button type="button" onclick="gymDelEx(${i})" class="p-2 text-charcoal-700 hover:text-terracotta-600 cursor-pointer" title="Remover"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
+                    ${e.sets.map((s, j) => `<div class="grid grid-cols-[auto_1fr_1fr_auto] items-center gap-2 text-[11px]"><span class="font-mono font-bold opacity-60 w-12">Série ${j + 1}</span><input type="number" min="0" inputmode="numeric" value="${esc(s.reps)}" placeholder="reps" oninput="gymSet(${i},${j},'reps',this.value)" class="${I}"><input type="number" min="0" step="0.5" inputmode="decimal" value="${esc(s.load)}" placeholder="carga kg" oninput="gymSet(${i},${j},'load',this.value)" class="${I}"><button type="button" onclick="gymDelSet(${i},${j})" class="p-1 opacity-50 hover:opacity-100 cursor-pointer"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div>`).join('')}
+                    <button type="button" onclick="gymAddSet(${i})" class="text-[11px] text-forest-900 font-bold hover:underline cursor-pointer">+ série</button>
+                </div>`).join('')}
+                <button type="button" onclick="gymAddEx()" class="${B2} w-full">+ Adicionar exercício</button>
+
+                <div class="border-t border-paper-200 pt-3 space-y-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Cardio</span>
+                    ${d.cardio.map((c, i) => `<div class="flex items-center justify-between text-xs bg-paper-100/60 border border-paper-200 rounded-lg px-3 py-2"><span><b>${esc(c.type)}</b> · ${esc(c.min)} min${c.km ? ' · ' + esc(c.km) + ' km' : ''}</span><button type="button" onclick="gymDelCardio(${i})" class="opacity-60 hover:opacity-100 cursor-pointer"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div>`).join('')}
+                    <div class="grid grid-cols-4 gap-2">
+                        <select id="gym-c-type" class="${I}">${Object.keys(MET).map(k => `<option>${k}</option>`).join('')}</select>
+                        <input id="gym-c-min" type="number" min="1" placeholder="min" class="${I}">
+                        <input id="gym-c-km" type="number" min="0" step="0.01" placeholder="km" class="${I}">
+                        <button type="button" onclick="gymAddCardio()" class="${B2}">Lançar</button>
+                    </div>
+                </div>
+                <button type="button" onclick="gymSave()" class="${B1} w-full flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i>Salvar treino</button>
+            </div>
+
+            <div class="${C}">
+                ${H('Relatório da semana')}
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    ${KPI('Volume total', Math.round(r.curVol).toLocaleString('pt-BR') + ' kg')}
+                    ${KPI('Duração média', r.avgDur ? Math.round(r.avgDur / 60) + ' min' : '—')}
+                    ${KPI('Frequência', r.days.size + '/7 dias')}
+                    ${KPI('Calorias', r.weekKcal + ' kcal')}
+                </div>
+                <p class="text-[11px] text-charcoal-700 opacity-70">Média por treino (últimas 4 semanas): <b>${r.avgKcal} kcal</b> · Semana anterior: ${Math.round(r.prevVol).toLocaleString('pt-BR')} kg</p>
+                <div class="flex gap-1.5">${DAYS.map((n, i) => { const dt = new Date(r.cw + 'T12:00:00'); dt.setDate(dt.getDate() + i); const on = r.days.has(getFormattedDateKey(dt)); return `<div class="flex-1 text-center text-[10px] font-bold py-1.5 rounded-lg border ${on ? 'bg-forest-900 text-paper-50 border-forest-900' : 'border-paper-200 text-charcoal-700 opacity-60'}">${n}</div>`; }).join('')}</div>
+                ${Object.keys(r.byName).length ? `<div class="space-y-1.5 pt-1"><span class="text-[11px] font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Volume por treino</span>${Object.entries(r.byName).map(([n, v]) => `<div class="text-[11px]"><div class="flex justify-between"><span class="font-semibold">${esc(n)}</span><span class="font-mono">${Math.round(v).toLocaleString('pt-BR')} kg</span></div><div class="h-1.5 bg-paper-200 rounded-full overflow-hidden"><div class="h-full bg-forest-900" style="width:${v / maxVol * 100}%"></div></div></div>`).join('')}</div>` : ''}
+            </div>
+
+            <div class="${C}">
+                ${H('Progressão de carga')}
+                ${Object.values(r.P).length ? Object.values(r.P).slice(-8).map(p => { const l = p.h[p.h.length - 1], b = p.h.length > 1 ? l - p.h[p.h.length - 2] : null; return `<div class="flex justify-between items-center text-xs border-b border-paper-200/70 pb-1.5"><span class="font-semibold">${esc(p.n)}</span><span class="font-mono">${l} kg ${b === null ? '' : `<span class="${b > 0 ? 'text-forest-900' : b < 0 ? 'text-terracotta-600' : 'opacity-60'}">${b > 0 ? '▲ +' : b < 0 ? '▼ ' : '= '}${b}</span>`}</span></div>`; }).join('') : '<p class="text-xs opacity-60">Registre séries com carga para acompanhar sua evolução.</p>'}
+            </div>
+
+            <div class="${C}">
+                ${H('Sugestões e feedback')}
+                <ul class="space-y-2">${r.tips.map(x => `<li class="text-xs text-charcoal-800 flex gap-2"><span>💡</span><span>${x}</span></li>`).join('')}</ul>
+            </div>
+
+            <div class="${C}">
+                ${H('Histórico recente')}
+                ${r.W.length ? r.W.slice(0, 10).map(x => `<div class="flex items-center justify-between text-xs border-b border-paper-200/70 pb-2"><div><b>${esc(x.name || 'Treino')}</b><div class="text-[10px] opacity-70">${x.date.split('-').reverse().join('/')} · ${x.duration ? Math.round(x.duration / 60) + ' min · ' : ''}${Math.round(vol(x))} kg · ${x.kcal || 0} kcal${x.cardio.length ? ' · ' + x.cardio.map(c => c.type + ' ' + c.min + 'min' + (c.km ? ' ' + c.km + 'km' : '')).join(', ') : ''}</div></div><button type="button" onclick="gymDelW('${x.id}')" class="p-1.5 opacity-50 hover:opacity-100 hover:text-terracotta-600 cursor-pointer"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('') : '<p class="text-xs opacity-60">Nenhum treino salvo ainda.</p>'}
+            </div>`;
+            safeCreateIcons();
+        }
+
+        const w = window;
+        w.gymRender = render;
+        w.gymProfile = (k, v) => { const g = G(); g.profile[k] = v; S(g); render(); };
+        w.gymPlan = (i, v) => { const g = G(); g.plan[i] = v.trim(); S(g); };
+        w.gymD = (k, v) => { draft()[k] = v; };
+        w.gymTimer = () => { const t = T(); if (t.start) { t.acc = el(t); t.start = null; } else t.start = Date.now(); ST(t); render(); };
+        w.gymAddEx = () => { draft().ex.push({ name: '', sets: [{ reps: '', load: '' }] }); render(); };
+        w.gymDelEx = i => { const d = draft(); d.ex.splice(i, 1); if (!d.ex.length) d.ex.push({ name: '', sets: [{ reps: '', load: '' }] }); render(); };
+        w.gymEx = (i, v) => { draft().ex[i].name = v; };
+        w.gymAddSet = i => { const s = draft().ex[i].sets, l = s[s.length - 1]; s.push({ reps: l ? l.reps : '', load: l ? l.load : '' }); render(); };
+        w.gymDelSet = (i, j) => { const s = draft().ex[i].sets; s.splice(j, 1); if (!s.length) s.push({ reps: '', load: '' }); render(); };
+        w.gymSet = (i, j, k, v) => { draft().ex[i].sets[j][k] = v; };
+        w.gymAddCardio = () => { const m = $('gym-c-min').value; if (!(+m > 0)) return alert('Informe o tempo do cardio em minutos.'); draft().cardio.push({ type: $('gym-c-type').value, min: m, km: $('gym-c-km').value }); render(); };
+        w.gymDelCardio = i => { draft().cardio.splice(i, 1); render(); };
+        w.gymDelW = id => { if (!confirm('Excluir este treino?')) return; const g = G(); g.workouts = g.workouts.filter(x => x.id !== id); S(g); render(); };
+        w.gymSave = () => {
+            const d = draft(), g = G();
+            const ex = d.ex.filter(e => e.name.trim()).map(e => ({ name: e.name.trim(), sets: e.sets.filter(s => +s.reps > 0 || +s.load > 0).map(s => ({ reps: +s.reps || 0, load: +s.load || 0 })) })).filter(e => e.sets.length);
+            const cardio = d.cardio.map(c => ({ type: c.type, min: +c.min, km: +c.km || 0 }));
+            if (!ex.length && !cardio.length) return alert('Adicione ao menos um exercício com séries ou uma atividade de cardio.');
+            let t = T(); const sec = Math.round(el(t));
+            g.workouts.unshift({ id: 'g-' + Date.now(), date: d.date || today(), name: d.name.trim(), duration: sec, exercises: ex, cardio, kcal: kcal(g.profile.weight, sec, cardio) });
+            g.workouts.sort((a, b) => b.date.localeCompare(a.date));
+            S(g); ST({ acc: 0, start: null }); D = null; render();
+        };
+
+        setInterval(() => { const e = $('gym-timer'); if (e && !$('section-academia').classList.contains('hidden')) e.textContent = fmt(el(T())); }, 500);
+
+        // Integra com a navegação existente sem alterar a função original
+        const origSwitch = window.switchNavTab;
+        window.switchNavTab = function (target) {
+            origSwitch(target);
+            $('section-academia')?.classList.toggle('hidden', target !== 'academia');
+            if (target === 'academia') render();
+        };
+    })();
     </script>
 </body>
 </html>
