@@ -183,6 +183,8 @@
                         <option value="pt">PT-BR</option>
                         <option value="en">EN</option>
                         <option value="es">ES</option>
+                        <option value="jp">日本語</option>
+                        <option value="zh">中文</option>
                     </select>
                 </div>
 
@@ -220,7 +222,7 @@
             </button>
             <button data-nav="loja" onclick="switchNavTab('loja')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
                 <i data-lucide="palette" class="w-4 h-4"></i>
-                <span>Personalização</span>
+                <span id="nav-loja">Personalização</span>
             </button>
         </nav>
     </header>
@@ -254,7 +256,7 @@
                             <div class="flex items-center gap-3">
                                 <button type="button" onclick="openInertiaModal()" class="text-[11px] text-terracotta-600 hover:text-terracotta-700 font-bold flex items-center gap-1 hover:underline transition-all cursor-pointer">
                                     <i data-lucide="lightbulb" class="w-3 h-3"></i>
-                                    <span>💡 O que fazer 1º?</span>
+                                    <span id="btn-inertia-ideas">💡 O que fazer 1º?</span>
                                 </button>
                                 
                                 <button type="button" onclick="startQuickFlow()" class="text-[11px] text-forest-900 hover:text-forest-800 font-bold flex items-center gap-1 hover:underline transition-all cursor-pointer">
@@ -305,10 +307,10 @@
                     <!-- MODO MEDIR TEMPO -->
                     <div id="measure-info" class="hidden rounded-xl border border-paper-200/90 bg-paper-100/40 p-4 space-y-3 text-xs text-charcoal-800">
                         <div class="space-y-1">
-                            <label for="measure-target-minutes" class="block font-semibold text-charcoal-900">Tempo que você almeja/pretende gastar (minutos):</label>
+                            <label id="lbl-measure-target" for="measure-target-minutes" class="block font-semibold text-charcoal-900">Tempo que você almeja/pretende gastar (minutos):</label>
                             <input id="measure-target-minutes" type="number" min="1" max="300" value="15" inputmode="numeric" class="w-full bg-paper-50 border border-paper-200 rounded-lg px-3 py-2 text-sm text-charcoal-900 focus:outline-none focus:border-forest-900">
                         </div>
-                        <p class="text-[11px] text-charcoal-700 opacity-80">
+                        <p id="lbl-measure-desc" class="text-[11px] text-charcoal-700 opacity-80">
                             O cronômetro vai contar para frente. Quando você terminar, vamos comparar o seu tempo real com a sua meta!
                         </p>
                     </div>
@@ -500,7 +502,7 @@
                     <h3 id="cal-month-year-label" class="font-serif-title font-bold text-base text-charcoal-900">-</h3>
                     <button id="cal-next-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900 cursor-pointer"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
-                <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-charcoal-700 opacity-60 uppercase tracking-wider">
+                <div id="cal-weekdays-header" class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-charcoal-700 opacity-60 uppercase tracking-wider">
                     <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                 </div>
                 <div id="cal-grid-days" class="grid grid-cols-7 gap-1.5 text-center text-xs font-medium"></div>
@@ -552,7 +554,7 @@
                 <textarea id="manual-note-input" placeholder="Anotação opcional..." rows="2"
                     class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2 text-xs text-charcoal-900"></textarea>
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer">Salvar Registro</button>
+                    <button type="submit" id="btn-save-manual-submit" class="bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer">Salvar Registro</button>
                     <button type="button" id="btn-cancel-manual" class="text-xs font-medium text-charcoal-700 hover:text-charcoal-900 px-3 py-2 cursor-pointer">Cancelar</button>
                 </div>
             </form>
@@ -612,8 +614,8 @@
         <!-- SECTION 5: LOJA DE PAPELARIA & PERSONALIZAÇÃO (GAMIFICAÇÃO) -->
         <div id="section-loja" class="hidden space-y-6">
             <div>
-                <h2 class="text-2xl font-serif-title font-bold text-charcoal-900">Loja de Papelaria &amp; Customização</h2>
-                <p class="text-xs text-charcoal-700 opacity-70">Troque seu XP de foco por novos papéis e acentos visuais para o seu caderno</p>
+                <h2 id="txt-loja-title" class="text-2xl font-serif-title font-bold text-charcoal-900">Loja de Papelaria &amp; Customização</h2>
+                <p id="txt-loja-sub" class="text-xs text-charcoal-700 opacity-70">Troque seu XP de foco por novos papéis e acentos visuais para o seu caderno</p>
             </div>
 
             <!-- Card do Nível do Usuário -->
@@ -635,13 +637,13 @@
 
             <!-- Escolha de Papel de Fundo -->
             <div class="space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Textura do Papel</h3>
+                <h3 id="txt-paper-texture-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Textura do Papel</h3>
                 <div id="shop-papers-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
             </div>
 
             <!-- Escolha da Cor de Acento -->
             <div class="space-y-3 pt-2">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Cor dos Acentos</h3>
+                <h3 id="txt-accent-color-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Cor dos Acentos</h3>
                 <div id="shop-accents-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
             </div>
         </div>
@@ -701,15 +703,15 @@
                     <i data-lucide="trophy" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="font-serif-title font-bold text-lg text-charcoal-900 leading-tight">Jornada de Títulos</h3>
-                    <p class="text-[11px] text-charcoal-700 opacity-70">Todos os títulos que você pode desbloquear com XP</p>
+                    <h3 id="txt-modal-titles-heading" class="font-serif-title font-bold text-lg text-charcoal-900 leading-tight">Jornada de Títulos</h3>
+                    <p id="txt-modal-titles-sub" class="text-[11px] text-charcoal-700 opacity-70">Todos os títulos que você pode desbloquear com XP</p>
                 </div>
             </div>
 
             <div id="titles-list-container" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1"></div>
 
             <div class="pt-1">
-                <button type="button" onclick="closeTitlesModal()" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all cursor-pointer">
+                <button type="button" onclick="closeTitlesModal()" id="btn-close-titles" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all cursor-pointer">
                     Fechar
                 </button>
             </div>
@@ -728,57 +730,17 @@
                     <i data-lucide="lightbulb" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="font-serif-title font-bold text-lg text-charcoal-900 leading-tight">Ideias para Começar Já</h3>
-                    <p class="text-[11px] text-charcoal-700 opacity-70">Escolha uma micro-ação de 2 minutos para vencer a inércia</p>
+                    <h3 id="txt-inertia-title" class="font-serif-title font-bold text-lg text-charcoal-900 leading-tight">Ideias para Começar Já</h3>
+                    <p id="txt-inertia-sub" class="text-[11px] text-charcoal-700 opacity-70">Escolha uma micro-ação de 2 minutos para vencer a inércia</p>
                 </div>
             </div>
 
-            <div class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-forest-900 block mb-1.5">💻 Programação / Dev</span>
-                    <div class="space-y-1.5">
-                        <button type="button" onclick="applySuggestedTask('Abrir a IDE e criar o arquivo inicial')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Abrir a IDE e criar o arquivo inicial
-                        </button>
-                        <button type="button" onclick="applySuggestedTask('Escrever apenas os comentários ou assinaturas das funções')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Escrever apenas os comentários ou funções
-                        </button>
-                        <button type="button" onclick="applySuggestedTask('Ler os requisitos por 2 min sem codar nada')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Ler os requisitos por 2 min sem codar nada
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-terracotta-600 block mb-1.5">📊 Trabalho &amp; Escritório</span>
-                    <div class="space-y-1.5">
-                        <button type="button" onclick="applySuggestedTask('Lançar a 1ª nota/comprovante no sistema')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Lançar a 1ª nota/comprovante no sistema
-                        </button>
-                        <button type="button" onclick="applySuggestedTask('Responder apenas 1 e-mail ou mensagem pendente')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Responder apenas 1 e-mail pendente
-                        </button>
-                        <button type="button" onclick="applySuggestedTask('Abrir a planilha e formatar só o cabeçalho')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Abrir a planilha e formatar só o cabeçalho
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-charcoal-800 block mb-1.5">📚 Estudos &amp; Leitura</span>
-                    <div class="space-y-1.5">
-                        <button type="button" onclick="applySuggestedTask('Abrir o livro/PDF na página do assunto')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Abrir o livro/PDF na página do assunto
-                        </button>
-                        <button type="button" onclick="applySuggestedTask('Ler apenas o 1º parágrafo ou sumário')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
-                            • Ler apenas o 1º parágrafo ou sumário
-                        </button>
-                    </div>
-                </div>
+            <div id="inertia-ideas-container" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+                <!-- Sugestões injetadas dinamicamente via JS -->
             </div>
 
             <div class="pt-1">
-                <button type="button" onclick="closeInertiaModal()" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-bold py-3 rounded-xl border border-paper-200 transition-all cursor-pointer">
+                <button type="button" onclick="closeInertiaModal()" id="btn-close-inertia" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-bold py-3 rounded-xl border border-paper-200 transition-all cursor-pointer">
                     Cancelar
                 </button>
             </div>
@@ -823,29 +785,27 @@
         // --- SISTEMA DE GAMIFICAÇÃO & NÍVEIS ---
         const GAMIFICATION_KEY = 'focusmicro_theme_xp';
 
-        const LEVEL_TITLES = [
-            'Aprendiz do Ritmo',      // Nível 1 (0 XP)
-            'Iniciador Constante',    // Nível 2 (500 XP)
-            'Artesão do Tempo',       // Nível 3 (1000 XP)
-            'Guardião do Foco',       // Nível 4 (1500 XP)
-            'Mestre do Progresso',    // Nível 5 (2000 XP)
-            'Arquiteto da Mente',     // Nível 6 (2500 XP)
-            'Rei do Foco'             // Nível 7 (3000 XP)
-        ];
+        const LEVEL_TITLES = {
+            pt: ['Aprendiz do Ritmo', 'Iniciador Constante', 'Artesão do Tempo', 'Guardião do Foco', 'Mestre do Progresso', 'Arquiteto da Mente', 'Rei do Foco'],
+            en: ['Rhythm Apprentice', 'Steady Starter', 'Time Artisan', 'Focus Guardian', 'Progress Master', 'Mind Architect', 'King of Focus'],
+            es: ['Aprendiz del Ritmo', 'Iniciador Constante', 'Artesano del Tiempo', 'Guardián del Foco', 'Maestro del Progreso', 'Arquitecto de la Mente', 'Rey del Foco'],
+            jp: ['リズムの見習い', '継続の先駆者', '時間の職人', '集中の守護者', '進捗の巨匠', '心の建築家', '集中の王'],
+            zh: ['节奏学徒', '持之以恒者', '时间匠人', '专注守护者', '进步大师', '心灵建筑师', '专注之王']
+        };
 
         const PAPERS_SHOP = [
-            { id: 'theme-dots', name: 'Papel Creme Pontilhado', price: 0, desc: 'Clássico e sereno.' },
-            { id: 'theme-lines', name: 'Papel Pautado Editorial', price: 200, desc: 'Linhas suaves de caderno tradicional.' },
-            { id: 'theme-grid', name: 'Papel Quadriculado (Grid)', price: 400, desc: 'Estilo técnico e bem estruturado.' },
-            { id: 'theme-kraft', name: 'Papel Kraft Terroso', price: 800, desc: 'Textura calorosa de papel reciclado.' },
-            { id: 'theme-nanquim', name: 'Papel Nanquim Noturno', price: 1500, desc: 'Modo escuro em tom de carvão profundo.' }
+            { id: 'theme-dots', name: { pt: 'Papel Creme Pontilhado', en: 'Dotted Cream Paper', es: 'Papel Crema Punteado', jp: 'ドット入りクリーム紙', zh: '点阵米黄纸' }, price: 0, desc: { pt: 'Clássico e sereno.', en: 'Classic and serene.', es: 'Clásico y sereno.', jp: 'クラシックで穏やか。', zh: '经典而宁静。' } },
+            { id: 'theme-lines', name: { pt: 'Papel Pautado Editorial', en: 'Lined Editorial Paper', es: 'Papel Rayado Editorial', jp: '横罫線ノート紙', zh: '横线编辑纸' }, price: 200, desc: { pt: 'Linhas suaves de caderno tradicional.', en: 'Soft traditional notebook lines.', es: 'Líneas suaves de cuaderno tradicional.', jp: '伝統的なノートの罫線。', zh: '传统笔记本的柔和横线。' } },
+            { id: 'theme-grid', name: { pt: 'Papel Quadriculado (Grid)', en: 'Grid Paper', es: 'Papel Cuadriculado', jp: '方眼紙 (Grid)', zh: '网格方格纸' }, price: 400, desc: { pt: 'Estilo técnico e bem estruturado.', en: 'Technical and well-structured style.', es: 'Estilo técnico y bien estructurado.', jp: '整然とした技術的なスタイル。', zh: '结构严谨的工程网格风格。' } },
+            { id: 'theme-kraft', name: { pt: 'Papel Kraft Terroso', en: 'Earthy Kraft Paper', es: 'Papel Kraft Terroso', jp: 'クラフトペーパー', zh: '大地色牛皮纸' }, price: 800, desc: { pt: 'Textura calorosa de papel reciclado.', en: 'Warm recycled paper texture.', es: 'Textura cálida de papel reciclado.', jp: '温かみのある再生紙の質感。', zh: '质感温润的环保环保纸。' } },
+            { id: 'theme-nanquim', name: { pt: 'Papel Nanquim Noturno', en: 'Night Ink Paper', es: 'Papel Tinta Nocturna', jp: '夜の墨紙', zh: '夜色墨黑纸' }, price: 1500, desc: { pt: 'Modo escuro em tom de carvão profundo.', en: 'Dark mode in deep charcoal tone.', es: 'Modo oscuro en tono carbón profundo.', jp: '深みのある炭色のダークモード。', zh: '深沉木炭色调的暗黑模式。' } }
         ];
 
         const ACCENTS_SHOP = [
-            { id: 'accent-forest', name: 'Verde Floresta', price: 0, color: '#19281F' },
-            { id: 'accent-terracotta', name: 'Terracota Clássico', price: 300, color: '#A34634' },
-            { id: 'accent-nanquim', name: 'Azul Tinta Nanquim', price: 600, color: '#2B3A4A' },
-            { id: 'accent-vinho', name: 'Vinho Editorial', price: 1000, color: '#5A2A32' }
+            { id: 'accent-forest', name: { pt: 'Verde Floresta', en: 'Forest Green', es: 'Verde Bosque', jp: 'フォレストグリーン', zh: '森林绿' }, price: 0, color: '#19281F' },
+            { id: 'accent-terracotta', name: { pt: 'Terracota Clássico', en: 'Classic Terracotta', es: 'Terracota Clásico', jp: 'テラコッタ', zh: '经典陶土红' }, price: 300, color: '#A34634' },
+            { id: 'accent-nanquim', name: { pt: 'Azul Tinta Nanquim', en: 'Ink Blue', es: 'Azul Tinta', jp: 'インクブルー', zh: '墨水蓝' }, price: 600, color: '#2B3A4A' },
+            { id: 'accent-vinho', name: { pt: 'Vinho Editorial', en: 'Editorial Wine', es: 'Vino Editorial', jp: 'ワインレッド', zh: '典雅酒红' }, price: 1000, color: '#5A2A32' }
         ];
 
         let userGamificationData = {
@@ -883,7 +843,8 @@
             const level = Math.floor(xp / 500) + 1;
             const currentLevelXP = xp % 500;
             const progressPct = Math.min((currentLevelXP / 500) * 100, 100);
-            const title = LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)];
+            const titleList = LEVEL_TITLES[currentLang] || LEVEL_TITLES.pt;
+            const title = titleList[Math.min(level - 1, titleList.length - 1)];
 
             return { level, title, currentLevelXP, progressPct };
         }
@@ -893,9 +854,10 @@
             const container = document.getElementById('titles-list-container');
             const userXp = userGamificationData.xp;
             const currentLvl = Math.floor(userXp / 500) + 1;
+            const titleList = LEVEL_TITLES[currentLang] || LEVEL_TITLES.pt;
 
             if (container) {
-                container.innerHTML = LEVEL_TITLES.map((title, index) => {
+                container.innerHTML = titleList.map((title, index) => {
                     const reqLevel = index + 1;
                     const reqXp = index * 500;
                     const isCurrent = reqLevel === currentLvl;
@@ -906,24 +868,24 @@
 
                     if (isCurrent) {
                         cardBg = 'bg-forest-900/10 border-forest-900/30';
-                        badgeStatus = `<span class="px-2.5 py-1 rounded-full bg-forest-900 text-paper-50 text-[10px] font-bold">Atual</span>`;
+                        badgeStatus = `<span class="px-2.5 py-1 rounded-full bg-forest-900 text-paper-50 text-[10px] font-bold">${currentLang === 'jp' ? '現在' : currentLang === 'zh' ? '当前' : 'Atual'}</span>`;
                     } else if (isUnlocked) {
                         cardBg = 'bg-paper-100/70 border-paper-200';
-                        badgeStatus = `<span class="text-forest-900 text-[10px] font-bold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Conquistado</span>`;
+                        badgeStatus = `<span class="text-forest-900 text-[10px] font-bold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> ${currentLang === 'jp' ? '獲得済み' : currentLang === 'zh' ? '已解锁' : 'Conquistado'}</span>`;
                     } else {
                         cardBg = 'bg-paper-50 border-paper-200 opacity-60';
-                        badgeStatus = `<span class="text-charcoal-700 text-[10px] font-medium flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Requer ${reqXp} XP</span>`;
+                        badgeStatus = `<span class="text-charcoal-700 text-[10px] font-medium flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> ${reqXp} XP</span>`;
                     }
 
                     return `
                         <div class="p-3.5 rounded-2xl border ${cardBg} flex items-center justify-between gap-3 transition-all">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl ${isUnlocked ? 'bg-forest-900 text-paper-50' : 'bg-paper-200 text-charcoal-700'} flex items-center justify-center font-bold text-xs shrink-0">
-                                    Nív.${reqLevel}
+                                    ${currentLang === 'jp' ? 'Lv.' : currentLang === 'zh' ? '等级' : 'Nív.'}${reqLevel}
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-charcoal-900 ${title === 'Rei do Foco' ? 'text-terracotta-600 font-extrabold' : ''}">${title} ${title === 'Rei do Foco' ? '👑' : ''}</h4>
-                                    <p class="text-[10px] text-charcoal-700 opacity-70">${reqXp} XP acumulados</p>
+                                    <h4 class="text-xs font-bold text-charcoal-900 ${index === titleList.length - 1 ? 'text-terracotta-600 font-extrabold' : ''}">${title} ${index === titleList.length - 1 ? '👑' : ''}</h4>
+                                    <p class="text-[10px] text-charcoal-700 opacity-70">${reqXp} XP</p>
                                 </div>
                             </div>
                             <div class="shrink-0">
@@ -946,6 +908,7 @@
         };
 
         window.openInertiaModal = function() {
+            renderInertiaSuggestions();
             const modal = document.getElementById('modal-inertia');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
@@ -975,22 +938,24 @@
             
             const headerLevel = document.getElementById('header-user-level');
             const headerXp = document.getElementById('header-user-xp');
-            if (headerLevel) headerLevel.textContent = `Nív. ${info.level}`;
+            if (headerLevel) headerLevel.textContent = `${currentLang === 'jp' ? 'Lv.' : currentLang === 'zh' ? '等级 ' : 'Nív. '}${info.level}`;
             if (headerXp) headerXp.textContent = `${userGamificationData.xp} XP`;
 
             const shopTitle = document.getElementById('shop-level-title');
             const shopXp = document.getElementById('shop-user-xp');
             const shopProgress = document.getElementById('shop-xp-progress');
-            if (shopTitle) shopTitle.textContent = `Nível ${info.level} — ${info.title}`;
+            if (shopTitle) shopTitle.textContent = `${currentLang === 'jp' ? 'レベル' : currentLang === 'zh' ? '等级' : 'Nível'} ${info.level} — ${info.title}`;
             if (shopXp) shopXp.textContent = userGamificationData.xp;
             if (shopProgress) shopProgress.style.width = `${info.progressPct}%`;
             
             const shopNextLevel = document.getElementById('shop-next-level-txt');
             if (shopNextLevel) {
-                if (info.level >= LEVEL_TITLES.length) {
-                    shopNextLevel.textContent = `Você alcançou a patente máxima de Rei do Foco! 👑`;
+                const titleList = LEVEL_TITLES[currentLang] || LEVEL_TITLES.pt;
+                if (info.level >= titleList.length) {
+                    shopNextLevel.textContent = currentLang === 'jp' ? '最高ランクに達しました！ 👑' : currentLang === 'zh' ? '您已达到最高等级！ 👑' : 'Você alcançou a patente máxima! 👑';
                 } else {
-                    shopNextLevel.textContent = `Faltam ${500 - info.currentLevelXP} XP para o Nível ${info.level + 1}.`;
+                    const remaining = 500 - info.currentLevelXP;
+                    shopNextLevel.textContent = currentLang === 'jp' ? `次のレベルまであと ${remaining} XP。` : currentLang === 'zh' ? `距离下一等级还需 ${remaining} XP。` : `Faltam ${remaining} XP para o Nível ${info.level + 1}.`;
                 }
             }
 
@@ -1004,20 +969,26 @@
                     const isUnlocked = userGamificationData.unlockedPapers.includes(p.id);
                     const isActive = userGamificationData.activePaper === p.id;
                     const canAfford = userGamificationData.xp >= p.price;
+                    const pName = p.name[currentLang] || p.name.pt;
+                    const pDesc = p.desc[currentLang] || p.desc.pt;
+
+                    const equipTxt = currentLang === 'jp' ? '装着' : currentLang === 'zh' ? '使用' : 'Equipar';
+                    const inUseTxt = currentLang === 'jp' ? '使用中' : currentLang === 'zh' ? '使用中' : 'Em Uso';
+                    const unlockTxt = currentLang === 'jp' ? '解除' : currentLang === 'zh' ? '解锁' : 'Desbloquear';
 
                     return `
                         <div class="bg-paper-50 border border-paper-200 p-4 rounded-xl flex flex-col justify-between space-y-3 shadow-xs">
                             <div>
-                                <h4 class="text-xs font-bold text-charcoal-900">${p.name}</h4>
-                                <p class="text-[10px] text-charcoal-700 opacity-70 mt-0.5">${p.desc}</p>
+                                <h4 class="text-xs font-bold text-charcoal-900">${pName}</h4>
+                                <p class="text-[10px] text-charcoal-700 opacity-70 mt-0.5">${pDesc}</p>
                             </div>
                             <div>
                                 ${isActive ? `
-                                    <span class="w-full inline-block text-center py-2 bg-forest-900/10 text-forest-900 font-bold text-xs rounded-lg border border-forest-900/20">Em Uso</span>
+                                    <span class="w-full inline-block text-center py-2 bg-forest-900/10 text-forest-900 font-bold text-xs rounded-lg border border-forest-900/20">${inUseTxt}</span>
                                 ` : isUnlocked ? `
-                                    <button type="button" onclick="selectPaperTheme('${p.id}')" class="w-full py-2 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-xs rounded-lg border border-paper-200 transition-colors cursor-pointer">Equipar</button>
+                                    <button type="button" onclick="selectPaperTheme('${p.id}')" class="w-full py-2 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-xs rounded-lg border border-paper-200 transition-colors cursor-pointer">${equipTxt}</button>
                                 ` : `
-                                    <button type="button" onclick="unlockPaperTheme('${p.id}', ${p.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-2 bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold text-xs rounded-lg disabled:opacity-40 transition-colors cursor-pointer">Desbloquear (${p.price} XP)</button>
+                                    <button type="button" onclick="unlockPaperTheme('${p.id}', ${p.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-2 bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold text-xs rounded-lg disabled:opacity-40 transition-colors cursor-pointer">${unlockTxt} (${p.price} XP)</button>
                                 `}
                             </div>
                         </div>
@@ -1031,16 +1002,20 @@
                     const isUnlocked = userGamificationData.unlockedAccents.includes(a.id);
                     const isActive = userGamificationData.activeAccent === a.id;
                     const canAfford = userGamificationData.xp >= a.price;
+                    const aName = a.name[currentLang] || a.name.pt;
+
+                    const equipTxt = currentLang === 'jp' ? '装着' : currentLang === 'zh' ? '使用' : 'Equipar';
+                    const inUseTxt = currentLang === 'jp' ? '装着中' : currentLang === 'zh' ? '已装备' : 'Equipado';
 
                     return `
                         <div class="bg-paper-50 border border-paper-200 p-3.5 rounded-xl flex flex-col items-center justify-between space-y-2.5 text-center shadow-xs">
                             <div class="w-6 h-6 rounded-full border border-paper-300" style="background-color: ${a.color}"></div>
-                            <span class="text-xs font-bold text-charcoal-900">${a.name}</span>
+                            <span class="text-xs font-bold text-charcoal-900">${aName}</span>
                             <div class="w-full">
                                 ${isActive ? `
-                                    <span class="w-full inline-block text-center py-1.5 bg-forest-900/10 text-forest-900 font-bold text-[11px] rounded-lg border border-forest-900/20">Equipado</span>
+                                    <span class="w-full inline-block text-center py-1.5 bg-forest-900/10 text-forest-900 font-bold text-[11px] rounded-lg border border-forest-900/20">${inUseTxt}</span>
                                 ` : isUnlocked ? `
-                                    <button type="button" onclick="selectAccentTheme('${a.id}')" class="w-full py-1.5 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-[11px] rounded-lg border border-paper-200 transition-colors cursor-pointer">Equipar</button>
+                                    <button type="button" onclick="selectAccentTheme('${a.id}')" class="w-full py-1.5 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-[11px] rounded-lg border border-paper-200 transition-colors cursor-pointer">${equipTxt}</button>
                                 ` : `
                                     <button type="button" onclick="unlockAccentTheme('${a.id}', ${a.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-1.5 bg-forest-900 text-paper-50 font-bold text-[11px] rounded-lg disabled:opacity-40 transition-colors cursor-pointer">${a.price} XP</button>
                                 `}
@@ -1089,11 +1064,13 @@
                 navPlanejamento: "Meu Planejamento",
                 navMeuDia: "Meu Dia",
                 navMeuProgresso: "Meu Progresso",
+                navLoja: "Personalização",
                 heroTag: "Vencendo a inércia em pequenos passos",
                 heroTitle: 'Comece pelo que dá <br><span class="text-forest-900 italic font-normal">para fazer agora.</span>',
                 heroDesc: "Qual é a menor ação possível neste momento? Reduza a resistência ao mínimo.",
                 taskInputLbl: "Sua Tarefa / Ação",
                 quickStart: "Entrar no Fluxo (2 min)",
+                btnInertiaIdeas: "💡 O que fazer 1º?",
                 modeLbl: "Método de Foco",
                 modeMicro: "Micro-tarefa",
                 modePomo: "Pomodoro",
@@ -1134,9 +1111,344 @@
                 modalTitle: "Micro-vitória concluída!",
                 modalNoteLbl: "Como foi essa sessão? (Opcional)",
                 modalSave: "Guardar no Diário",
-                modalExtend: "+2 min de impulso"
+                modalExtend: "+2 min de impulso",
+                lojaTitle: "Loja de Papelaria & Customização",
+                lojaSub: "Troque seu XP de foco por novos papéis e acentos visuais para o seu caderno",
+                paperTextureTitle: "Textura do Papel",
+                accentColorTitle: "Cor dos Acentos",
+                modalTitlesHeading: "Jornada de Títulos",
+                modalTitlesSub: "Todos os títulos que você pode desbloquear com XP",
+                btnCloseTitles: "Fechar",
+                inertiaTitle: "Ideias para Começar Já",
+                inertiaSub: "Escolha uma micro-ação de 2 minutos para vencer a inércia",
+                btnCloseInertia: "Cancelar",
+                measureTargetLbl: "Tempo que você almeja/pretende gastar (minutos):",
+                measureDescLbl: "O cronômetro vai contar para frente. Quando você terminar, vamos comparar o seu tempo real com a sua meta!"
+            },
+            en: {
+                appSubtitle: "Focus Notebook",
+                streakLabel: "days",
+                statToday: "Today:",
+                navFoco: "Focus",
+                navPlanejamento: "My Planning",
+                navMeuDia: "My Day",
+                navMeuProgresso: "My Progress",
+                navLoja: "Customization",
+                heroTag: "Overcoming inertia in small steps",
+                heroTitle: 'Start with what you <br><span class="text-forest-900 italic font-normal">can do right now.</span>',
+                heroDesc: "What is the smallest possible action right now? Reduce resistance to minimum.",
+                taskInputLbl: "Your Task / Action",
+                quickStart: "Enter Flow (2 min)",
+                btnInertiaIdeas: "💡 What to do first?",
+                modeLbl: "Focus Method",
+                modeMicro: "Micro-task",
+                modePomo: "Pomodoro",
+                modeMeasure: "Measure Time",
+                modeDescMicro: "Small blocks of 2, 3 or 5 minutes to start without pressure.",
+                modeDescPomo: "Structured focus and break cycles for tasks that require more time.",
+                modeDescMeasure: "Open timer to discover how much time you actually spend and compare with your goal.",
+                durationLbl: "Initial Duration",
+                btnStart: "Start Focus Now",
+                timerBadgeTop: "In Focus",
+                statusRunning: "Session in progress",
+                btnComplete: "Complete Task Now",
+                btnPause: "Pause",
+                btnResume: "Resume",
+                lofiLabel: "Ambient Sound (Lofi + Soft Rain)",
+                customMusicTitle: "Your Local Playlist",
+                btnChooseFile: "Add Songs from Folder",
+                planSectionTitle: "Daily Planning",
+                calToggleView: "View Monthly Calendar",
+                calToggleHide: "Hide Calendar",
+                planFormTitle: "New Micro-Task (Max 3)",
+                planLimit: "Daily limit of 3 tasks reached. Complete or remove one to add another.",
+                tasksHeader: "Tasks of the Day",
+                meuDiaTitle: "My Day",
+                meuDiaSub: "Your wins and records for today",
+                btnManual: "Manual Log",
+                manualFormTitle: "New Manual Record",
+                progressoTitle: "My Progress",
+                progressoSub: "Accumulated view of your effort and dedication",
+                kpiWeekTime: "Weekly Focus",
+                kpiWeekWins: "Wins (7d)",
+                kpiPeakDay: "Most Active Day",
+                chartTitle: "Last 7 Days",
+                historyTitle: "Full History",
+                btnMd: "Copy Markdown",
+                btnImport: "Import JSON",
+                footer: "FocusMicro — one day at a time, without rush or guilt.",
+                modalTitle: "Micro-win completed!",
+                modalNoteLbl: "How was this session? (Optional)",
+                modalSave: "Save to Journal",
+                modalExtend: "+2 min boost",
+                lojaTitle: "Stationery Shop & Customization",
+                lojaSub: "Trade your focus XP for new paper textures and accent colors",
+                paperTextureTitle: "Paper Texture",
+                accentColorTitle: "Accent Colors",
+                modalTitlesHeading: "Title Journey",
+                modalTitlesSub: "All titles you can unlock with XP",
+                btnCloseTitles: "Close",
+                inertiaTitle: "Ideas to Start Now",
+                inertiaSub: "Choose a 2-minute micro-action to break inertia",
+                btnCloseInertia: "Cancel",
+                measureTargetLbl: "Target duration you plan to spend (minutes):",
+                measureDescLbl: "The stopwatch will count up. When you finish, we will compare your real time with your goal!"
+            },
+            es: {
+                appSubtitle: "Cuaderno de Enfoque",
+                streakLabel: "días",
+                statToday: "Hoy:",
+                navFoco: "Enfoque",
+                navPlanejamento: "Mi Planificación",
+                navMeuDia: "Mi Día",
+                navMeuProgresso: "Mi Progreso",
+                navLoja: "Personalización",
+                heroTag: "Venciendo la inercia en pequeños pasos",
+                heroTitle: 'Empieza por lo que <br><span class="text-forest-900 italic font-normal">puedes hacer ahora.</span>',
+                heroDesc: "¿Cuál es la acción más pequeña posible ahora mismo? Reduce la resistencia al mínimo.",
+                taskInputLbl: "Tu Tarea / Acción",
+                quickStart: "Entrar en Flujo (2 min)",
+                btnInertiaIdeas: "💡 ¿Qué hacer 1º?",
+                modeLbl: "Método de Enfoque",
+                modeMicro: "Microtarea",
+                modePomo: "Pomodoro",
+                modeMeasure: "Medir Tiempo",
+                modeDescMicro: "Pequeños bloques de 2, 3 o 5 minutos para empezar sin presión.",
+                modeDescPomo: "Ciclos estructurados de enfoque y descanso para tareas más largas.",
+                modeDescMeasure: "Cronómetro libre para descubrir cuánto tiempo gastas realmente y compararlo con tu meta.",
+                durationLbl: "Duración Inicial",
+                btnStart: "Iniciar Enfoque Ahora",
+                timerBadgeTop: "En Enfoque",
+                statusRunning: "Sesión en curso",
+                btnComplete: "Completar Tarea Ahora",
+                btnPause: "Pausar",
+                btnResume: "Continuar",
+                lofiLabel: "Sonido Ambiente (Lofi + Lluvia)",
+                customMusicTitle: "Tu Lista Local",
+                btnChooseFile: "Añadir Canciones de Carpeta",
+                planSectionTitle: "Planificación Diaria",
+                calToggleView: "Ver Calendario Mensual",
+                calToggleHide: "Ocultar Calendario",
+                planFormTitle: "Nueva Microtarea (Máx 3)",
+                planLimit: "Límite diario de 3 tareas alcanzado. Completa o elimina una para añadir otra.",
+                tasksHeader: "Tareas del Día",
+                meuDiaTitle: "Mi Día",
+                meuDiaSub: "Tus victorias y registros de hoy",
+                btnManual: "Registro Manual",
+                manualFormTitle: "Nuevo Registro Manual",
+                progressoTitle: "Mi Progreso",
+                progressoSub: "Visión acumulada de tu esfuerzo y dedicación",
+                kpiWeekTime: "Enfoque Semanal",
+                kpiWeekWins: "Victorias (7d)",
+                kpiPeakDay: "Día Más Activo",
+                chartTitle: "Últimos 7 Días",
+                historyTitle: "Historial Completo",
+                btnMd: "Copiar Markdown",
+                btnImport: "Importar JSON",
+                footer: "FocusMicro — un día a la vez, sin prisa ni culpa.",
+                modalTitle: "¡Microvictoria completada!",
+                modalNoteLbl: "¿Cómo fue esta sesión? (Opcional)",
+                modalSave: "Guardar en Diario",
+                modalExtend: "+2 min de impulso",
+                lojaTitle: "Tienda de Papelería & Personalización",
+                lojaSub: "Canjea tu XP de enfoque por nuevos papeles y colores de acento",
+                paperTextureTitle: "Textura del Papel",
+                accentColorTitle: "Color de Acentos",
+                modalTitlesHeading: "Jornada de Títulos",
+                modalTitlesSub: "Todos los títulos que puedes desbloquear con XP",
+                btnCloseTitles: "Cerrar",
+                inertiaTitle: "Ideas para Empezar Ya",
+                inertiaSub: "Elige una microacción de 2 minutos para vencer la inercia",
+                btnCloseInertia: "Cancelar",
+                measureTargetLbl: "Tiempo objetivo que pretendes usar (minutos):",
+                measureDescLbl: "El cronómetro contará hacia adelante. ¡Al terminar, compararemos tu tiempo real con tu meta!"
+            },
+            jp: {
+                appSubtitle: "集中ノート",
+                streakLabel: "日連続",
+                statToday: "今日:",
+                navFoco: "集中",
+                navPlanejamento: "計画",
+                navMeuDia: "マイデー",
+                navMeuProgresso: "進捗",
+                navLoja: "カスタマイズ",
+                heroTag: "小さな一歩で慣性を克服する",
+                heroTitle: '今すぐできることから <br><span class="text-forest-900 italic font-normal">始めましょう。</span>',
+                heroDesc: "今できる最も小さな行動は何ですか？抵抗感を最小限に抑えましょう。",
+                taskInputLbl: "タスク / アクション",
+                quickStart: "フローに入る (2分)",
+                btnInertiaIdeas: "💡 最初に何をする？",
+                modeLbl: "集中メソッド",
+                modeMicro: "マイクロタスク",
+                modePomo: "ポモドーロ",
+                modeMeasure: "時間測定",
+                modeDescMicro: "プレッシャーなく始めるための2分、3分、5分のスモールステップ。",
+                modeDescPomo: "まとまった時間を要するタスク向けの構造化された集中と休憩のサイクル。",
+                modeDescMeasure: "実際にかかった時間を測定し、目標と比較するためのストップウォッチ。",
+                durationLbl: "初期時間",
+                btnStart: "集中を開始する",
+                timerBadgeTop: "集中中",
+                statusRunning: "セッション進行中",
+                btnComplete: "今すぐタスク完了",
+                btnPause: "一時停止",
+                btnResume: "再開",
+                lofiLabel: "環境音 (Lofi + 静かな雨)",
+                customMusicTitle: "ローカルプレイリスト",
+                btnChooseFile: "フォルダから音楽を追加",
+                planSectionTitle: "デイリー計画",
+                calToggleView: "月間カレンダーを表示",
+                calToggleHide: "カレンダーを隠す",
+                planFormTitle: "新規マイクロタスク (最大3つ)",
+                planLimit: "1日の制限（3タスク）に達しました。追加するには既存のものを完了または削除してください。",
+                tasksHeader: "本日のタスク",
+                meuDiaTitle: "マイデー",
+                meuDiaSub: "今日の達成記録と勝利",
+                btnManual: "手動記録",
+                manualFormTitle: "新しい手動記録",
+                progressoTitle: "私の進捗",
+                progressoSub: "努力と献身の累積ビュー",
+                kpiWeekTime: "今週の集中時間",
+                kpiWeekWins: "達成数 (7日間)",
+                kpiPeakDay: "最も活発な日",
+                chartTitle: "過去7日間",
+                historyTitle: "全履歴",
+                btnMd: "Markdownをコピー",
+                btnImport: "JSONをインポート",
+                footer: "FocusMicro — 焦らず、罪悪感を持たず、一日一歩ずつ。",
+                modalTitle: "マイクロ勝利達成！",
+                modalNoteLbl: "このセッションはどうでしたか？ (任意)",
+                modalSave: "日記に保存",
+                modalExtend: "+2分 ブースト",
+                lojaTitle: "文房具ショップ & カスタマイズ",
+                lojaSub: "集中のXPを新しい紙の質感やアクセントカラーと交換しましょう",
+                paperTextureTitle: "紙の質感",
+                accentColorTitle: "アクセントカラー",
+                modalTitlesHeading: "称号の旅",
+                modalTitlesSub: "XPで解放できるすべての称号",
+                btnCloseTitles: "閉じる",
+                inertiaTitle: "今すぐ始めるアイデア",
+                inertiaSub: "慣性を破るための2分間のマイクロアクションを選択してください",
+                btnCloseInertia: "キャンセル",
+                measureTargetLbl: "目標時間 (分):",
+                measureDescLbl: "ストップウォッチがカウントアップします。終了後、実際の時間と目標を比較します！"
+            },
+            zh: {
+                appSubtitle: "专注笔记本",
+                streakLabel: "天",
+                statToday: "今天:",
+                navFoco: "专注",
+                navPlanejamento: "我的计划",
+                navMeuDia: "我的今天",
+                navMeuProgresso: "我的进步",
+                navLoja: "个性化",
+                heroTag: "以微小的步调战胜拖延与惯性",
+                heroTitle: '从现在<br><span class="text-forest-900 italic font-normal">力所能及的小事开始。</span>',
+                heroDesc: "此时此刻最小的行动是什么？将阻力降低到最低。",
+                taskInputLbl: "你的任务 / 行动",
+                quickStart: "进入状态 (2分钟)",
+                btnInertiaIdeas: "💡 第一步做什么？",
+                modeLbl: "专注模式",
+                modeMicro: "微任务",
+                modePomo: "番茄钟",
+                modeMeasure: "测量时间",
+                modeDescMicro: "2分、3分或5分钟的微小时间块，无压力轻松开始。",
+                modeDescPomo: "针对较长时间任务的结构化专注与休息循环。",
+                modeDescMeasure: "正计时秒表，探索你实际消耗的时间并与目标进行对比。",
+                durationLbl: "初始时长",
+                btnStart: "立即开始专注",
+                timerBadgeTop: "专注中",
+                statusRunning: "专注进行中",
+                btnComplete: "立即完成任务",
+                btnPause: "暂停",
+                btnResume: "继续",
+                lofiLabel: "环境音 (Lofi + 柔和雨声)",
+                customMusicTitle: "本地播放列表",
+                btnChooseFile: "从文件夹添加音乐",
+                planSectionTitle: "每日计划",
+                calToggleView: "查看月历",
+                calToggleHide: "隐藏月历",
+                planFormTitle: "新建微任务 (最多3个)",
+                planLimit: "已达到每日3个任务的上限。完成或删除已有任务以添加新任务。",
+                tasksHeader: "今日任务",
+                meuDiaTitle: "我的今天",
+                meuDiaSub: "你今天的成就与记录",
+                btnManual: "手动记录",
+                manualFormTitle: "添加手动记录",
+                progressoTitle: "我的进步",
+                progressoSub: "累积的努力与付出全景",
+                kpiWeekTime: "本周专注",
+                kpiWeekWins: "成就数 (7天)",
+                kpiPeakDay: "最活跃的一天",
+                chartTitle: "过去7天",
+                historyTitle: "完整历史",
+                btnMd: "复制 Markdown",
+                btnImport: "导入 JSON",
+                footer: "FocusMicro — 不急不躁，无愧无疚，一步一个脚印。",
+                modalTitle: "微小胜利完成！",
+                modalNoteLbl: "这次专注感觉如何？ (可选)",
+                modalSave: "保存到日记",
+                modalExtend: "+2分钟 冲刺",
+                lojaTitle: "文具店与个性化",
+                lojaSub: "用专注获得的 XP 兑换全新的纸张纹理与主题色彩",
+                paperTextureTitle: "纸张纹理",
+                accentColorTitle: "主题色彩",
+                modalTitlesHeading: "头衔之旅",
+                modalTitlesSub: "所有可以通过 XP 解锁的头衔",
+                btnCloseTitles: "关闭",
+                inertiaTitle: "战胜惯性的小灵感",
+                inertiaSub: "选择一个2分钟的微行动来开启专注",
+                btnCloseInertia: "取消",
+                measureTargetLbl: "预计目标耗时 (分钟):",
+                measureDescLbl: "秒表将正向计时。完成后，我们将对比实际耗时与你的目标！"
             }
         };
+
+        const INERTIA_IDEAS = {
+            pt: [
+                { cat: "💻 Programação / Dev", items: ["Abrir a IDE e criar o arquivo inicial", "Escrever apenas os comentários ou assinaturas das funções", "Ler os requisitos por 2 min sem codar nada"] },
+                { cat: "📊 Trabalho & Escritório", items: ["Lançar a 1ª nota/comprovante no sistema", "Responder apenas 1 e-mail ou mensagem pendente", "Abrir a planilha e formatar só o cabeçalho"] },
+                { cat: "📚 Estudos & Leitura", items: ["Abrir o livro/PDF na página do assunto", "Ler apenas o 1º parágrafo ou sumário"] }
+            ],
+            en: [
+                { cat: "💻 Coding / Dev", items: ["Open IDE and create initial file", "Write only code comments or function signatures", "Read requirements for 2 mins without coding"] },
+                { cat: "📊 Work & Office", items: ["Process 1st receipt/invoice in system", "Reply to just 1 pending email or message", "Open spreadsheet and format only the header"] },
+                { cat: "📚 Study & Reading", items: ["Open book/PDF to relevant page", "Read only the first paragraph or outline"] }
+            ],
+            es: [
+                { cat: "💻 Programación / Dev", items: ["Abrir el IDE y crear el archivo inicial", "Escribir solo los comentarios o firmas de funciones", "Leer los requisitos durante 2 min sin codificar"] },
+                { cat: "📊 Trabajo y Oficina", items: ["Ingresar el 1er recibo/comprobante en el sistema", "Responder solo 1 correo o mensaje pendiente", "Abrir la hoja de cálculo y dar formato solo al encabezado"] },
+                { cat: "📚 Estudios y Lectura", items: ["Abrir el libro/PDF en la página del tema", "Leer solo el 1er párrafo o el índice"] }
+            ],
+            jp: [
+                { cat: "💻 プログラミング / 開発", items: ["IDEを開いて初期ファイルを作成する", "関数のコメントやシグネチャだけを書く", "コードを書かずに2分間仕様書を読む"] },
+                { cat: "📊 仕事 & オフィス", items: ["最初の伝票/領収書をシステムに入力する", "保留中のメールまたはメッセージを1通だけ返信する", "スプレッドシートを開いてヘッダーだけを整える"] },
+                { cat: "📚 勉強 & 読書", items: ["本やPDFの該当ページを開く", "最初の1段落または目次だけを読む"] }
+            ],
+            zh: [
+                { cat: "💻 编程与开发", items: ["打开 IDE 并创建初始文件", "仅编写注释或函数签名", "阅读2分钟需求文档，暂不写代码"] },
+                { cat: "📊 办公与工作", items: ["在系统中录入第一张发票/凭证", "仅回复1封待处理的邮件或消息", "打开表格并仅格式化表头"] },
+                { cat: "📚 学习与阅读", items: ["翻开书本或PDF至相关页面", "仅阅读第一段或目录"] }
+            ]
+        };
+
+        function renderInertiaSuggestions() {
+            const container = document.getElementById('inertia-ideas-container');
+            if (!container) return;
+            const ideas = INERTIA_IDEAS[currentLang] || INERTIA_IDEAS.pt;
+
+            container.innerHTML = ideas.map(group => `
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-forest-900 block mb-1.5">${group.cat}</span>
+                    <div class="space-y-1.5">
+                        ${group.items.map(item => `
+                            <button type="button" onclick="applySuggestedTask('${escapeHtml(item)}')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                                • ${escapeHtml(item)}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
 
         const LANG_KEY = 'focusmicro_language';
         let currentLang = 'pt';
@@ -1151,6 +1463,7 @@
             renderPlanningSection();
             renderTodaySection();
             renderProgressSection();
+            updateGamificationUI();
         };
 
         function applyTranslations() {
@@ -1166,12 +1479,14 @@
             setTxt('nav-planejamento', t.navPlanejamento);
             setTxt('nav-meu-dia', t.navMeuDia);
             setTxt('nav-meu-progresso', t.navMeuProgresso);
+            setTxt('nav-loja', t.navLoja);
 
             setHtml('txt-hero-tag', `<i data-lucide="sparkles" class="w-3.5 h-3.5 text-forest-900"></i> ${t.heroTag}`);
             setHtml('txt-hero-title', t.heroTitle);
             setTxt('txt-hero-desc', t.heroDesc);
             setTxt('lbl-task-input', t.taskInputLbl);
             setTxt('btn-quick-start', t.quickStart);
+            setTxt('btn-inertia-ideas', t.btnInertiaIdeas);
             setTxt('lbl-mode', t.modeLbl);
             setTxt('lbl-mode-micro', t.modeMicro);
             setTxt('lbl-mode-pomo', t.modePomo);
@@ -1202,6 +1517,7 @@
             setTxt('txt-meu-dia-sub', t.meuDiaSub);
             setTxt('txt-btn-manual', t.btnManual);
             setTxt('txt-manual-form-title', t.manualFormTitle);
+            setTxt('btn-save-manual-submit', t.manualFormTitle);
 
             setTxt('txt-progresso-title', t.progressoTitle);
             setTxt('txt-progresso-sub', t.progressoSub);
@@ -1218,6 +1534,35 @@
             setTxt('lbl-modal-note', t.modalNoteLbl);
             setTxt('btn-save-victory', t.modalSave);
             setTxt('btn-extend-victory', t.modalExtend);
+
+            setTxt('txt-loja-title', t.lojaTitle);
+            setTxt('txt-loja-sub', t.lojaSub);
+            setTxt('txt-paper-texture-title', t.paperTextureTitle);
+            setTxt('txt-accent-color-title', t.accentColorTitle);
+
+            setTxt('txt-modal-titles-heading', t.modalTitlesHeading);
+            setTxt('txt-modal-titles-sub', t.modalTitlesSub);
+            setTxt('btn-close-titles', t.btnCloseTitles);
+
+            setTxt('txt-inertia-title', t.inertiaTitle);
+            setTxt('txt-inertia-sub', t.inertiaSub);
+            setTxt('btn-close-inertia', t.btnCloseInertia);
+
+            setTxt('lbl-measure-target', t.measureTargetLbl);
+            setTxt('lbl-measure-desc', t.measureDescLbl);
+
+            const calHeaders = {
+                pt: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+                en: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+                es: ['Dom','Seg','Ter','Mié','Jue','Vie','Sáb'],
+                jp: ['日','月','火','水','木','金','土'],
+                zh: ['日','一','二','三','四','五','六']
+            };
+            const weekdays = calHeaders[currentLang] || calHeaders.pt;
+            const calHeaderEl = document.getElementById('cal-weekdays-header');
+            if (calHeaderEl) {
+                calHeaderEl.innerHTML = weekdays.map(w => `<span>${w}</span>`).join('');
+            }
 
             safeCreateIcons();
         }
@@ -1450,7 +1795,7 @@
             const toggleBtnTxt = document.getElementById('btn-playlist-play-txt');
             const playIcon = document.getElementById('playlist-play-icon');
             if (!toggleBtnTxt) return;
-            toggleBtnTxt.textContent = isCustomMusicPlaying ? 'Pausar' : 'Tocar';
+            toggleBtnTxt.textContent = isCustomMusicPlaying ? (currentLang === 'jp' ? '一時停止' : currentLang === 'zh' ? '暂停' : 'Pausar') : (currentLang === 'jp' ? '再生' : currentLang === 'zh' ? '播放' : 'Tocar');
             if (playIcon) playIcon.setAttribute('data-lucide', isCustomMusicPlaying ? 'pause' : 'play');
             safeCreateIcons();
         }
@@ -1483,7 +1828,7 @@
         let editingPlanId = null;
 
         window.startQuickFlow = function() {
-            if (taskInput) taskInput.value = "Apenas começar (2 min)";
+            if (taskInput) taskInput.value = currentLang === 'jp' ? '始める (2分)' : currentLang === 'zh' ? '直接开始 (2分钟)' : 'Apenas começar (2 min)';
             timeRemaining = 120;
             initialDuration = 120;
             setFocusMode('micro');
@@ -1516,7 +1861,6 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Mapeamento seguro dos elementos DOM
             viewSetup = document.getElementById('view-setup');
             viewTimer = document.getElementById('view-timer');
             taskInput = document.getElementById('task-input');
@@ -1816,7 +2160,7 @@
 
         window.startSession = function() {
             const rawTask = taskInput ? taskInput.value.trim() : '';
-            currentTask = rawTask !== '' ? rawTask : 'Micro-Ação Sem Nome';
+            currentTask = rawTask !== '' ? rawTask : (currentLang === 'jp' ? '無題のタスク' : currentLang === 'zh' ? '未命名任务' : 'Micro-Ação Sem Nome');
             pomodoroPhase = 'focus';
             sessionStartTime = Date.now();
             pendingEarnedXP = 0;
@@ -2133,7 +2477,7 @@
 
             if (planDateDisplay) {
                 if (isToday) {
-                    planDateDisplay.textContent = 'Hoje';
+                    planDateDisplay.textContent = currentLang === 'jp' ? '今日' : currentLang === 'zh' ? '今天' : 'Hoje';
                     if (planTodayBtn) planTodayBtn.classList.add('hidden');
                 } else {
                     planDateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { weekday: 'short', day: '2-digit', month: 'short' });
@@ -2160,12 +2504,14 @@
             if (!planTaskList) return;
 
             if (dayTasks.length === 0) {
+                const emptyTxt = currentLang === 'jp' ? 'この日のマイナータスクはありません。' : currentLang === 'zh' ? '今天没有计划的微任务。' : 'Nenhuma micro-tarefa planejada para este dia.';
                 planTaskList.innerHTML = `
                     <div class="bg-paper-50 border border-dashed border-paper-200 p-8 rounded-2xl text-center text-xs text-charcoal-700 opacity-70">
-                        Nenhuma micro-tarefa planejada para este dia.
+                        ${emptyTxt}
                     </div>
                 `;
             } else {
+                const focusBtnTxt = currentLang === 'jp' ? '集中' : currentLang === 'zh' ? '专注' : 'Focar';
                 planTaskList.innerHTML = dayTasks.map(item => `
                     <div class="bg-paper-50 border border-paper-200 p-4 rounded-xl flex items-center justify-between gap-3 shadow-xs hover:border-paper-300 transition-all">
                         <div class="flex items-start gap-3 flex-1 min-w-0">
@@ -2175,14 +2521,14 @@
                             <div class="min-w-0">
                                 <h4 class="text-xs font-bold truncate ${item.completed ? 'line-through text-charcoal-700 opacity-50' : 'text-charcoal-900'}">${escapeHtml(item.title)}</h4>
                                 ${item.desc ? `<p class="text-[11px] text-charcoal-700 opacity-80 mt-0.5 truncate">${escapeHtml(item.desc)}</p>` : ''}
-                                ${item.journalId ? `<span class="inline-flex items-center gap-1 text-[10px] text-forest-900 font-bold mt-1">✦ Salvo no Diário</span>` : ''}
+                                ${item.journalId ? `<span class="inline-flex items-center gap-1 text-[10px] text-forest-900 font-bold mt-1">✦ ${currentLang === 'jp' ? '日記に保存済み' : currentLang === 'zh' ? '已保存至日记' : 'Salvo no Diário'}</span>` : ''}
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
                             ${!item.completed ? `
                                 <button type="button" onclick="startFocusFromPlan('${escapeHtml(item.title)}')" class="bg-forest-900 hover:bg-forest-800 text-paper-50 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer">
                                     <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-                                    <span>Focar</span>
+                                    <span>${focusBtnTxt}</span>
                                 </button>
                                 <button type="button" onclick="editPlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-paper-100 rounded-lg text-charcoal-700 opacity-70 transition-colors cursor-pointer"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
                             ` : ''}
@@ -2301,7 +2647,8 @@
             task.completed = !task.completed;
 
             if (task.completed && !task.journalId) {
-                if (confirm(`Salvar "${task.title}" no seu Diário?`)) {
+                const confirmMsg = currentLang === 'jp' ? `"${task.title}" を日記に保存しますか？` : currentLang === 'zh' ? `是否将 "${task.title}" 保存到日记？` : `Salvar "${task.title}" no seu Diário?`;
+                if (confirm(confirmMsg)) {
                     saveJournalEntry(task.title, 0, task.desc || 'Concluído do Planejamento');
                     addXP(25);
                     task.journalId = true;
@@ -2327,7 +2674,8 @@
         };
 
         window.deletePlanTask = function(dateKey, taskId) {
-            if (!confirm('Excluir esta tarefa planejada?')) return;
+            const confirmMsg = currentLang === 'jp' ? 'このタスクを削除しますか？' : currentLang === 'zh' ? '确定要删除此任务吗？' : 'Excluir esta tarefa planejada?';
+            if (!confirm(confirmMsg)) return;
             const planData = getPlanData();
             if (planData[dateKey]) {
                 planData[dateKey] = planData[dateKey].filter(t => t.id !== taskId);
@@ -2346,7 +2694,8 @@
             if (!container) return;
 
             if (todayEntries.length === 0) {
-                container.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">Nenhuma conquista registrada hoje ainda.</div>`;
+                const emptyTxt = currentLang === 'jp' ? '本日の記録はまだありません。' : currentLang === 'zh' ? '今天还没有任何成就记录。' : 'Nenhuma conquista registrada hoje ainda.';
+                container.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">${emptyTxt}</div>`;
                 return;
             }
 
