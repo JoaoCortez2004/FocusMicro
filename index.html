@@ -12,23 +12,23 @@
                 extend: {
                     colors: {
                         paper: {
-                            50: '#FAF8F5',
-                            100: '#F4F0EA',
-                            200: '#E8E2D8',
-                            300: '#DCD4C7',
+                            50: 'var(--bg-paper-50, #FAF8F5)',
+                            100: 'var(--bg-paper-100, #F4F0EA)',
+                            200: 'var(--bg-paper-200, #E8E2D8)',
+                            300: 'var(--bg-paper-300, #DCD4C7)',
                         },
                         forest: {
-                            800: '#23382B',
-                            900: '#19281F',
+                            800: 'var(--color-accent-dark, #23382B)',
+                            900: 'var(--color-accent, #19281F)',
                         },
                         terracotta: {
                             600: '#C05A46',
                             700: '#A34634',
                         },
                         charcoal: {
-                            700: '#4A4C4C',
-                            800: '#2B2C2C',
-                            900: '#1C1D1D',
+                            700: 'var(--txt-secondary, #4A4C4C)',
+                            800: 'var(--txt-primary, #2B2C2C)',
+                            900: 'var(--txt-primary, #1C1D1D)',
                         }
                     },
                     fontFamily: {
@@ -47,12 +47,72 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
+        :root {
+            --bg-paper-50: #FAF8F5;
+            --bg-paper-100: #F4F0EA;
+            --bg-paper-200: #E8E2D8;
+            --bg-paper-300: #DCD4C7;
+            --txt-primary: #1C1D1D;
+            --txt-secondary: #4A4C4C;
+            --color-accent: #19281F;
+            --color-accent-dark: #23382B;
+            --pattern-bg: radial-gradient(#E2DACD 0.8px, transparent 0.8px);
+            --pattern-size: 20px 20px;
+        }
+
+        /* Estilos e Texturas dos Papéis */
+        body.theme-dots {
+            --pattern-bg: radial-gradient(#E2DACD 0.8px, transparent 0.8px);
+            --pattern-size: 20px 20px;
+        }
+        body.theme-lines {
+            --pattern-bg: linear-gradient(180deg, transparent 23px, #E2DACD 24px);
+            --pattern-size: 100% 24px;
+        }
+        body.theme-grid {
+            --pattern-bg: linear-gradient(to right, #E2DACD 1px, transparent 1px), linear-gradient(to bottom, #E2DACD 1px, transparent 1px);
+            --pattern-size: 20px 20px;
+        }
+        body.theme-kraft {
+            --bg-paper-50: #F2E8D8;
+            --bg-paper-100: #E6D8C3;
+            --bg-paper-200: #D8C6AC;
+            --bg-paper-300: #CBB495;
+            --pattern-bg: radial-gradient(#C4AD8D 0.9px, transparent 0.9px);
+            --pattern-size: 16px 16px;
+        }
+        body.theme-nanquim {
+            --bg-paper-50: #1B1C1D;
+            --bg-paper-100: #242627;
+            --bg-paper-200: #313335;
+            --bg-paper-300: #424548;
+            --txt-primary: #F0EDE6;
+            --txt-secondary: #A0A4A8;
+            --pattern-bg: radial-gradient(#313335 1px, transparent 1px);
+            --pattern-size: 20px 20px;
+        }
+
+        /* Acentos de Cor */
+        body.accent-terracotta {
+            --color-accent: #A34634;
+            --color-accent-dark: #8C392A;
+        }
+        body.accent-nanquim {
+            --color-accent: #2B3A4A;
+            --color-accent-dark: #1E2A37;
+        }
+        body.accent-vinho {
+            --color-accent: #5A2A32;
+            --color-accent-dark: #441E24;
+        }
+
         body {
             font-family: 'DM Sans', sans-serif;
-            background-color: #FAF8F5;
-            color: #1C1D1D;
-            background-image: radial-gradient(#E2DACD 0.8px, transparent 0.8px);
-            background-size: 20px 20px;
+            background-color: var(--bg-paper-50);
+            color: var(--txt-primary);
+            background-image: var(--pattern-bg);
+            background-size: var(--pattern-size);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .font-serif-title {
             font-family: 'Playfair Display', Georgia, serif;
@@ -68,25 +128,32 @@
             background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #DCD4C7;
+            background: var(--bg-paper-300);
             border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #C05A46;
         }
         
         input[type="text"], input[type="number"], select, textarea {
-            background-color: #FAF8F5;
-            border: 1px solid #E8E2D8;
+            background-color: var(--bg-paper-50);
+            border: 1px solid var(--bg-paper-200);
+            color: var(--txt-primary);
             transition: all 0.2s ease;
         }
         input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-            border-color: #19281F;
+            border-color: var(--color-accent);
             box-shadow: 0 0 0 2px rgba(25, 40, 31, 0.08);
+        }
+
+        .zen-active header, .zen-active footer, .zen-active #zen-hide-target {
+            display: none !important;
+        }
+        .zen-active main {
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
     </style>
 </head>
-<body class="min-h-full flex flex-col justify-between selection:bg-forest-900 selection:text-paper-50 antialiased">
+<body class="theme-dots min-h-full flex flex-col justify-between selection:bg-forest-900 selection:text-paper-50 antialiased">
 
     <!-- HEADER & NAV -->
     <header class="border-b border-paper-200 bg-paper-50/95 backdrop-blur-md sticky top-0 z-40 shadow-xs">
@@ -101,8 +168,15 @@
                 </div>
             </div>
 
-            <!-- Header Right Section: Language + Stats + Streak -->
+            <!-- Header Right Section: Level + XP + Language + Streak -->
             <div class="flex items-center gap-2 text-xs ml-auto">
+                <!-- LEVEL & XP BADGE -->
+                <div onclick="switchNavTab('loja')" class="bg-forest-900/10 border border-forest-900/20 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs cursor-pointer hover:bg-forest-900/20 transition-all" title="Ver sua Loja de Papelaria & Nível">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-forest-900"></i>
+                    <span id="header-user-level" class="font-bold text-forest-900 text-[11px]">Nível 1</span>
+                    <span id="header-user-xp" class="text-[10px] text-forest-900/70 font-mono font-bold">0 XP</span>
+                </div>
+
                 <!-- Seletor de Idioma -->
                 <div class="relative inline-flex items-center">
                     <i data-lucide="globe" class="w-3.5 h-3.5 text-charcoal-700 opacity-60 absolute left-2.5 pointer-events-none"></i>
@@ -115,7 +189,7 @@
                     </select>
                 </div>
 
-                <!-- 1. STREAK / OFENSIVA SUAVE -->
+                <!-- STREAK / OFENSIVA SUAVE -->
                 <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs" title="Dias seguidos com registo de foco">
                     <span class="text-xs">🔥</span>
                     <span id="stat-streak" class="font-bold text-terracotta-600 font-mono">0</span>
@@ -126,15 +200,11 @@
                     <span id="txt-stat-today" class="text-charcoal-700 opacity-70 font-medium">Hoje:</span>
                     <span id="stat-today" class="font-bold text-forest-900 font-mono">0</span>
                 </div>
-                <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs hidden sm:flex">
-                    <span id="txt-stat-total" class="text-charcoal-700 opacity-70 font-medium">Total:</span>
-                    <span id="stat-total" class="font-bold text-charcoal-900 font-mono">0</span>
-                </div>
             </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <nav class="max-w-4xl mx-auto px-4 sm:px-6 flex border-t border-paper-200/60 text-xs sm:text-sm overflow-x-auto custom-scrollbar gap-1 sm:gap-4">
+        <nav class="max-w-4xl mx-auto px-4 sm:px-6 flex border-t border-paper-200/60 text-xs sm:text-sm overflow-x-auto custom-scrollbar gap-1 sm:gap-3">
             <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0">
                 <i data-lucide="timer" class="w-4 h-4"></i>
                 <span id="nav-foco">Foco</span>
@@ -150,6 +220,10 @@
             <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
                 <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                 <span id="nav-meu-progresso">Meu Progresso</span>
+            </button>
+            <button data-nav="loja" onclick="switchNavTab('loja')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
+                <i data-lucide="palette" class="w-4 h-4"></i>
+                <span>Personalização</span>
             </button>
         </nav>
     </header>
@@ -180,7 +254,6 @@
                         <div class="flex items-center justify-between">
                             <label id="lbl-task-input" for="task-input" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Sua Micro-Tarefa</label>
                             
-                            <!-- 3. MODO RÁPIDO "ENTRAR NO FLUXO" -->
                             <button type="button" onclick="startQuickFlow()" class="text-[11px] text-forest-900 hover:text-forest-800 font-bold flex items-center gap-1 hover:underline transition-all">
                                 <i data-lucide="zap" class="w-3 h-3"></i>
                                 <span id="btn-quick-start">Entrar no Fluxo (2 min)</span>
@@ -261,7 +334,11 @@
 
             <!-- Timer Running View -->
             <section id="view-timer" class="hidden space-y-6 text-center">
-                <div class="bg-paper-100/70 border border-paper-200 rounded-2xl p-4 sm:p-5 shadow-xs max-w-lg mx-auto">
+                <div class="bg-paper-100/70 border border-paper-200 rounded-2xl p-4 sm:p-5 shadow-xs max-w-lg mx-auto relative">
+                    <button type="button" onclick="toggleZenMode()" class="absolute right-3 top-3 p-2 text-charcoal-700 opacity-60 hover:opacity-100 hover:bg-paper-200/60 rounded-lg transition-all" title="Modo Zen (Tela Cheia)">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                    </button>
+
                     <span id="txt-timer-badge-top" class="text-[11px] font-bold uppercase tracking-widest text-charcoal-700 opacity-70 block mb-1">Em Foco</span>
                     <p id="timer-task-display" class="text-charcoal-900 font-serif-title font-bold text-xl sm:text-2xl line-clamp-2">"Lavar 2 copos"</p>
                 </div>
@@ -278,7 +355,7 @@
                     </div>
                 </div>
 
-                <div class="space-y-4 max-w-lg mx-auto">
+                <div id="zen-hide-target" class="space-y-4 max-w-lg mx-auto">
                     <button id="btn-complete-now" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                         <span id="txt-btn-complete">Concluir Tarefa Agora</span>
@@ -300,11 +377,11 @@
                         </button>
                     </div>
 
-                    <!-- SOM AMBIENTE -->
+                    <!-- SOM AMBIENTE (LOFI + CHUVA) -->
                     <div class="bg-paper-100/60 border border-paper-200 rounded-xl p-3.5 space-y-2.5 text-left">
                         <button id="btn-toggle-lofi" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs text-charcoal-900 transition-all font-semibold shadow-xs">
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="music" class="w-4 h-4 text-forest-900"></i>
+                                <i data-lucide="cloud-rain" class="w-4 h-4 text-forest-900"></i>
                                 <span id="txt-lofi-label">Som Ambiente (Lofi + Chuva Suave)</span>
                             </div>
                             <span id="lofi-status-badge" class="opacity-60 text-[11px] font-normal">Desativado</span>
@@ -317,35 +394,51 @@
                         </div>
                     </div>
 
-                    <!-- MÚSICA PERSONALIZADA -->
+                    <!-- PLAYLIST LOCAL MULTI-FAIXAS -->
                     <div class="bg-paper-100/60 border border-paper-200 rounded-xl p-3.5 space-y-3 text-left">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <i data-lucide="headphones" class="w-4 h-4 text-forest-900"></i>
-                                <span id="txt-custom-music-title" class="text-xs font-bold text-charcoal-900">Sua Música Local</span>
+                                <i data-lucide="music" class="w-4 h-4 text-forest-900"></i>
+                                <span id="txt-custom-music-title" class="text-xs font-bold text-charcoal-900">Sua Playlist Local</span>
                             </div>
-                            <span id="txt-custom-music-badge" class="text-[10px] text-charcoal-700 opacity-60 font-medium">Arquivo Local</span>
+                            <span id="playlist-count-badge" class="text-[10px] text-charcoal-700 opacity-60 font-medium">0 faixas</span>
                         </div>
                         
-                        <input id="custom-music-file" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a" class="hidden">
+                        <input id="custom-music-file" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a" multiple class="hidden">
                         
                         <button id="btn-choose-music" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-3 py-2.5 text-xs font-medium text-charcoal-900 flex items-center justify-center gap-2 transition-all shadow-xs">
-                            <i data-lucide="folder-open" class="w-4 h-4 text-forest-900"></i>
-                            <span id="txt-btn-choose-file">Escolher Áudio</span>
+                            <i data-lucide="folder-plus" class="w-4 h-4 text-forest-900"></i>
+                            <span id="txt-btn-choose-file">Adicionar Músicas da Pasta</span>
                         </button>
                         
-                        <p id="custom-music-name" class="text-[11px] text-charcoal-800 opacity-70 truncate italic px-1">Nenhum arquivo selecionado</p>
+                        <p id="custom-music-name" class="text-[11px] text-forest-900 font-bold truncate italic px-1">Nenhum arquivo selecionado</p>
                         
-                        <div class="flex gap-2">
-                            <button id="btn-toggle-custom-music" type="button" disabled class="flex-1 bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg py-2 text-xs font-semibold text-charcoal-900 disabled:opacity-40 transition-all">Tocar música</button>
-                            <button id="btn-stop-custom-music" type="button" disabled class="bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg px-3 py-2 text-xs font-semibold text-charcoal-900 disabled:opacity-40 transition-all">Parar</button>
+                        <div class="flex items-center justify-between gap-1.5 pt-1">
+                            <button id="btn-playlist-prev" type="button" disabled onclick="playlistPrevTrack()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-900 disabled:opacity-40 transition-all hover:bg-paper-100">
+                                <i data-lucide="skip-back" class="w-3.5 h-3.5"></i>
+                            </button>
+                            
+                            <button id="btn-toggle-custom-music" type="button" disabled class="flex-1 bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg py-2 text-xs font-bold text-charcoal-900 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5">
+                                <i id="playlist-play-icon" data-lucide="play" class="w-3.5 h-3.5"></i>
+                                <span id="btn-playlist-play-txt">Tocar</span>
+                            </button>
+
+                            <button id="btn-playlist-next" type="button" disabled onclick="playlistNextTrack()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-900 disabled:opacity-40 transition-all hover:bg-paper-100">
+                                <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
+                            </button>
+
+                            <button id="btn-playlist-shuffle" type="button" onclick="togglePlaylistShuffle()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-800 opacity-60 hover:opacity-100 transition-all" title="Modo Aleatório">
+                                <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+                            </button>
                         </div>
                         
-                        <div class="flex items-center gap-3 px-1">
+                        <div class="flex items-center gap-3 px-1 pt-1">
                             <i data-lucide="volume-2" class="w-3.5 h-3.5 text-charcoal-700 opacity-60"></i>
                             <input type="range" id="custom-music-volume" min="0" max="1" step="0.05" value="0.5" class="w-full h-1.5 bg-paper-200 rounded-lg appearance-none cursor-pointer">
                             <span class="text-[10px] text-charcoal-800 opacity-70 font-mono">Volume</span>
                         </div>
+
+                        <div id="playlist-items-container" class="hidden space-y-1 max-h-28 overflow-y-auto custom-scrollbar border-t border-paper-200 pt-2"></div>
                     </div>
                 </div>
             </section>
@@ -479,7 +572,6 @@
                     <h3 id="txt-history-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
                     <div class="flex items-center gap-3">
 
-                        <!-- 5. EXPORTAÇÃO MARKDOWN -->
                         <button id="btn-export-markdown" type="button" onclick="exportMarkdownSummary()" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold">
                             <i data-lucide="file-text" class="w-3.5 h-3.5"></i> <span id="txt-btn-md">Copiar Markdown</span>
                         </button>
@@ -497,6 +589,44 @@
             </div>
         </div>
 
+        <!-- SECTION 5: LOJA DE PAPELARIA & PERSONALIZAÇÃO (GAMIFICAÇÃO) -->
+        <div id="section-loja" class="hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-serif-title font-bold text-charcoal-900">Loja de Papelaria &amp; Customização</h2>
+                <p class="text-xs text-charcoal-700 opacity-70">Troque seu XP de foco por novos papéis e acentos visuais para o seu caderno</p>
+            </div>
+
+            <!-- Card do Nível do Usuário -->
+            <div class="bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span id="shop-level-title" class="text-xs font-bold uppercase tracking-wider text-forest-900">Level 1 — Aprendiz do Ritmo</span>
+                        <h3 class="text-lg font-bold text-charcoal-900 font-serif-title mt-0.5"><span id="shop-user-xp">0</span> XP Acumulados</h3>
+                    </div>
+                    <!-- ÍCONE CLICÁVEL DE TÍTULOS -->
+                    <button type="button" onclick="openTitlesModal()" class="w-12 h-12 rounded-2xl bg-forest-900/10 hover:bg-forest-900/20 text-forest-900 flex items-center justify-center font-bold text-lg border border-forest-900/20 transition-all cursor-pointer group relative" title="Clique para ver a lista de títulos desbloqueáveis">
+                        <i data-lucide="award" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                    </button>
+                </div>
+                <div class="w-full bg-paper-200 h-2 rounded-full overflow-hidden">
+                    <div id="shop-xp-progress" class="bg-forest-900 h-full w-0 transition-all duration-500"></div>
+                </div>
+                <p id="shop-next-level-txt" class="text-[11px] text-charcoal-700 opacity-70">Faltam 500 XP para o próximo nível.</p>
+            </div>
+
+            <!-- Escolha de Papel de Fundo -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Textura do Papel</h3>
+                <div id="shop-papers-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+
+            <!-- Escolha da Cor de Acento -->
+            <div class="space-y-3 pt-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Cor dos Acentos</h3>
+                <div id="shop-accents-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+            </div>
+        </div>
+
     </main>
 
     <!-- FOOTER -->
@@ -504,7 +634,7 @@
         <p id="txt-footer">FocusMicro — um dia de cada vez, sem pressa nem culpa.</p>
     </footer>
 
-    <!-- CELEBRATION MODAL WITH REFLECTION NOTE -->
+    <!-- CELEBRATION MODAL -->
     <div id="modal-celebration" class="fixed inset-0 bg-charcoal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-paper-50 border border-paper-200 rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4">
             <div class="w-14 h-14 bg-forest-900/10 text-forest-900 rounded-full flex items-center justify-center mx-auto border border-forest-900/20">
@@ -513,9 +643,9 @@
             <div class="space-y-1.5">
                 <h3 id="modal-title" class="font-serif-title font-bold text-2xl text-charcoal-900">Micro-vitória concluída!</h3>
                 <p id="modal-task-name" class="text-xs text-charcoal-800 opacity-80 italic">"..."</p>
+                <div class="inline-block px-3 py-1 rounded-full bg-forest-900/10 text-forest-900 font-bold text-xs mt-1">+100 XP Ganhos! ✨</div>
             </div>
 
-            <!-- 2. REFLEXÃO / NOTA RÁPIDA -->
             <div class="text-left space-y-1">
                 <label id="lbl-modal-note" for="modal-reflection-note" class="block text-[11px] font-bold text-charcoal-700 uppercase tracking-wider">Como foi essa sessão? (Opcional)</label>
                 <input type="text" id="modal-reflection-note" placeholder="Ex: Fluíu super bem, foco total..." class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none">
@@ -532,6 +662,34 @@
         </div>
     </div>
 
+    <!-- MODAL DE LISTA DE TÍTULOS E NÍVEIS -->
+    <div id="modal-titles" class="fixed inset-0 bg-charcoal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-paper-50 border border-paper-200 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 relative">
+            <button type="button" onclick="closeTitlesModal()" class="absolute right-4 top-4 p-1.5 text-charcoal-700 hover:bg-paper-200/60 rounded-xl transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 border-b border-paper-200 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-forest-900/10 text-forest-900 flex items-center justify-center border border-forest-900/20 shrink-0">
+                    <i data-lucide="trophy" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif-title font-bold text-lg text-charcoal-900 leading-tight">Jornada de Títulos</h3>
+                    <p class="text-[11px] text-charcoal-700 opacity-70">Todos os títulos que você pode desbloquear com XP</p>
+                </div>
+            </div>
+
+            <!-- LISTA DE TÍTULOS -->
+            <div id="titles-list-container" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1"></div>
+
+            <div class="pt-1">
+                <button type="button" onclick="closeTitlesModal()" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- AUDIO ENGINE & SCRIPT -->
     <script>
         function safeCreateIcons() {
@@ -540,14 +698,14 @@
             }
         }
 
-        // --- 4. SINTETIZADOR DE SOM DE CONCLUSÃO (WEB AUDIO API - TIGELA TIBETANA) ---
+        // --- SINTETIZADOR DE SOM DE CONCLUSÃO ---
         function playCompletionChime() {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
                 if (!AudioCtx) return;
                 const ctx = new AudioCtx();
                 
-                const frequencies = [528, 660, 792]; // Acorde harmónico relaxante
+                const frequencies = [528, 660, 792];
                 frequencies.forEach((freq, idx) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -567,6 +725,229 @@
                 });
             } catch(e) {}
         }
+
+        // --- SISTEMA DE XP, NÍVEL E TEMA (GAMIFICAÇÃO) ---
+        const GAMIFICATION_KEY = 'focusmicro_theme_xp';
+
+        const LEVEL_TITLES = [
+            'Aprendiz do Ritmo',
+            'Iniciador Constante',
+            'Artesão do Tempo',
+            'Guardião do Foco',
+            'Mestre do Progresso',
+            'Arquiteto da Mente'
+        ];
+
+        const PAPERS_SHOP = [
+            { id: 'theme-dots', name: 'Papel Creme Pontilhado', price: 0, desc: 'Clássico e sereno.' },
+            { id: 'theme-lines', name: 'Papel Pautado Editorial', price: 200, desc: 'Linhas suaves de caderno tradicional.' },
+            { id: 'theme-grid', name: 'Papel Quadriculado (Grid)', price: 400, desc: 'Estilo técnico e bem estruturado.' },
+            { id: 'theme-kraft', name: 'Papel Kraft Terroso', price: 800, desc: 'Textura calorosa de papel reciclado.' },
+            { id: 'theme-nanquim', name: 'Papel Nanquim Noturno', price: 1500, desc: 'Modo escuro em tom de carvão profundo.' }
+        ];
+
+        const ACCENTS_SHOP = [
+            { id: 'accent-forest', name: 'Verde Floresta', price: 0, color: '#19281F' },
+            { id: 'accent-terracotta', name: 'Terracota Clássico', price: 300, color: '#A34634' },
+            { id: 'accent-nanquim', name: 'Azul Tinta Nanquim', price: 600, color: '#2B3A4A' },
+            { id: 'accent-vinho', name: 'Vinho Editorial', price: 1000, color: '#5A2A32' }
+        ];
+
+        let userGamificationData = {
+            xp: 0,
+            unlockedPapers: ['theme-dots'],
+            unlockedAccents: ['accent-forest'],
+            activePaper: 'theme-dots',
+            activeAccent: 'accent-forest'
+        };
+
+        function loadGamificationData() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(GAMIFICATION_KEY) || 'null');
+                if (saved) {
+                    userGamificationData = { ...userGamificationData, ...saved };
+                }
+            } catch(e) {}
+            applyActiveTheme();
+            updateGamificationUI();
+        }
+
+        function saveGamificationData() {
+            localStorage.setItem(GAMIFICATION_KEY, JSON.stringify(userGamificationData));
+            applyActiveTheme();
+            updateGamificationUI();
+        }
+
+        function addXP(amount) {
+            userGamificationData.xp += amount;
+            saveGamificationData();
+        }
+
+        function getLevelInfo(xp) {
+            const level = Math.floor(xp / 500) + 1;
+            const currentLevelXP = xp % 500;
+            const progressPct = (currentLevelXP / 500) * 100;
+            const title = LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)];
+
+            return { level, title, currentLevelXP, progressPct };
+        }
+
+        function openTitlesModal() {
+            const modal = document.getElementById('modal-titles');
+            const container = document.getElementById('titles-list-container');
+            const userXp = userGamificationData.xp;
+            const currentLvl = Math.floor(userXp / 500) + 1;
+
+            if (container) {
+                container.innerHTML = LEVEL_TITLES.map((title, index) => {
+                    const reqLevel = index + 1;
+                    const reqXp = index * 500;
+                    const isCurrent = reqLevel === currentLvl;
+                    const isUnlocked = reqLevel <= currentLvl;
+
+                    let badgeStatus = '';
+                    let cardBg = '';
+
+                    if (isCurrent) {
+                        cardBg = 'bg-forest-900/10 border-forest-900/30';
+                        badgeStatus = `<span class="px-2 py-0.5 rounded-full bg-forest-900 text-paper-50 text-[10px] font-bold">Atual</span>`;
+                    } else if (isUnlocked) {
+                        cardBg = 'bg-paper-100/70 border-paper-200';
+                        badgeStatus = `<span class="text-forest-900 text-[10px] font-bold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Conquistado</span>`;
+                    } else {
+                        cardBg = 'bg-paper-50 border-paper-200 opacity-60';
+                        badgeStatus = `<span class="text-charcoal-700 text-[10px] font-medium flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Requer ${reqXp} XP</span>`;
+                    }
+
+                    return `
+                        <div class="p-3.5 rounded-2xl border ${cardBg} flex items-center justify-between gap-3 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-xl ${isUnlocked ? 'bg-forest-900 text-paper-50' : 'bg-paper-200 text-charcoal-700'} flex items-center justify-center font-bold text-xs shrink-0">
+                                    Nív.${reqLevel}
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-charcoal-900">${title}</h4>
+                                    <p class="text-[10px] text-charcoal-700 opacity-70">${reqXp} XP acumulados</p>
+                                </div>
+                            </div>
+                            <div class="shrink-0">
+                                ${badgeStatus}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            safeCreateIcons();
+        }
+
+        function closeTitlesModal() {
+            const modal = document.getElementById('modal-titles');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function applyActiveTheme() {
+            document.body.className = `${userGamificationData.activePaper} ${userGamificationData.activeAccent} min-h-full flex flex-col justify-between selection:bg-forest-900 selection:text-paper-50 antialiased`;
+        }
+
+        function updateGamificationUI() {
+            const info = getLevelInfo(userGamificationData.xp);
+            
+            document.getElementById('header-user-level').textContent = `Nív. ${info.level}`;
+            document.getElementById('header-user-xp').textContent = `${userGamificationData.xp} XP`;
+
+            document.getElementById('shop-level-title').textContent = `Nível ${info.level} — ${info.title}`;
+            document.getElementById('shop-user-xp').textContent = userGamificationData.xp;
+            document.getElementById('shop-xp-progress').style.width = `${info.progressPct}%`;
+            document.getElementById('shop-next-level-txt').textContent = `Faltam ${500 - info.currentLevelXP} XP para o Nível ${info.level + 1}.`;
+
+            renderShopGrid();
+        }
+
+        function renderShopGrid() {
+            const papersContainer = document.getElementById('shop-papers-grid');
+            if (papersContainer) {
+                papersContainer.innerHTML = PAPERS_SHOP.map(p => {
+                    const isUnlocked = userGamificationData.unlockedPapers.includes(p.id);
+                    const isActive = userGamificationData.activePaper === p.id;
+                    const canAfford = userGamificationData.xp >= p.price;
+
+                    return `
+                        <div class="bg-paper-50 border border-paper-200 p-4 rounded-xl flex flex-col justify-between space-y-3 shadow-xs">
+                            <div>
+                                <h4 class="text-xs font-bold text-charcoal-900">${p.name}</h4>
+                                <p class="text-[10px] text-charcoal-700 opacity-70 mt-0.5">${p.desc}</p>
+                            </div>
+                            <div>
+                                ${isActive ? `
+                                    <span class="w-full inline-block text-center py-2 bg-forest-900/10 text-forest-900 font-bold text-xs rounded-lg border border-forest-900/20">Em Uso</span>
+                                ` : isUnlocked ? `
+                                    <button type="button" onclick="selectPaperTheme('${p.id}')" class="w-full py-2 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-xs rounded-lg border border-paper-200 transition-colors">Equipar</button>
+                                ` : `
+                                    <button type="button" onclick="unlockPaperTheme('${p.id}', ${p.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-2 bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold text-xs rounded-lg disabled:opacity-40 transition-colors">Desbloquear (${p.price} XP)</button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const accentsContainer = document.getElementById('shop-accents-grid');
+            if (accentsContainer) {
+                accentsContainer.innerHTML = ACCENTS_SHOP.map(a => {
+                    const isUnlocked = userGamificationData.unlockedAccents.includes(a.id);
+                    const isActive = userGamificationData.activeAccent === a.id;
+                    const canAfford = userGamificationData.xp >= a.price;
+
+                    return `
+                        <div class="bg-paper-50 border border-paper-200 p-3.5 rounded-xl flex flex-col items-center justify-between space-y-2.5 text-center shadow-xs">
+                            <div class="w-6 h-6 rounded-full border border-paper-300" style="background-color: ${a.color}"></div>
+                            <span class="text-xs font-bold text-charcoal-900">${a.name}</span>
+                            <div class="w-full">
+                                ${isActive ? `
+                                    <span class="w-full inline-block text-center py-1.5 bg-forest-900/10 text-forest-900 font-bold text-[11px] rounded-lg border border-forest-900/20">Equipado</span>
+                                ` : isUnlocked ? `
+                                    <button type="button" onclick="selectAccentTheme('${a.id}')" class="w-full py-1.5 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-[11px] rounded-lg border border-paper-200 transition-colors">Equipar</button>
+                                ` : `
+                                    <button type="button" onclick="unlockAccentTheme('${a.id}', ${a.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-1.5 bg-forest-900 text-paper-50 font-bold text-[11px] rounded-lg disabled:opacity-40 transition-colors">${a.price} XP</button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        window.selectPaperTheme = function(id) {
+            userGamificationData.activePaper = id;
+            saveGamificationData();
+        };
+
+        window.unlockPaperTheme = function(id, price) {
+            if (userGamificationData.xp >= price) {
+                userGamificationData.xp -= price;
+                userGamificationData.unlockedPapers.push(id);
+                userGamificationData.activePaper = id;
+                saveGamificationData();
+            }
+        };
+
+        window.selectAccentTheme = function(id) {
+            userGamificationData.activeAccent = id;
+            saveGamificationData();
+        };
+
+        window.unlockAccentTheme = function(id, price) {
+            if (userGamificationData.xp >= price) {
+                userGamificationData.xp -= price;
+                userGamificationData.unlockedAccents.push(id);
+                userGamificationData.activeAccent = id;
+                saveGamificationData();
+            }
+        };
 
         // --- TRANSLATIONS (I18N) ---
         const I18N = {
@@ -597,9 +978,8 @@
                 btnPause: "Pausar",
                 btnResume: "Continuar",
                 lofiLabel: "Som Ambiente (Lofi + Chuva Suave)",
-                customMusicTitle: "Sua Música Local",
-                customMusicBadge: "Arquivo Local",
-                btnChooseFile: "Escolher Áudio",
+                customMusicTitle: "Sua Playlist Local",
+                btnChooseFile: "Adicionar Músicas da Pasta",
                 planSectionTitle: "Planejamento Diário",
                 calToggleView: "Ver Calendário Mensal",
                 calToggleHide: "Ocultar Calendário",
@@ -652,9 +1032,8 @@
                 btnPause: "Pause",
                 btnResume: "Resume",
                 lofiLabel: "Ambient Sound (Lofi + Soft Rain)",
-                customMusicTitle: "Your Local Music",
-                customMusicBadge: "Local File",
-                btnChooseFile: "Choose Audio",
+                customMusicTitle: "Your Local Playlist",
+                btnChooseFile: "Add Songs from Folder",
                 planSectionTitle: "Daily Planning",
                 calToggleView: "View Monthly Calendar",
                 calToggleHide: "Hide Calendar",
@@ -707,9 +1086,8 @@
                 btnPause: "Pausar",
                 btnResume: "Continuar",
                 lofiLabel: "Sonido Ambiente (Lofi + Lluvia Suave)",
-                customMusicTitle: "Tu Música Local",
-                customMusicBadge: "Archivo Local",
-                btnChooseFile: "Elegir Audio",
+                customMusicTitle: "Tu Playlist Local",
+                btnChooseFile: "Agregar Canciones",
                 planSectionTitle: "Planificación Diaria",
                 calToggleView: "Ver Calendario Mensual",
                 calToggleHide: "Ocultar Calendario",
@@ -762,9 +1140,8 @@
                 btnPause: "一時停止",
                 btnResume: "再開",
                 lofiLabel: "環境音 (Lofi + 静かな雨)",
-                customMusicTitle: "ローカル音楽",
-                customMusicBadge: "ローカルファイル",
-                btnChooseFile: "音声を選択",
+                customMusicTitle: "ローカルプレイリスト",
+                btnChooseFile: "曲を追加する",
                 planSectionTitle: "毎日の計画",
                 calToggleView: "月間カレンダーを表示",
                 calToggleHide: "カレンダーを隠す",
@@ -817,9 +1194,8 @@
                 btnPause: "暂停",
                 btnResume: "继续",
                 lofiLabel: "环境音 (Lofi + 柔和雨声)",
-                customMusicTitle: "本地音乐",
-                customMusicBadge: "本地文件",
-                btnChooseFile: "选择音频",
+                customMusicTitle: "本地播放列表",
+                btnChooseFile: "添加文件夹歌曲",
                 planSectionTitle: "每日计划",
                 calToggleView: "查看月历",
                 calToggleHide: "隐藏月历",
@@ -895,7 +1271,6 @@
 
             setTxt('txt-lofi-label', t.lofiLabel);
             setTxt('txt-custom-music-title', t.customMusicTitle);
-            setTxt('txt-custom-music-badge', t.customMusicBadge);
             setTxt('txt-btn-choose-file', t.btnChooseFile);
 
             setTxt('txt-plan-section-title', t.planSectionTitle);
@@ -925,6 +1300,13 @@
             setTxt('btn-extend-victory', t.modalExtend);
 
             safeCreateIcons();
+        }
+
+        // --- MODO ZEN FULLSCREEN ---
+        let isZenMode = false;
+        function toggleZenMode() {
+            isZenMode = !isZenMode;
+            document.body.classList.toggle('zen-active', isZenMode);
         }
 
         // --- SISTEMA DE ÁUDIO LOFI ---
@@ -986,30 +1368,125 @@
             if (volumeBox) volumeBox.classList.add('hidden');
         }
 
-        // --- MÚSICA LOCAL ---
+        // --- MINI PLAYER DE PLAYLIST LOCAL ---
+        let playlistFiles = [];
+        let currentTrackIndex = 0;
+        let isPlaylistShuffle = false;
+        let playlistObjectUrls = [];
+
         function handleCustomMusicFile(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('audio/') && !/\.(mp3|wav|ogg|m4a|aac|flac|opus)$/i.test(file.name)) {
-                alert('Escolha um arquivo de áudio válido.');
-                event.target.value = '';
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+
+            stopCustomMusic();
+            playlistObjectUrls.forEach(url => URL.revokeObjectURL(url));
+            playlistObjectUrls = [];
+
+            playlistFiles = files.filter(f => f.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a|aac|flac|opus)$/i.test(f.name));
+
+            if (playlistFiles.length === 0) {
+                alert('Escolha arquivos de áudio válidos.');
                 return;
             }
-            stopCustomMusic();
-            if (customMusicObjectUrl) URL.revokeObjectURL(customMusicObjectUrl);
-            customMusicObjectUrl = URL.createObjectURL(file);
-            customMusicAudio = new Audio(customMusicObjectUrl);
-            customMusicAudio.loop = true;
+
+            currentTrackIndex = 0;
+            document.getElementById('playlist-count-badge').textContent = `${playlistFiles.length} faixas`;
+            renderPlaylistQueue();
+            loadTrack(0);
+        }
+
+        function loadTrack(index) {
+            if (!playlistFiles[index]) return;
+            currentTrackIndex = index;
+
+            if (customMusicAudio) {
+                customMusicAudio.pause();
+            }
+
+            if (!playlistObjectUrls[index]) {
+                playlistObjectUrls[index] = URL.createObjectURL(playlistFiles[index]);
+            }
+
+            customMusicAudio = new Audio(playlistObjectUrls[index]);
             customMusicAudio.volume = parseFloat(document.getElementById('custom-music-volume').value || 0.5);
+
             customMusicAudio.addEventListener('ended', () => {
-                isCustomMusicPlaying = false;
-                updateCustomMusicControls();
+                playlistNextTrack();
             });
-            document.getElementById('custom-music-name').textContent = file.name;
+
+            document.getElementById('custom-music-name').textContent = playlistFiles[index].name;
             document.getElementById('btn-toggle-custom-music').disabled = false;
-            document.getElementById('btn-stop-custom-music').disabled = false;
-            isCustomMusicPlaying = false;
-            updateCustomMusicControls();
+            document.getElementById('btn-playlist-prev').disabled = false;
+            document.getElementById('btn-playlist-next').disabled = false;
+
+            renderPlaylistQueue();
+
+            if (isCustomMusicPlaying) {
+                customMusicAudio.play().catch(()=>{});
+            }
+        }
+
+        function renderPlaylistQueue() {
+            const container = document.getElementById('playlist-items-container');
+            if (!container) return;
+
+            if (playlistFiles.length <= 1) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            container.innerHTML = playlistFiles.map((file, i) => `
+                <div onclick="selectTrackFromQueue(${i})" class="px-2 py-1 rounded text-[11px] flex items-center justify-between cursor-pointer hover:bg-paper-200/60 transition-colors ${i === currentTrackIndex ? 'font-bold text-forest-900 bg-forest-900/10' : 'text-charcoal-800 opacity-80'}">
+                    <span class="truncate">${i + 1}. ${escapeHtml(file.name)}</span>
+                    ${i === currentTrackIndex ? '<i data-lucide="volume-2" class="w-3 h-3 text-forest-900 shrink-0"></i>' : ''}
+                </div>
+            `).join('');
+            safeCreateIcons();
+        }
+
+        window.selectTrackFromQueue = function(idx) {
+            const wasPlaying = isCustomMusicPlaying;
+            loadTrack(idx);
+            if (wasPlaying && customMusicAudio) {
+                customMusicAudio.play().catch(()=>{});
+            }
+        };
+
+        function playlistNextTrack() {
+            if (playlistFiles.length === 0) return;
+            if (isPlaylistShuffle) {
+                currentTrackIndex = Math.floor(Math.random() * playlistFiles.length);
+            } else {
+                currentTrackIndex = (currentTrackIndex + 1) % playlistFiles.length;
+            }
+            const wasPlaying = isCustomMusicPlaying;
+            loadTrack(currentTrackIndex);
+            if (wasPlaying && customMusicAudio) {
+                customMusicAudio.play().catch(()=>{});
+            }
+        }
+
+        function playlistPrevTrack() {
+            if (playlistFiles.length === 0) return;
+            currentTrackIndex = (currentTrackIndex - 1 + playlistFiles.length) % playlistFiles.length;
+            const wasPlaying = isCustomMusicPlaying;
+            loadTrack(currentTrackIndex);
+            if (wasPlaying && customMusicAudio) {
+                customMusicAudio.play().catch(()=>{});
+            }
+        }
+
+        function togglePlaylistShuffle() {
+            isPlaylistShuffle = !isPlaylistShuffle;
+            const btn = document.getElementById('btn-playlist-shuffle');
+            if (isPlaylistShuffle) {
+                btn.classList.remove('opacity-60');
+                btn.classList.add('bg-forest-900', 'text-paper-50');
+            } else {
+                btn.classList.add('opacity-60');
+                btn.classList.remove('bg-forest-900', 'text-paper-50');
+            }
         }
 
         function toggleCustomMusic() {
@@ -1036,12 +1513,12 @@
         }
 
         function updateCustomMusicControls() {
-            const toggleBtn = document.getElementById('btn-toggle-custom-music');
-            const stopBtn = document.getElementById('btn-stop-custom-music');
-            if (!toggleBtn || !stopBtn) return;
-            toggleBtn.textContent = isCustomMusicPlaying ? 'Pausar' : 'Tocar';
-            toggleBtn.disabled = !customMusicAudio;
-            stopBtn.disabled = !customMusicAudio;
+            const toggleBtnTxt = document.getElementById('btn-playlist-play-txt');
+            const playIcon = document.getElementById('playlist-play-icon');
+            if (!toggleBtnTxt) return;
+            toggleBtnTxt.textContent = isCustomMusicPlaying ? 'Pausar' : 'Tocar';
+            if (playIcon) playIcon.setAttribute('data-lucide', isCustomMusicPlaying ? 'pause' : 'play');
+            safeCreateIcons();
         }
 
         // --- APP STATE & KEYS ---
@@ -1057,8 +1534,6 @@
         let pomodoroPhase = 'focus';
         let pomodoroCompletedSessions = 0;
         let customMusicAudio = null;
-        let customMusicObjectUrl = null;
-        let isCustomMusicPlaying = false;
 
         let selectedPlanDate = new Date();
         let calendarCurrentMonth = new Date();
@@ -1099,7 +1574,6 @@
 
         let editingPlanId = null;
 
-        // --- 3. QUICK START "ENTRAR NO FLUXO" ---
         function startQuickFlow() {
             taskInput.value = (I18N[currentLang] || I18N.pt).quickStart || "Apenas começar";
             timeRemaining = 120;
@@ -1122,6 +1596,7 @@
             document.getElementById('section-planejamento').classList.add('hidden');
             document.getElementById('section-meu-dia').classList.add('hidden');
             document.getElementById('section-meu-progresso').classList.add('hidden');
+            document.getElementById('section-loja').classList.add('hidden');
 
             const activeSection = document.getElementById(`section-${target}`);
             if (activeSection) activeSection.classList.remove('hidden');
@@ -1129,6 +1604,7 @@
             if (target === 'planejamento') renderPlanningSection();
             if (target === 'meu-dia') renderTodaySection();
             if (target === 'meu-progresso') renderProgressSection();
+            if (target === 'loja') updateGamificationUI();
         };
 
         // --- INIT ---
@@ -1136,6 +1612,7 @@
             const savedLang = localStorage.getItem(LANG_KEY) || 'pt';
             changeLanguage(savedLang);
 
+            loadGamificationData();
             safeCreateIcons();
             updateAllDisplays();
 
@@ -1171,17 +1648,18 @@
             document.getElementById('btn-choose-music')?.addEventListener('click', () => document.getElementById('custom-music-file')?.click());
             document.getElementById('custom-music-file')?.addEventListener('change', handleCustomMusicFile);
             document.getElementById('btn-toggle-custom-music')?.addEventListener('click', toggleCustomMusic);
-            document.getElementById('btn-stop-custom-music')?.addEventListener('click', stopCustomMusic);
             document.getElementById('custom-music-volume')?.addEventListener('input', (e) => {
                 if (customMusicAudio) customMusicAudio.volume = parseFloat(e.target.value);
             });
 
-            // 2. SALVAR COM NOTA DE REFLEXÃO
             btnSaveVictory.addEventListener('click', () => {
                 const timeSpent = Math.max(initialDuration - timeRemaining, 60);
                 const noteInput = document.getElementById('modal-reflection-note');
                 const noteText = noteInput ? noteInput.value.trim() : '';
+                
                 saveJournalEntry(currentTask, timeSpent, noteText);
+                addXP(100); // 100 XP por tarefa concluída!
+
                 if (noteInput) noteInput.value = '';
                 closeModal();
                 resetToSetup();
@@ -1191,7 +1669,10 @@
                 const timeSpent = Math.max(initialDuration - timeRemaining, 60);
                 const noteInput = document.getElementById('modal-reflection-note');
                 const noteText = noteInput ? noteInput.value.trim() : '';
+                
                 saveJournalEntry(currentTask, timeSpent, noteText);
+                addXP(100);
+
                 if (noteInput) noteInput.value = '';
                 closeModal();
                 timeRemaining = 120;
@@ -1248,6 +1729,7 @@
                 const task = document.getElementById('manual-task-input').value;
                 const note = document.getElementById('manual-note-input').value;
                 saveJournalEntry(task, 0, note);
+                addXP(50);
                 document.getElementById('form-manual-entry').reset();
                 document.getElementById('form-manual-entry').classList.add('hidden');
             });
@@ -1404,6 +1886,7 @@
             clearInterval(timerInterval);
             stopLofiAudio();
             stopCustomMusic();
+            if (isZenMode) toggleZenMode();
             document.title = 'FocusMicro - Caderno de Progresso Pessoal';
             pomodoroPhase = 'focus';
             timeRemaining = focusMode === 'pomodoro' ? 25 * 60 : initialDuration;
@@ -1415,14 +1898,14 @@
 
         function onTimerComplete() {
             clearInterval(timerInterval);
-            
-            // 4. Tocar som relaxante de conclusão
             playCompletionChime();
 
             if (focusMode === 'pomodoro') {
                 if (pomodoroPhase === 'focus') {
                     saveJournalEntry(currentTask, initialDuration);
+                    addXP(150); // Pomodoro rende 150 XP por ciclo de foco!
                     pomodoroCompletedSessions++;
+
                     const settings = getPomodoroSettings();
                     const isLongBreak = pomodoroCompletedSessions % settings.longBreakCycle === 0;
                     const breakMinutes = isLongBreak ? settings.longBreak : settings.shortBreak;
@@ -1440,6 +1923,7 @@
                 pomodoroPhase = 'focus';
                 stopLofiAudio();
                 stopCustomMusic();
+                if (isZenMode) toggleZenMode();
                 viewTimer.classList.add('hidden');
                 viewSetup.classList.remove('hidden');
                 timeRemaining = getPomodoroSettings().focus * 60;
@@ -1450,6 +1934,7 @@
             }
             stopLofiAudio();
             stopCustomMusic();
+            if (isZenMode) toggleZenMode();
             document.title = '🎉 Micro-Vitória!';
             modalTaskName.textContent = `"${currentTask}"`;
             modalCelebration.classList.remove('hidden');
@@ -1485,7 +1970,6 @@
             renderProgressSection();
         }
 
-        // --- 1. CÁLCULO DA OFENSIVA / STREAK ---
         function calculateStreak(entries) {
             if (!entries || entries.length === 0) return 0;
 
@@ -1496,7 +1980,6 @@
             let streak = 0;
             let checkDate = new Date();
 
-            // Se hoje não tem registo, começa a testar a partir de ontem
             const todayStr = checkDate.toISOString().slice(0, 10);
             if (!daysSet.has(todayStr)) {
                 checkDate.setDate(checkDate.getDate() - 1);
@@ -1696,6 +2179,7 @@
             if (task.completed && !task.journalId) {
                 if (confirm(`Salvar "${task.title}" no seu Diário?`)) {
                     saveJournalEntry(task.title, 0, task.desc || 'Concluído do Planejamento');
+                    addXP(100);
                     task.journalId = true;
                 }
             }
@@ -1846,12 +2330,11 @@
             statToday.textContent = todayCount;
             statTotal.textContent = entries.length;
 
-            // 1. Atualiza contador de ofensiva
             const streak = calculateStreak(entries);
             document.getElementById('stat-streak').textContent = streak;
         }
 
-        // --- 5. EXPORTAÇÃO MARKDOWN ---
+        // --- EXPORTAÇÃO MARKDOWN ---
         function exportMarkdownSummary() {
             const entries = getJournalEntries();
             if (entries.length === 0) {
@@ -1908,6 +2391,7 @@
                             }
                         });
                         alert('Backup restaurado com sucesso!');
+                        loadGamificationData();
                         updateAllDisplays();
                         renderPlanningSection();
                         renderTodaySection();
