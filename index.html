@@ -60,7 +60,6 @@
             --pattern-size: 20px 20px;
         }
 
-        /* Estilos e Texturas dos Papéis */
         body.theme-dots {
             --pattern-bg: radial-gradient(#E2DACD 0.8px, transparent 0.8px);
             --pattern-size: 20px 20px;
@@ -92,7 +91,6 @@
             --pattern-size: 20px 20px;
         }
 
-        /* Acentos de Cor */
         body.accent-terracotta {
             --color-accent: #A34634;
             --color-accent-dark: #8C392A;
@@ -113,6 +111,7 @@
             background-image: var(--pattern-bg);
             background-size: var(--pattern-size);
             transition: background-color 0.3s ease, color 0.3s ease;
+            touch-action: manipulation;
         }
         .font-serif-title {
             font-family: 'Playfair Display', Georgia, serif;
@@ -184,13 +183,11 @@
                         <option value="pt">PT-BR</option>
                         <option value="en">EN</option>
                         <option value="es">ES</option>
-                        <option value="ja">JA</option>
-                        <option value="zh">ZH</option>
                     </select>
                 </div>
 
                 <!-- STREAK / OFENSIVA SUAVE -->
-                <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs" title="Dias seguidos com registo de foco">
+                <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs" title="Dias seguidos com registro de foco">
                     <span class="text-xs">🔥</span>
                     <span id="stat-streak" class="font-bold text-terracotta-600 font-mono">0</span>
                     <span id="txt-streak-label" class="text-[10px] text-charcoal-700 opacity-70 hidden sm:inline">dias</span>
@@ -205,23 +202,23 @@
 
         <!-- Navigation Tabs -->
         <nav class="max-w-4xl mx-auto px-4 sm:px-6 flex border-t border-paper-200/60 text-xs sm:text-sm overflow-x-auto custom-scrollbar gap-1 sm:gap-3">
-            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0">
+            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0 cursor-pointer">
                 <i data-lucide="timer" class="w-4 h-4"></i>
                 <span id="nav-foco">Foco</span>
             </button>
-            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
+            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
                 <i data-lucide="calendar" class="w-4 h-4"></i>
-                <span id="nav-planejamento">Meu Planeamento</span>
+                <span id="nav-planejamento">Meu Planejamento</span>
             </button>
-            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
+            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
                 <i data-lucide="sun" class="w-4 h-4"></i>
                 <span id="nav-meu-dia">Meu Dia</span>
             </button>
-            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
+            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
                 <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                 <span id="nav-meu-progresso">Meu Progresso</span>
             </button>
-            <button data-nav="loja" onclick="switchNavTab('loja')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
+            <button data-nav="loja" onclick="switchNavTab('loja')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer">
                 <i data-lucide="palette" class="w-4 h-4"></i>
                 <span>Personalização</span>
             </button>
@@ -252,48 +249,71 @@
                 <div class="bg-paper-50 border border-paper-200/90 p-6 rounded-2xl shadow-xs space-y-6">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <label id="lbl-task-input" for="task-input" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Sua Micro-Tarefa</label>
+                            <label id="lbl-task-input" for="task-input" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Sua Tarefa / Ação</label>
                             
-                            <button type="button" onclick="startQuickFlow()" class="text-[11px] text-forest-900 hover:text-forest-800 font-bold flex items-center gap-1 hover:underline transition-all">
-                                <i data-lucide="zap" class="w-3 h-3"></i>
-                                <span id="btn-quick-start">Entrar no Fluxo (2 min)</span>
-                            </button>
+                            <div class="flex items-center gap-3">
+                                <button type="button" onclick="openInertiaModal()" class="text-[11px] text-terracotta-600 hover:text-terracotta-700 font-bold flex items-center gap-1 hover:underline transition-all cursor-pointer">
+                                    <i data-lucide="lightbulb" class="w-3 h-3"></i>
+                                    <span>💡 O que fazer 1º?</span>
+                                </button>
+                                
+                                <button type="button" onclick="startQuickFlow()" class="text-[11px] text-forest-900 hover:text-forest-800 font-bold flex items-center gap-1 hover:underline transition-all cursor-pointer">
+                                    <i data-lucide="zap" class="w-3 h-3"></i>
+                                    <span id="btn-quick-start">Entrar no Fluxo (2 min)</span>
+                                </button>
+                            </div>
                         </div>
-                        <input type="text" id="task-input" placeholder="Ex: Escrever o primeiro parágrafo, abrir o projeto..." 
+                        <input type="text" id="task-input" placeholder="Ex: Escrever o primeiro parágrafo, lançar nota no sistema..." 
                             class="w-full bg-paper-50 border border-paper-200 rounded-xl px-4 py-3 text-charcoal-900 placeholder-charcoal-700/40 focus:outline-none focus:border-forest-900 text-sm">
                     </div>
 
                     <div class="space-y-2">
                         <label id="lbl-mode" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Método de Foco</label>
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <button id="btn-mode-micro" type="button" class="py-3 px-4 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex items-center justify-center gap-2">
+                        <div class="grid grid-cols-3 gap-2">
+                            <button id="btn-mode-micro" type="button" onclick="setFocusMode('micro')" class="py-3 px-2 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center cursor-pointer">
                                 <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span id="lbl-mode-micro">Micro-tarefa</span>
                             </button>
-                            <button id="btn-mode-pomodoro" type="button" class="py-3 px-4 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex items-center justify-center gap-2">
+                            <button id="btn-mode-pomodoro" type="button" onclick="setFocusMode('pomodoro')" class="py-3 px-2 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center cursor-pointer">
                                 <i data-lucide="clock" class="w-3.5 h-3.5"></i> <span id="lbl-mode-pomo">Pomodoro</span>
+                            </button>
+                            <button id="btn-mode-measure" type="button" onclick="setFocusMode('measure')" class="py-3 px-2 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center cursor-pointer">
+                                <i data-lucide="stopwatch" class="w-3.5 h-3.5 text-forest-900"></i> <span id="lbl-mode-measure">Medir Tempo</span>
                             </button>
                         </div>
                         <p id="mode-description" class="text-[11px] text-charcoal-700 opacity-70 italic">Pequenos blocos de 2, 3 ou 5 minutos para começar sem pressão.</p>
                     </div>
 
+                    <!-- DURAÇÃO INICIAL (MODO MICRO-TAREFA) -->
                     <div id="time-preset-options" class="space-y-2">
                         <label id="lbl-duration" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Duração Inicial</label>
                         <div class="grid grid-cols-3 gap-3">
-                            <button type="button" data-time="120" class="btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5">
+                            <button type="button" data-time="120" class="btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5 cursor-pointer">
                                 <span class="font-mono font-bold text-sm">2 min</span>
                                 <span id="preset-2m-sub" class="text-[10px] opacity-60">Direto ao ponto</span>
                             </button>
-                            <button type="button" data-time="180" class="btn-time-preset active py-3 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5">
+                            <button type="button" data-time="180" class="btn-time-preset active py-3 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5 cursor-pointer">
                                 <span class="font-mono font-bold text-sm">3 min</span>
                                 <span id="preset-3m-sub" class="text-[10px] text-forest-900/80 font-semibold">Recomendado</span>
                             </button>
-                            <button type="button" data-time="300" class="btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5">
+                            <button type="button" data-time="300" class="btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5 cursor-pointer">
                                 <span class="font-mono font-bold text-sm">5 min</span>
                                 <span id="preset-5m-sub" class="text-[10px] opacity-60">Aprofundado</span>
                             </button>
                         </div>
                     </div>
 
+                    <!-- MODO MEDIR TEMPO -->
+                    <div id="measure-info" class="hidden rounded-xl border border-paper-200/90 bg-paper-100/40 p-4 space-y-3 text-xs text-charcoal-800">
+                        <div class="space-y-1">
+                            <label for="measure-target-minutes" class="block font-semibold text-charcoal-900">Tempo que você almeja/pretende gastar (minutos):</label>
+                            <input id="measure-target-minutes" type="number" min="1" max="300" value="15" inputmode="numeric" class="w-full bg-paper-50 border border-paper-200 rounded-lg px-3 py-2 text-sm text-charcoal-900 focus:outline-none focus:border-forest-900">
+                        </div>
+                        <p class="text-[11px] text-charcoal-700 opacity-80">
+                            O cronômetro vai contar para frente. Quando você terminar, vamos comparar o seu tempo real com a sua meta!
+                        </p>
+                    </div>
+
+                    <!-- CONFIGURAÇÃO DO POMODORO -->
                     <div id="pomodoro-info" class="hidden rounded-xl border border-paper-200/90 bg-paper-100/40 p-4 space-y-4 text-xs text-charcoal-800">
                         <div class="grid grid-cols-2 gap-3">
                             <div class="space-y-1">
@@ -325,7 +345,7 @@
                         </div>
                     </div>
 
-                    <button id="btn-start" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md active:scale-[0.99] cursor-pointer">
+                    <button id="btn-start" onclick="startSession()" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md active:scale-[0.99] cursor-pointer">
                         <i data-lucide="play" class="w-4 h-4 fill-current"></i>
                         <span id="txt-btn-start">Iniciar Foco Agora</span>
                     </button>
@@ -335,7 +355,7 @@
             <!-- Timer Running View -->
             <section id="view-timer" class="hidden space-y-6 text-center">
                 <div class="bg-paper-100/70 border border-paper-200 rounded-2xl p-4 sm:p-5 shadow-xs max-w-lg mx-auto relative">
-                    <button type="button" onclick="toggleZenMode()" class="absolute right-3 top-3 p-2 text-charcoal-700 opacity-60 hover:opacity-100 hover:bg-paper-200/60 rounded-lg transition-all" title="Modo Zen (Tela Cheia)">
+                    <button type="button" onclick="toggleZenMode()" class="absolute right-3 top-3 p-2 text-charcoal-700 opacity-60 hover:opacity-100 hover:bg-paper-200/60 rounded-lg transition-all cursor-pointer" title="Modo Zen (Tela Cheia)">
                         <i data-lucide="maximize-2" class="w-4 h-4"></i>
                     </button>
 
@@ -356,30 +376,30 @@
                 </div>
 
                 <div id="zen-hide-target" class="space-y-4 max-w-lg mx-auto">
-                    <button id="btn-complete-now" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
+                    <button id="btn-complete-now" onclick="onTimerComplete(false)" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99] cursor-pointer">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                         <span id="txt-btn-complete">Concluir Tarefa Agora</span>
                     </button>
 
                     <div class="flex items-center justify-center gap-2.5">
-                        <button id="btn-pause" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-semibold py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-2 text-xs shadow-xs">
+                        <button id="btn-pause" onclick="togglePause()" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-semibold py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-2 text-xs shadow-xs cursor-pointer">
                             <i id="pause-icon" data-lucide="pause" class="w-4 h-4"></i>
                             <span id="btn-pause-text">Pausar</span>
                         </button>
 
-                        <button id="btn-add-2min" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-forest-900 font-semibold py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs shadow-xs">
+                        <button id="btn-add-2min" onclick="extendTime(120)" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-forest-900 font-semibold py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs shadow-xs cursor-pointer">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             <span>+2 Min</span>
                         </button>
 
-                        <button id="btn-reset" type="button" class="bg-paper-100 hover:bg-terracotta-600/10 hover:text-terracotta-600 text-charcoal-800 font-medium p-2.5 rounded-xl transition-all border border-paper-200 shadow-xs" title="Descartar Sessão">
+                        <button id="btn-reset" onclick="resetToSetup()" type="button" class="bg-paper-100 hover:bg-terracotta-600/10 hover:text-terracotta-600 text-charcoal-800 font-medium p-2.5 rounded-xl transition-all border border-paper-200 shadow-xs cursor-pointer" title="Descartar Sessão">
                             <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                         </button>
                     </div>
 
                     <!-- SOM AMBIENTE (LOFI + CHUVA) -->
                     <div class="bg-paper-100/60 border border-paper-200 rounded-xl p-3.5 space-y-2.5 text-left">
-                        <button id="btn-toggle-lofi" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs text-charcoal-900 transition-all font-semibold shadow-xs">
+                        <button id="btn-toggle-lofi" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs text-charcoal-900 transition-all font-semibold shadow-xs cursor-pointer">
                             <div class="flex items-center gap-2.5">
                                 <i data-lucide="cloud-rain" class="w-4 h-4 text-forest-900"></i>
                                 <span id="txt-lofi-label">Som Ambiente (Lofi + Chuva Suave)</span>
@@ -406,7 +426,7 @@
                         
                         <input id="custom-music-file" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a" multiple class="hidden">
                         
-                        <button id="btn-choose-music" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-3 py-2.5 text-xs font-medium text-charcoal-900 flex items-center justify-center gap-2 transition-all shadow-xs">
+                        <button id="btn-choose-music" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-3 py-2.5 text-xs font-medium text-charcoal-900 flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer">
                             <i data-lucide="folder-plus" class="w-4 h-4 text-forest-900"></i>
                             <span id="txt-btn-choose-file">Adicionar Músicas da Pasta</span>
                         </button>
@@ -414,20 +434,20 @@
                         <p id="custom-music-name" class="text-[11px] text-forest-900 font-bold truncate italic px-1">Nenhum arquivo selecionado</p>
                         
                         <div class="flex items-center justify-between gap-1.5 pt-1">
-                            <button id="btn-playlist-prev" type="button" disabled onclick="playlistPrevTrack()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-900 disabled:opacity-40 transition-all hover:bg-paper-100">
+                            <button id="btn-playlist-prev" type="button" disabled onclick="playlistPrevTrack()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-900 disabled:opacity-40 transition-all hover:bg-paper-100 cursor-pointer">
                                 <i data-lucide="skip-back" class="w-3.5 h-3.5"></i>
                             </button>
                             
-                            <button id="btn-toggle-custom-music" type="button" disabled class="flex-1 bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg py-2 text-xs font-bold text-charcoal-900 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5">
+                            <button id="btn-toggle-custom-music" type="button" disabled class="flex-1 bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg py-2 text-xs font-bold text-charcoal-900 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                                 <i id="playlist-play-icon" data-lucide="play" class="w-3.5 h-3.5"></i>
                                 <span id="btn-playlist-play-txt">Tocar</span>
                             </button>
 
-                            <button id="btn-playlist-next" type="button" disabled onclick="playlistNextTrack()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-900 disabled:opacity-40 transition-all hover:bg-paper-100">
+                            <button id="btn-playlist-next" type="button" disabled onclick="playlistNextTrack()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-900 disabled:opacity-40 transition-all hover:bg-paper-100 cursor-pointer">
                                 <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
                             </button>
 
-                            <button id="btn-playlist-shuffle" type="button" onclick="togglePlaylistShuffle()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-800 opacity-60 hover:opacity-100 transition-all" title="Modo Aleatório">
+                            <button id="btn-playlist-shuffle" type="button" onclick="togglePlaylistShuffle()" class="p-2 bg-paper-50 border border-paper-200 rounded-lg text-charcoal-800 opacity-60 hover:opacity-100 transition-all cursor-pointer" title="Modo Aleatório">
                                 <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -449,14 +469,14 @@
             <div class="bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-4">
                 <div class="flex items-center justify-between border-b border-paper-200 pb-3">
                     <span id="txt-plan-section-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Planejamento Diário</span>
-                    <button id="btn-toggle-calendar-view" type="button" class="text-xs text-forest-900 font-bold hover:underline flex items-center gap-1.5">
+                    <button id="btn-toggle-calendar-view" type="button" class="text-xs text-forest-900 font-bold hover:underline flex items-center gap-1.5 cursor-pointer">
                         <i data-lucide="calendar-days" class="w-4 h-4"></i>
                         <span id="calendar-toggle-label">Ver Calendário Mensal</span>
                     </button>
                 </div>
 
                 <div id="day-navigation-bar" class="flex items-center justify-between pt-1">
-                    <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-100 rounded-lg transition-colors text-charcoal-900">
+                    <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-100 rounded-lg transition-colors text-charcoal-900 cursor-pointer">
                         <i data-lucide="chevron-left" class="w-5 h-5"></i>
                     </button>
                     <div class="text-center">
@@ -464,10 +484,10 @@
                         <span id="plan-subdate-display" class="text-xs text-charcoal-700 opacity-70 font-medium">-</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <button id="plan-today-btn" type="button" class="text-xs font-semibold bg-paper-200 hover:bg-paper-300 px-3 py-1.5 rounded-lg text-charcoal-900 transition-colors hidden shadow-xs">
+                        <button id="plan-today-btn" type="button" class="text-xs font-semibold bg-paper-200 hover:bg-paper-300 px-3 py-1.5 rounded-lg text-charcoal-900 transition-colors hidden shadow-xs cursor-pointer">
                             Ir para Hoje
                         </button>
-                        <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-100 rounded-lg transition-colors text-charcoal-900">
+                        <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-100 rounded-lg transition-colors text-charcoal-900 cursor-pointer">
                             <i data-lucide="chevron-right" class="w-5 h-5"></i>
                         </button>
                     </div>
@@ -476,9 +496,9 @@
 
             <div id="monthly-calendar-container" class="hidden bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-4">
                 <div class="flex items-center justify-between">
-                    <button id="cal-prev-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <button id="cal-prev-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900 cursor-pointer"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
                     <h3 id="cal-month-year-label" class="font-serif-title font-bold text-base text-charcoal-900">-</h3>
-                    <button id="cal-next-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    <button id="cal-next-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900 cursor-pointer"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
                 <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-charcoal-700 opacity-60 uppercase tracking-wider">
                     <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
@@ -519,7 +539,7 @@
                     <h2 id="txt-meu-dia-title" class="text-2xl font-serif-title font-bold text-charcoal-900">Meu Dia</h2>
                     <p id="txt-meu-dia-sub" class="text-xs text-charcoal-700 opacity-70">Suas vitórias e registros de hoje</p>
                 </div>
-                <button id="btn-add-manual" type="button" class="bg-paper-50 border border-paper-200 hover:bg-paper-100 text-charcoal-900 text-xs font-semibold py-2 px-3.5 rounded-xl flex items-center gap-1.5 transition-colors shadow-xs">
+                <button id="btn-add-manual" type="button" class="bg-paper-50 border border-paper-200 hover:bg-paper-100 text-charcoal-900 text-xs font-semibold py-2 px-3.5 rounded-xl flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer">
                     <i data-lucide="edit-3" class="w-3.5 h-3.5 text-forest-900"></i>
                     <span id="txt-btn-manual">Registro Manual</span>
                 </button>
@@ -532,8 +552,8 @@
                 <textarea id="manual-note-input" placeholder="Anotação opcional..." rows="2"
                     class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2 text-xs text-charcoal-900"></textarea>
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold px-4 py-2 rounded-lg transition-colors">Salvar Registro</button>
-                    <button type="button" id="btn-cancel-manual" class="text-xs font-medium text-charcoal-700 hover:text-charcoal-900 px-3 py-2">Cancelar</button>
+                    <button type="submit" class="bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer">Salvar Registro</button>
+                    <button type="button" id="btn-cancel-manual" class="text-xs font-medium text-charcoal-700 hover:text-charcoal-900 px-3 py-2 cursor-pointer">Cancelar</button>
                 </div>
             </form>
 
@@ -572,11 +592,11 @@
                     <h3 id="txt-history-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
                     <div class="flex items-center gap-3">
 
-                        <button id="btn-export-markdown" type="button" onclick="exportMarkdownSummary()" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold">
+                        <button id="btn-export-markdown" type="button" onclick="exportMarkdownSummary()" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold cursor-pointer">
                             <i data-lucide="file-text" class="w-3.5 h-3.5"></i> <span id="txt-btn-md">Copiar Markdown</span>
                         </button>
 
-                        <button id="btn-export-backup" type="button" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold">
+                        <button id="btn-export-backup" type="button" onclick="exportBackup()" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold cursor-pointer">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup JSON
                         </button>
                         <label class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold cursor-pointer">
@@ -603,7 +623,6 @@
                         <span id="shop-level-title" class="text-xs font-bold uppercase tracking-wider text-forest-900">Level 1 — Aprendiz do Ritmo</span>
                         <h3 class="text-lg font-bold text-charcoal-900 font-serif-title mt-0.5"><span id="shop-user-xp">0</span> XP Acumulados</h3>
                     </div>
-                    <!-- ÍCONE CLICÁVEL DE TÍTULOS -->
                     <button type="button" onclick="openTitlesModal()" class="w-12 h-12 rounded-2xl bg-forest-900/10 hover:bg-forest-900/20 text-forest-900 flex items-center justify-center font-bold text-lg border border-forest-900/20 transition-all cursor-pointer group relative" title="Clique para ver a lista de títulos desbloqueáveis">
                         <i data-lucide="award" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
                     </button>
@@ -643,7 +662,15 @@
             <div class="space-y-1.5">
                 <h3 id="modal-title" class="font-serif-title font-bold text-2xl text-charcoal-900">Micro-vitória concluída!</h3>
                 <p id="modal-task-name" class="text-xs text-charcoal-800 opacity-80 italic">"..."</p>
-                <div class="inline-block px-3 py-1 rounded-full bg-forest-900/10 text-forest-900 font-bold text-xs mt-1">+100 XP Ganhos! ✨</div>
+                <div id="modal-xp-badge" class="inline-block px-3.5 py-1 rounded-full bg-forest-900/10 text-forest-900 font-bold text-xs mt-1 border border-forest-900/20">+0 XP Ganho! ✨</div>
+            </div>
+
+            <div id="modal-time-comparison-box" class="hidden rounded-xl bg-paper-100 border border-paper-200 p-3 text-xs text-left space-y-1">
+                <div class="flex justify-between font-bold text-charcoal-900">
+                    <span>Tempo Meta: <span id="comp-target-time" class="text-forest-900 font-mono">0 min</span></span>
+                    <span>Real: <span id="comp-actual-time" class="text-forest-900 font-mono">0 min</span></span>
+                </div>
+                <p id="comp-result-msg" class="text-[11px] text-forest-900 font-semibold italic"></p>
             </div>
 
             <div class="text-left space-y-1">
@@ -652,10 +679,10 @@
             </div>
 
             <div class="space-y-2.5 pt-1">
-                <button id="btn-save-victory" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3.5 rounded-xl transition-all shadow-md">
+                <button id="btn-save-victory" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3.5 rounded-xl transition-all shadow-md cursor-pointer">
                     Guardar no Diário
                 </button>
-                <button id="btn-extend-victory" type="button" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-semibold py-3 rounded-xl border border-paper-200 transition-all">
+                <button id="btn-extend-victory" type="button" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-semibold py-3 rounded-xl border border-paper-200 transition-all cursor-pointer">
                     +2 min de impulso
                 </button>
             </div>
@@ -665,7 +692,7 @@
     <!-- MODAL DE LISTA DE TÍTULOS E NÍVEIS -->
     <div id="modal-titles" class="fixed inset-0 bg-charcoal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-paper-50 border border-paper-200 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 relative">
-            <button type="button" onclick="closeTitlesModal()" class="absolute right-4 top-4 p-1.5 text-charcoal-700 hover:bg-paper-200/60 rounded-xl transition-all">
+            <button type="button" onclick="closeTitlesModal()" class="absolute right-4 top-4 p-1.5 text-charcoal-700 hover:bg-paper-200/60 rounded-xl transition-all cursor-pointer">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             
@@ -679,12 +706,80 @@
                 </div>
             </div>
 
-            <!-- LISTA DE TÍTULOS -->
             <div id="titles-list-container" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1"></div>
 
             <div class="pt-1">
-                <button type="button" onclick="closeTitlesModal()" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all">
+                <button type="button" onclick="closeTitlesModal()" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all cursor-pointer">
                     Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL QUEBRADOR DE INÉRCIA (SUGESTÕES) -->
+    <div id="modal-inertia" class="fixed inset-0 bg-charcoal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-paper-50 border border-paper-200 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 relative">
+            <button type="button" onclick="closeInertiaModal()" class="absolute right-4 top-4 p-1.5 text-charcoal-700 hover:bg-paper-200/60 rounded-xl transition-all cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 border-b border-paper-200 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-terracotta-600/10 text-terracotta-600 flex items-center justify-center border border-terracotta-600/20 shrink-0">
+                    <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif-title font-bold text-lg text-charcoal-900 leading-tight">Ideias para Começar Já</h3>
+                    <p class="text-[11px] text-charcoal-700 opacity-70">Escolha uma micro-ação de 2 minutos para vencer a inércia</p>
+                </div>
+            </div>
+
+            <div class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-forest-900 block mb-1.5">💻 Programação / Dev</span>
+                    <div class="space-y-1.5">
+                        <button type="button" onclick="applySuggestedTask('Abrir a IDE e criar o arquivo inicial')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Abrir a IDE e criar o arquivo inicial
+                        </button>
+                        <button type="button" onclick="applySuggestedTask('Escrever apenas os comentários ou assinaturas das funções')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Escrever apenas os comentários ou funções
+                        </button>
+                        <button type="button" onclick="applySuggestedTask('Ler os requisitos por 2 min sem codar nada')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Ler os requisitos por 2 min sem codar nada
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-terracotta-600 block mb-1.5">📊 Trabalho &amp; Escritório</span>
+                    <div class="space-y-1.5">
+                        <button type="button" onclick="applySuggestedTask('Lançar a 1ª nota/comprovante no sistema')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Lançar a 1ª nota/comprovante no sistema
+                        </button>
+                        <button type="button" onclick="applySuggestedTask('Responder apenas 1 e-mail ou mensagem pendente')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Responder apenas 1 e-mail pendente
+                        </button>
+                        <button type="button" onclick="applySuggestedTask('Abrir a planilha e formatar só o cabeçalho')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Abrir a planilha e formatar só o cabeçalho
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-charcoal-800 block mb-1.5">📚 Estudos &amp; Leitura</span>
+                    <div class="space-y-1.5">
+                        <button type="button" onclick="applySuggestedTask('Abrir o livro/PDF na página do assunto')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Abrir o livro/PDF na página do assunto
+                        </button>
+                        <button type="button" onclick="applySuggestedTask('Ler apenas o 1º parágrafo ou sumário')" class="w-full text-left p-2.5 rounded-xl bg-paper-100 hover:bg-paper-200/80 text-xs text-charcoal-900 transition-all font-medium border border-paper-200 cursor-pointer">
+                            • Ler apenas o 1º parágrafo ou sumário
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-1">
+                <button type="button" onclick="closeInertiaModal()" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-bold py-3 rounded-xl border border-paper-200 transition-all cursor-pointer">
+                    Cancelar
                 </button>
             </div>
         </div>
@@ -698,7 +793,6 @@
             }
         }
 
-        // --- SINTETIZADOR DE SOM DE CONCLUSÃO ---
         function playCompletionChime() {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -726,16 +820,17 @@
             } catch(e) {}
         }
 
-        // --- SISTEMA DE XP, NÍVEL E TEMA (GAMIFICAÇÃO) ---
+        // --- SISTEMA DE GAMIFICAÇÃO & NÍVEIS ---
         const GAMIFICATION_KEY = 'focusmicro_theme_xp';
 
         const LEVEL_TITLES = [
-            'Aprendiz do Ritmo',
-            'Iniciador Constante',
-            'Artesão do Tempo',
-            'Guardião do Foco',
-            'Mestre do Progresso',
-            'Arquiteto da Mente'
+            'Aprendiz do Ritmo',      // Nível 1 (0 XP)
+            'Iniciador Constante',    // Nível 2 (500 XP)
+            'Artesão do Tempo',       // Nível 3 (1000 XP)
+            'Guardião do Foco',       // Nível 4 (1500 XP)
+            'Mestre do Progresso',    // Nível 5 (2000 XP)
+            'Arquiteto da Mente',     // Nível 6 (2500 XP)
+            'Rei do Foco'             // Nível 7 (3000 XP)
         ];
 
         const PAPERS_SHOP = [
@@ -779,6 +874,7 @@
         }
 
         function addXP(amount) {
+            if (amount <= 0) return;
             userGamificationData.xp += amount;
             saveGamificationData();
         }
@@ -786,13 +882,13 @@
         function getLevelInfo(xp) {
             const level = Math.floor(xp / 500) + 1;
             const currentLevelXP = xp % 500;
-            const progressPct = (currentLevelXP / 500) * 100;
+            const progressPct = Math.min((currentLevelXP / 500) * 100, 100);
             const title = LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)];
 
             return { level, title, currentLevelXP, progressPct };
         }
 
-        function openTitlesModal() {
+        window.openTitlesModal = function() {
             const modal = document.getElementById('modal-titles');
             const container = document.getElementById('titles-list-container');
             const userXp = userGamificationData.xp;
@@ -810,23 +906,23 @@
 
                     if (isCurrent) {
                         cardBg = 'bg-forest-900/10 border-forest-900/30';
-                        badgeStatus = `<span class="px-2 py-0.5 rounded-full bg-forest-900 text-paper-50 text-[10px] font-bold">Atual</span>`;
+                        badgeStatus = `<span class="px-2.5 py-1 rounded-full bg-forest-900 text-paper-50 text-[10px] font-bold">Atual</span>`;
                     } else if (isUnlocked) {
                         cardBg = 'bg-paper-100/70 border-paper-200';
-                        badgeStatus = `<span class="text-forest-900 text-[10px] font-bold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Conquistado</span>`;
+                        badgeStatus = `<span class="text-forest-900 text-[10px] font-bold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Conquistado</span>`;
                     } else {
                         cardBg = 'bg-paper-50 border-paper-200 opacity-60';
-                        badgeStatus = `<span class="text-charcoal-700 text-[10px] font-medium flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Requer ${reqXp} XP</span>`;
+                        badgeStatus = `<span class="text-charcoal-700 text-[10px] font-medium flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Requer ${reqXp} XP</span>`;
                     }
 
                     return `
                         <div class="p-3.5 rounded-2xl border ${cardBg} flex items-center justify-between gap-3 transition-all">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-xl ${isUnlocked ? 'bg-forest-900 text-paper-50' : 'bg-paper-200 text-charcoal-700'} flex items-center justify-center font-bold text-xs shrink-0">
+                                <div class="w-9 h-9 rounded-xl ${isUnlocked ? 'bg-forest-900 text-paper-50' : 'bg-paper-200 text-charcoal-700'} flex items-center justify-center font-bold text-xs shrink-0">
                                     Nív.${reqLevel}
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-charcoal-900">${title}</h4>
+                                    <h4 class="text-xs font-bold text-charcoal-900 ${title === 'Rei do Foco' ? 'text-terracotta-600 font-extrabold' : ''}">${title} ${title === 'Rei do Foco' ? '👑' : ''}</h4>
                                     <p class="text-[10px] text-charcoal-700 opacity-70">${reqXp} XP acumulados</p>
                                 </div>
                             </div>
@@ -841,13 +937,34 @@
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
             safeCreateIcons();
-        }
+        };
 
-        function closeTitlesModal() {
+        window.closeTitlesModal = function() {
             const modal = document.getElementById('modal-titles');
             modal.classList.add('opacity-0');
             setTimeout(() => modal.classList.add('hidden'), 300);
-        }
+        };
+
+        window.openInertiaModal = function() {
+            const modal = document.getElementById('modal-inertia');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            safeCreateIcons();
+        };
+
+        window.closeInertiaModal = function() {
+            const modal = document.getElementById('modal-inertia');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        window.applySuggestedTask = function(taskText) {
+            document.getElementById('task-input').value = taskText;
+            closeInertiaModal();
+            timeRemaining = 120;
+            initialDuration = 120;
+            startSession();
+        };
 
         function applyActiveTheme() {
             document.body.className = `${userGamificationData.activePaper} ${userGamificationData.activeAccent} min-h-full flex flex-col justify-between selection:bg-forest-900 selection:text-paper-50 antialiased`;
@@ -856,13 +973,26 @@
         function updateGamificationUI() {
             const info = getLevelInfo(userGamificationData.xp);
             
-            document.getElementById('header-user-level').textContent = `Nív. ${info.level}`;
-            document.getElementById('header-user-xp').textContent = `${userGamificationData.xp} XP`;
+            const headerLevel = document.getElementById('header-user-level');
+            const headerXp = document.getElementById('header-user-xp');
+            if (headerLevel) headerLevel.textContent = `Nív. ${info.level}`;
+            if (headerXp) headerXp.textContent = `${userGamificationData.xp} XP`;
 
-            document.getElementById('shop-level-title').textContent = `Nível ${info.level} — ${info.title}`;
-            document.getElementById('shop-user-xp').textContent = userGamificationData.xp;
-            document.getElementById('shop-xp-progress').style.width = `${info.progressPct}%`;
-            document.getElementById('shop-next-level-txt').textContent = `Faltam ${500 - info.currentLevelXP} XP para o Nível ${info.level + 1}.`;
+            const shopTitle = document.getElementById('shop-level-title');
+            const shopXp = document.getElementById('shop-user-xp');
+            const shopProgress = document.getElementById('shop-xp-progress');
+            if (shopTitle) shopTitle.textContent = `Nível ${info.level} — ${info.title}`;
+            if (shopXp) shopXp.textContent = userGamificationData.xp;
+            if (shopProgress) shopProgress.style.width = `${info.progressPct}%`;
+            
+            const shopNextLevel = document.getElementById('shop-next-level-txt');
+            if (shopNextLevel) {
+                if (info.level >= LEVEL_TITLES.length) {
+                    shopNextLevel.textContent = `Você alcançou a patente máxima de Rei do Foco! 👑`;
+                } else {
+                    shopNextLevel.textContent = `Faltam ${500 - info.currentLevelXP} XP para o Nível ${info.level + 1}.`;
+                }
+            }
 
             renderShopGrid();
         }
@@ -885,9 +1015,9 @@
                                 ${isActive ? `
                                     <span class="w-full inline-block text-center py-2 bg-forest-900/10 text-forest-900 font-bold text-xs rounded-lg border border-forest-900/20">Em Uso</span>
                                 ` : isUnlocked ? `
-                                    <button type="button" onclick="selectPaperTheme('${p.id}')" class="w-full py-2 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-xs rounded-lg border border-paper-200 transition-colors">Equipar</button>
+                                    <button type="button" onclick="selectPaperTheme('${p.id}')" class="w-full py-2 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-xs rounded-lg border border-paper-200 transition-colors cursor-pointer">Equipar</button>
                                 ` : `
-                                    <button type="button" onclick="unlockPaperTheme('${p.id}', ${p.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-2 bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold text-xs rounded-lg disabled:opacity-40 transition-colors">Desbloquear (${p.price} XP)</button>
+                                    <button type="button" onclick="unlockPaperTheme('${p.id}', ${p.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-2 bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold text-xs rounded-lg disabled:opacity-40 transition-colors cursor-pointer">Desbloquear (${p.price} XP)</button>
                                 `}
                             </div>
                         </div>
@@ -910,9 +1040,9 @@
                                 ${isActive ? `
                                     <span class="w-full inline-block text-center py-1.5 bg-forest-900/10 text-forest-900 font-bold text-[11px] rounded-lg border border-forest-900/20">Equipado</span>
                                 ` : isUnlocked ? `
-                                    <button type="button" onclick="selectAccentTheme('${a.id}')" class="w-full py-1.5 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-[11px] rounded-lg border border-paper-200 transition-colors">Equipar</button>
+                                    <button type="button" onclick="selectAccentTheme('${a.id}')" class="w-full py-1.5 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-bold text-[11px] rounded-lg border border-paper-200 transition-colors cursor-pointer">Equipar</button>
                                 ` : `
-                                    <button type="button" onclick="unlockAccentTheme('${a.id}', ${a.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-1.5 bg-forest-900 text-paper-50 font-bold text-[11px] rounded-lg disabled:opacity-40 transition-colors">${a.price} XP</button>
+                                    <button type="button" onclick="unlockAccentTheme('${a.id}', ${a.price})" ${!canAfford ? 'disabled' : ''} class="w-full py-1.5 bg-forest-900 text-paper-50 font-bold text-[11px] rounded-lg disabled:opacity-40 transition-colors cursor-pointer">${a.price} XP</button>
                                 `}
                             </div>
                         </div>
@@ -955,21 +1085,22 @@
                 appSubtitle: "Caderno de Foco",
                 streakLabel: "dias",
                 statToday: "Hoje:",
-                statTotal: "Total:",
                 navFoco: "Foco",
-                navPlanejamento: "Meu Planeamento",
+                navPlanejamento: "Meu Planejamento",
                 navMeuDia: "Meu Dia",
                 navMeuProgresso: "Meu Progresso",
                 heroTag: "Vencendo a inércia em pequenos passos",
                 heroTitle: 'Comece pelo que dá <br><span class="text-forest-900 italic font-normal">para fazer agora.</span>',
                 heroDesc: "Qual é a menor ação possível neste momento? Reduza a resistência ao mínimo.",
-                taskInputLbl: "Sua Micro-Tarefa",
+                taskInputLbl: "Sua Tarefa / Ação",
                 quickStart: "Entrar no Fluxo (2 min)",
                 modeLbl: "Método de Foco",
                 modeMicro: "Micro-tarefa",
                 modePomo: "Pomodoro",
+                modeMeasure: "Medir Tempo",
                 modeDescMicro: "Pequenos blocos de 2, 3 ou 5 minutos para começar sem pressão.",
                 modeDescPomo: "Ciclos estruturados de foco e pausa para tarefas que exigem mais tempo.",
+                modeDescMeasure: "Cronômetro livre para descobrir quanto tempo você realmente gasta e comparar com sua meta.",
                 durationLbl: "Duração Inicial",
                 btnStart: "Iniciar Foco Agora",
                 timerBadgeTop: "Em Foco",
@@ -1004,238 +1135,23 @@
                 modalNoteLbl: "Como foi essa sessão? (Opcional)",
                 modalSave: "Guardar no Diário",
                 modalExtend: "+2 min de impulso"
-            },
-            en: {
-                appSubtitle: "Focus Notebook",
-                streakLabel: "days",
-                statToday: "Today:",
-                statTotal: "Total:",
-                navFoco: "Focus",
-                navPlanejamento: "My Planning",
-                navMeuDia: "My Day",
-                navMeuProgresso: "My Progress",
-                heroTag: "Overcoming inertia in small steps",
-                heroTitle: 'Start with what you <br><span class="text-forest-900 italic font-normal">can do right now.</span>',
-                heroDesc: "What is the smallest possible action right now? Lower resistance to a minimum.",
-                taskInputLbl: "Your Micro-Task",
-                quickStart: "Enter Flow (2 min)",
-                modeLbl: "Focus Method",
-                modeMicro: "Micro-task",
-                modePomo: "Pomodoro",
-                modeDescMicro: "Small 2, 3, or 5-minute blocks to start without pressure.",
-                modeDescPomo: "Structured focus and break cycles for longer tasks.",
-                durationLbl: "Initial Duration",
-                btnStart: "Start Focus Now",
-                timerBadgeTop: "In Focus",
-                statusRunning: "Session in progress",
-                btnComplete: "Complete Task Now",
-                btnPause: "Pause",
-                btnResume: "Resume",
-                lofiLabel: "Ambient Sound (Lofi + Soft Rain)",
-                customMusicTitle: "Your Local Playlist",
-                btnChooseFile: "Add Songs from Folder",
-                planSectionTitle: "Daily Planning",
-                calToggleView: "View Monthly Calendar",
-                calToggleHide: "Hide Calendar",
-                planFormTitle: "New Micro-Task (Max 3)",
-                planLimit: "Daily limit of 3 tasks reached. Complete or delete one to add another.",
-                tasksHeader: "Tasks for the Day",
-                meuDiaTitle: "My Day",
-                meuDiaSub: "Your victories and logs for today",
-                btnManual: "Manual Log",
-                manualFormTitle: "New Manual Log",
-                progressoTitle: "My Progress",
-                progressoSub: "Accumulated view of your effort and dedication",
-                kpiWeekTime: "Focus This Week",
-                kpiWeekWins: "Victories (7d)",
-                kpiPeakDay: "Most Active Day",
-                chartTitle: "Last 7 Days",
-                historyTitle: "Full History",
-                btnMd: "Copy Markdown",
-                btnImport: "Import JSON",
-                footer: "FocusMicro — one day at a time, no rush, no guilt.",
-                modalTitle: "Micro-victory unlocked!",
-                modalNoteLbl: "How was this session? (Optional)",
-                modalSave: "Save to Journal",
-                modalExtend: "+2 min momentum"
-            },
-            es: {
-                appSubtitle: "Cuaderno de Enfoque",
-                streakLabel: "días",
-                statToday: "Hoy:",
-                statTotal: "Total:",
-                navFoco: "Enfoque",
-                navPlanejamento: "Mi Planificación",
-                navMeuDia: "Mi Día",
-                navMeuProgresso: "Mi Progreso",
-                heroTag: "Venciendo la inercia paso a paso",
-                heroTitle: 'Empieza con lo que <br><span class="text-forest-900 italic font-normal">puedes hacer ahora.</span>',
-                heroDesc: "¿Cuál es la acción más pequeña posible? Reduce la resistencia al mínimo.",
-                taskInputLbl: "Tu Microtarea",
-                quickStart: "Entrar en Flujo (2 min)",
-                modeLbl: "Método de Enfoque",
-                modeMicro: "Microtarea",
-                modePomo: "Pomodoro",
-                modeDescMicro: "Pequeños bloques de 2, 3 o 5 minutos para empezar sin presión.",
-                modeDescPomo: "Ciclos estructurados de enfoque y descanso para tareas más largas.",
-                durationLbl: "Duración Inicial",
-                btnStart: "Iniciar Enfoque Ahora",
-                timerBadgeTop: "En Enfoque",
-                statusRunning: "Sesión en curso",
-                btnComplete: "Completar Tarea Ahora",
-                btnPause: "Pausar",
-                btnResume: "Continuar",
-                lofiLabel: "Sonido Ambiente (Lofi + Lluvia Suave)",
-                customMusicTitle: "Tu Playlist Local",
-                btnChooseFile: "Agregar Canciones",
-                planSectionTitle: "Planificación Diaria",
-                calToggleView: "Ver Calendario Mensual",
-                calToggleHide: "Ocultar Calendario",
-                planFormTitle: "Nueva Microtarea (Máx 3)",
-                planLimit: "Límite diario de 3 tareas alcanzado. Completa o elimina una para agregar otra.",
-                tasksHeader: "Tareas del Día",
-                meuDiaTitle: "Mi Día",
-                meuDiaSub: "Tus victorias y registros de hoy",
-                btnManual: "Registro Manual",
-                manualFormTitle: "Nuevo Registro Manual",
-                progressoTitle: "Mi Progreso",
-                progressoSub: "Visión acumulada de tu esfuerzo y dedicación",
-                kpiWeekTime: "Enfoque esta Semana",
-                kpiWeekWins: "Victorias (7d)",
-                kpiPeakDay: "Día más Activo",
-                chartTitle: "Últimos 7 Días",
-                historyTitle: "Historial Completo",
-                btnMd: "Copiar Markdown",
-                btnImport: "Importar JSON",
-                footer: "FocusMicro — un día a la vez, sin prisa y sin culpa.",
-                modalTitle: "¡Microvictoria conseguida!",
-                modalNoteLbl: "¿Cómo fue esta sesión? (Opcional)",
-                modalSave: "Guardar en el Diario",
-                modalExtend: "+2 min de impulso"
-            },
-            ja: {
-                appSubtitle: "集中ノート",
-                streakLabel: "日連続",
-                statToday: "今日:",
-                statTotal: "合計:",
-                navFoco: "集中",
-                navPlanejamento: "計画",
-                navMeuDia: "今日の一日",
-                navMeuProgresso: "進捗状況",
-                heroTag: "小さな一歩で慣性を克服する",
-                heroTitle: '今すぐできることから <br><span class="text-forest-900 italic font-normal">始めましょう。</span>',
-                heroDesc: "今できる最小のアクションは何ですか？抵抗を最小限に抑えましょう。",
-                taskInputLbl: "マイクロタスク",
-                quickStart: "フローに入る (2分)",
-                modeLbl: "集中モード",
-                modeMicro: "マイクロタスク",
-                modePomo: "ポモドーロ",
-                modeDescMicro: "プレッシャーなく始めるための2分、3分、5分の小さなブロック。",
-                modeDescPomo: "より長いタスクのための構造化された集中と休みのサイクル。",
-                durationLbl: "初期時間",
-                btnStart: "今すぐ集中を開始",
-                timerBadgeTop: "集中中",
-                statusRunning: "セッション進行中",
-                btnComplete: "今すぐタスクを完了",
-                btnPause: "一時停止",
-                btnResume: "再開",
-                lofiLabel: "環境音 (Lofi + 静かな雨)",
-                customMusicTitle: "ローカルプレイリスト",
-                btnChooseFile: "曲を追加する",
-                planSectionTitle: "毎日の計画",
-                calToggleView: "月間カレンダーを表示",
-                calToggleHide: "カレンダーを隠す",
-                planFormTitle: "新しいマイクロタスク (最大3つ)",
-                planLimit: "1日の制限(3タスク)に達しました。追加するには1つ完了するか削除してください。",
-                tasksHeader: "今日のタスク",
-                meuDiaTitle: "今日の一日",
-                meuDiaSub: "今日の勝利と記録",
-                btnManual: "手動記録",
-                manualFormTitle: "新しい手動記録",
-                progressoTitle: "進捗状況",
-                progressoSub: "あなたの努力と献身の累積ビュー",
-                kpiWeekTime: "今週の集中時間",
-                kpiWeekWins: "勝利数 (7日間)",
-                kpiPeakDay: "最も活発な日",
-                chartTitle: "過去7日間",
-                historyTitle: "完全な履歴",
-                btnMd: "Markdownをコピー",
-                btnImport: "JSONインポート",
-                footer: "FocusMicro — 焦らず、責めず、一日一歩ずつ。",
-                modalTitle: "小さな勝利を達成！",
-                modalNoteLbl: "このセッションはどうでしたか？ (任意)",
-                modalSave: "日記に保存",
-                modalExtend: "+2分ブースト"
-            },
-            zh: {
-                appSubtitle: "专注笔记",
-                streakLabel: "天",
-                statToday: "今天:",
-                statTotal: "总计:",
-                navFoco: "专注",
-                navPlanejamento: "我的计划",
-                navMeuDia: "我的今天",
-                navMeuProgresso: "我的进度",
-                heroTag: "循序渐进，战胜惰性",
-                heroTitle: '从你现在能做的事情 <br><span class="text-forest-900 italic font-normal">开始。</span>',
-                heroDesc: "此时此刻最小的可行行动是什么？将阻力降到最低。",
-                taskInputLbl: "微任务",
-                quickStart: "进入状态 (2分钟)",
-                modeLbl: "专注方法",
-                modeMicro: "微任务",
-                modePomo: "番茄钟",
-                modeDescMicro: "2、3 或 5 分钟的小时间块，轻松开始毫无压力。",
-                modeDescPomo: "针对长任务的结构化专注与休息循环。",
-                durationLbl: "初始时长",
-                btnStart: "立即开始专注",
-                timerBadgeTop: "专注中",
-                statusRunning: "进行中",
-                btnComplete: "立即完成任务",
-                btnPause: "暂停",
-                btnResume: "继续",
-                lofiLabel: "环境音 (Lofi + 柔和雨声)",
-                customMusicTitle: "本地播放列表",
-                btnChooseFile: "添加文件夹歌曲",
-                planSectionTitle: "每日计划",
-                calToggleView: "查看月历",
-                calToggleHide: "隐藏月历",
-                planFormTitle: "新微任务 (最多3个)",
-                planLimit: "已达到每日3个任务的上限。请完成或删除一个以添加新任务。",
-                tasksHeader: "今天的任务",
-                meuDiaTitle: "我的今天",
-                meuDiaSub: "你今天的胜利与记录",
-                btnManual: "手动记录",
-                manualFormTitle: "新建手动记录",
-                progressoTitle: "我的进度",
-                progressoSub: "你的努力与专注的累积视图",
-                kpiWeekTime: "本周专注时长",
-                kpiWeekWins: "胜利数 (7天)",
-                kpiPeakDay: "最活跃的一天",
-                chartTitle: "最近7天",
-                historyTitle: "完整历史",
-                btnMd: "复制 Markdown",
-                btnImport: "导入 JSON",
-                footer: "FocusMicro — 一天一步，不急不躁，心安理得。",
-                modalTitle: "解开微小的胜利！",
-                modalNoteLbl: "这次专注感觉如何？ (可选)",
-                modalSave: "保存到日记",
-                modalExtend: "+2分钟冲刺"
             }
         };
 
         const LANG_KEY = 'focusmicro_language';
         let currentLang = 'pt';
 
-        function changeLanguage(lang) {
+        window.changeLanguage = function(lang) {
             if (!I18N[lang]) return;
             currentLang = lang;
             localStorage.setItem(LANG_KEY, lang);
-            document.getElementById('lang-select').value = lang;
+            const selectEl = document.getElementById('lang-select');
+            if (selectEl) selectEl.value = lang;
             applyTranslations();
             renderPlanningSection();
             renderTodaySection();
             renderProgressSection();
-        }
+        };
 
         function applyTranslations() {
             const t = I18N[currentLang] || I18N.pt;
@@ -1246,7 +1162,6 @@
             setTxt('txt-app-subtitle', t.appSubtitle);
             setTxt('txt-streak-label', t.streakLabel);
             setTxt('txt-stat-today', t.statToday);
-            setTxt('txt-stat-total', t.statTotal);
             setTxt('nav-foco', t.navFoco);
             setTxt('nav-planejamento', t.navPlanejamento);
             setTxt('nav-meu-dia', t.navMeuDia);
@@ -1260,7 +1175,12 @@
             setTxt('lbl-mode', t.modeLbl);
             setTxt('lbl-mode-micro', t.modeMicro);
             setTxt('lbl-mode-pomo', t.modePomo);
-            setTxt('mode-description', focusMode === 'pomodoro' ? t.modeDescPomo : t.modeDescMicro);
+            setTxt('lbl-mode-measure', t.modeMeasure);
+            
+            if (focusMode === 'pomodoro') setTxt('mode-description', t.modeDescPomo);
+            else if (focusMode === 'measure') setTxt('mode-description', t.modeDescMeasure);
+            else setTxt('mode-description', t.modeDescMicro);
+
             setTxt('lbl-duration', t.durationLbl);
             setTxt('txt-btn-start', t.btnStart);
 
@@ -1302,14 +1222,12 @@
             safeCreateIcons();
         }
 
-        // --- MODO ZEN FULLSCREEN ---
         let isZenMode = false;
-        function toggleZenMode() {
+        window.toggleZenMode = function() {
             isZenMode = !isZenMode;
             document.body.classList.toggle('zen-active', isZenMode);
-        }
+        };
 
-        // --- SISTEMA DE ÁUDIO LOFI ---
         const LOFI_RAIN_URL = 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3';
         let lofiAudio = null;
         let isLofiPlaying = false;
@@ -1322,25 +1240,33 @@
             if (!lofiAudio) {
                 lofiAudio = new Audio(LOFI_RAIN_URL);
                 lofiAudio.loop = true;
-                lofiAudio.volume = parseFloat(document.getElementById('sound-volume-range').value || 0.25);
+                lofiAudio.volume = parseFloat(document.getElementById('sound-volume-range')?.value || 0.25);
             }
 
             if (isLofiPlaying) {
                 lofiAudio.pause();
                 isLofiPlaying = false;
-                statusBadge.textContent = 'Desativado';
-                statusBadge.className = 'opacity-60 text-[11px] font-normal';
-                btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
-                btn.classList.add('bg-paper-50', 'text-charcoal-900');
-                volumeBox.classList.add('hidden');
+                if (statusBadge) {
+                    statusBadge.textContent = 'Desativado';
+                    statusBadge.className = 'opacity-60 text-[11px] font-normal';
+                }
+                if (btn) {
+                    btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                    btn.classList.add('bg-paper-50', 'text-charcoal-900');
+                }
+                if (volumeBox) volumeBox.classList.add('hidden');
             } else {
                 lofiAudio.play().then(() => {
                     isLofiPlaying = true;
-                    statusBadge.textContent = 'A tocar baixinho 🌧️';
-                    statusBadge.className = 'text-forest-900 font-bold text-[11px]';
-                    btn.classList.remove('bg-paper-50', 'text-charcoal-900');
-                    btn.classList.add('bg-forest-900', 'text-paper-50', 'border-forest-900');
-                    volumeBox.classList.remove('hidden');
+                    if (statusBadge) {
+                        statusBadge.textContent = 'A tocar baixinho 🌧️';
+                        statusBadge.className = 'text-forest-900 font-bold text-[11px]';
+                    }
+                    if (btn) {
+                        btn.classList.remove('bg-paper-50', 'text-charcoal-900');
+                        btn.classList.add('bg-forest-900', 'text-paper-50', 'border-forest-900');
+                    }
+                    if (volumeBox) volumeBox.classList.remove('hidden');
                 }).catch(err => {
                     alert('Toque na tela para autorizar o áudio!');
                 });
@@ -1368,11 +1294,11 @@
             if (volumeBox) volumeBox.classList.add('hidden');
         }
 
-        // --- MINI PLAYER DE PLAYLIST LOCAL ---
         let playlistFiles = [];
         let currentTrackIndex = 0;
         let isPlaylistShuffle = false;
         let playlistObjectUrls = [];
+        let isCustomMusicPlaying = false;
 
         function handleCustomMusicFile(event) {
             const files = Array.from(event.target.files || []);
@@ -1390,7 +1316,8 @@
             }
 
             currentTrackIndex = 0;
-            document.getElementById('playlist-count-badge').textContent = `${playlistFiles.length} faixas`;
+            const countBadge = document.getElementById('playlist-count-badge');
+            if (countBadge) countBadge.textContent = `${playlistFiles.length} faixas`;
             renderPlaylistQueue();
             loadTrack(0);
         }
@@ -1408,16 +1335,21 @@
             }
 
             customMusicAudio = new Audio(playlistObjectUrls[index]);
-            customMusicAudio.volume = parseFloat(document.getElementById('custom-music-volume').value || 0.5);
+            customMusicAudio.volume = parseFloat(document.getElementById('custom-music-volume')?.value || 0.5);
 
             customMusicAudio.addEventListener('ended', () => {
                 playlistNextTrack();
             });
 
-            document.getElementById('custom-music-name').textContent = playlistFiles[index].name;
-            document.getElementById('btn-toggle-custom-music').disabled = false;
-            document.getElementById('btn-playlist-prev').disabled = false;
-            document.getElementById('btn-playlist-next').disabled = false;
+            const musicNameEl = document.getElementById('custom-music-name');
+            if (musicNameEl) musicNameEl.textContent = playlistFiles[index].name;
+
+            const toggleBtn = document.getElementById('btn-toggle-custom-music');
+            const prevBtn = document.getElementById('btn-playlist-prev');
+            const nextBtn = document.getElementById('btn-playlist-next');
+            if (toggleBtn) toggleBtn.disabled = false;
+            if (prevBtn) prevBtn.disabled = false;
+            if (nextBtn) nextBtn.disabled = false;
 
             renderPlaylistQueue();
 
@@ -1453,7 +1385,7 @@
             }
         };
 
-        function playlistNextTrack() {
+        window.playlistNextTrack = function() {
             if (playlistFiles.length === 0) return;
             if (isPlaylistShuffle) {
                 currentTrackIndex = Math.floor(Math.random() * playlistFiles.length);
@@ -1465,9 +1397,9 @@
             if (wasPlaying && customMusicAudio) {
                 customMusicAudio.play().catch(()=>{});
             }
-        }
+        };
 
-        function playlistPrevTrack() {
+        window.playlistPrevTrack = function() {
             if (playlistFiles.length === 0) return;
             currentTrackIndex = (currentTrackIndex - 1 + playlistFiles.length) % playlistFiles.length;
             const wasPlaying = isCustomMusicPlaying;
@@ -1475,19 +1407,21 @@
             if (wasPlaying && customMusicAudio) {
                 customMusicAudio.play().catch(()=>{});
             }
-        }
+        };
 
-        function togglePlaylistShuffle() {
+        window.togglePlaylistShuffle = function() {
             isPlaylistShuffle = !isPlaylistShuffle;
             const btn = document.getElementById('btn-playlist-shuffle');
-            if (isPlaylistShuffle) {
-                btn.classList.remove('opacity-60');
-                btn.classList.add('bg-forest-900', 'text-paper-50');
-            } else {
-                btn.classList.add('opacity-60');
-                btn.classList.remove('bg-forest-900', 'text-paper-50');
+            if (btn) {
+                if (isPlaylistShuffle) {
+                    btn.classList.remove('opacity-60');
+                    btn.classList.add('bg-forest-900', 'text-paper-50');
+                } else {
+                    btn.classList.add('opacity-60');
+                    btn.classList.remove('bg-forest-900', 'text-paper-50');
+                }
             }
-        }
+        };
 
         function toggleCustomMusic() {
             if (!customMusicAudio) return;
@@ -1521,82 +1455,56 @@
             safeCreateIcons();
         }
 
-        // --- APP STATE & KEYS ---
+        // --- APP STATE ---
         const HISTORY_KEY = 'focusmicro_history';
         const PLAN_KEY = 'focusmicro_plan_v1';
 
         let timerInterval = null;
         let timeRemaining = 180;
         let initialDuration = 180;
+        let elapsedSeconds = 0;
+        let sessionStartTime = null;
+        let targetMeasureMinutes = 15;
         let isPaused = false;
         let currentTask = '';
-        let focusMode = 'micro';
+        let focusMode = 'micro'; // 'micro', 'pomodoro', 'measure'
         let pomodoroPhase = 'focus';
         let pomodoroCompletedSessions = 0;
         let customMusicAudio = null;
+        let pendingEarnedXP = 0;
 
         let selectedPlanDate = new Date();
         let calendarCurrentMonth = new Date();
 
-        const statToday = document.getElementById('stat-today');
-        const statTotal = document.getElementById('stat-total');
-
-        const viewSetup = document.getElementById('view-setup');
-        const viewTimer = document.getElementById('view-timer');
-        const taskInput = document.getElementById('task-input');
-        const timePresetBtns = document.querySelectorAll('.btn-time-preset');
-        const btnStart = document.getElementById('btn-start');
-
-        const timerCountdown = document.getElementById('timer-countdown');
-        const timerTaskDisplay = document.getElementById('timer-task-display');
-        const btnPause = document.getElementById('btn-pause');
-        const btnPauseText = document.getElementById('btn-pause-text');
-        const btnAdd2Min = document.getElementById('btn-add-2min');
-        const btnReset = document.getElementById('btn-reset');
-        const btnCompleteNow = document.getElementById('btn-complete-now');
-
-        const modalCelebration = document.getElementById('modal-celebration');
-        const modalTaskName = document.getElementById('modal-task-name');
-        const btnSaveVictory = document.getElementById('btn-save-victory');
-        const btnExtendVictory = document.getElementById('btn-extend-victory');
-
-        const planDateDisplay = document.getElementById('plan-date-display');
-        const planSubdateDisplay = document.getElementById('plan-subdate-display');
-        const planTodayBtn = document.getElementById('plan-today-btn');
-        const planPrevDate = document.getElementById('plan-prev-date');
-        const planNextDate = document.getElementById('plan-next-date');
-        const planTitleInput = document.getElementById('plan-title-input');
-        const planDescInput = document.getElementById('plan-desc-input');
-        const btnAddPlan = document.getElementById('btn-add-plan');
-        const planCounterBadge = document.getElementById('plan-counter-badge');
-        const planLimitMsg = document.getElementById('plan-limit-msg');
-        const planTaskList = document.getElementById('plan-task-list');
+        let taskInput, timePresetBtns, viewSetup, viewTimer, timerCountdown, timerTaskDisplay, btnPauseText, btnAdd2Min, btnCompleteNow;
+        let modalCelebration, modalTaskName, btnSaveVictory, btnExtendVictory;
+        let planDateDisplay, planSubdateDisplay, planTodayBtn, planPrevDate, planNextDate, planTitleInput, planDescInput, btnAddPlan, planCounterBadge, planLimitMsg, planTaskList;
 
         let editingPlanId = null;
 
-        function startQuickFlow() {
-            taskInput.value = (I18N[currentLang] || I18N.pt).quickStart || "Apenas começar";
+        window.startQuickFlow = function() {
+            if (taskInput) taskInput.value = "Apenas começar (2 min)";
             timeRemaining = 120;
             initialDuration = 120;
+            setFocusMode('micro');
             startSession();
-        }
+        };
 
-        // --- GLOBAL NAVIGATION ---
         window.switchNavTab = function(target) {
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(t => {
                 if (t.dataset.nav === target) {
-                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0';
+                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0 cursor-pointer';
                 } else {
-                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium';
+                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium cursor-pointer';
                 }
             });
 
-            document.getElementById('section-foco').classList.add('hidden');
-            document.getElementById('section-planejamento').classList.add('hidden');
-            document.getElementById('section-meu-dia').classList.add('hidden');
-            document.getElementById('section-meu-progresso').classList.add('hidden');
-            document.getElementById('section-loja').classList.add('hidden');
+            document.getElementById('section-foco')?.classList.add('hidden');
+            document.getElementById('section-planejamento')?.classList.add('hidden');
+            document.getElementById('section-meu-dia')?.classList.add('hidden');
+            document.getElementById('section-meu-progresso')?.classList.add('hidden');
+            document.getElementById('section-loja')?.classList.add('hidden');
 
             const activeSection = document.getElementById(`section-${target}`);
             if (activeSection) activeSection.classList.remove('hidden');
@@ -1607,8 +1515,36 @@
             if (target === 'loja') updateGamificationUI();
         };
 
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Mapeamento seguro dos elementos DOM
+            viewSetup = document.getElementById('view-setup');
+            viewTimer = document.getElementById('view-timer');
+            taskInput = document.getElementById('task-input');
+            timePresetBtns = document.querySelectorAll('.btn-time-preset');
+
+            timerCountdown = document.getElementById('timer-countdown');
+            timerTaskDisplay = document.getElementById('timer-task-display');
+            btnPauseText = document.getElementById('btn-pause-text');
+            btnAdd2Min = document.getElementById('btn-add-2min');
+            btnCompleteNow = document.getElementById('btn-complete-now');
+
+            modalCelebration = document.getElementById('modal-celebration');
+            modalTaskName = document.getElementById('modal-task-name');
+            btnSaveVictory = document.getElementById('btn-save-victory');
+            btnExtendVictory = document.getElementById('btn-extend-victory');
+
+            planDateDisplay = document.getElementById('plan-date-display');
+            planSubdateDisplay = document.getElementById('plan-subdate-display');
+            planTodayBtn = document.getElementById('plan-today-btn');
+            planPrevDate = document.getElementById('plan-prev-date');
+            planNextDate = document.getElementById('plan-next-date');
+            planTitleInput = document.getElementById('plan-title-input');
+            planDescInput = document.getElementById('plan-desc-input');
+            btnAddPlan = document.getElementById('btn-add-plan');
+            planCounterBadge = document.getElementById('plan-counter-badge');
+            planLimitMsg = document.getElementById('plan-limit-msg');
+            planTaskList = document.getElementById('plan-task-list');
+
             const savedLang = localStorage.getItem(LANG_KEY) || 'pt';
             changeLanguage(savedLang);
 
@@ -1619,28 +1555,23 @@
             timePresetBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     timePresetBtns.forEach(b => {
-                        b.className = 'btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5';
+                        b.className = 'btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5 cursor-pointer';
                     });
-                    btn.className = 'btn-time-preset active py-3 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5';
-                    timeRemaining = parseInt(btn.dataset.time);
+                    btn.className = 'btn-time-preset active py-3 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5 cursor-pointer';
+                    timeRemaining = parseInt(btn.dataset.time, 10);
                     initialDuration = timeRemaining;
                 });
             });
 
-            btnStart.addEventListener('click', startSession);
-            taskInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') startSession(); });
-            btnPause.addEventListener('click', togglePause);
-            btnAdd2Min.addEventListener('click', () => extendTime(120));
-            btnReset.addEventListener('click', resetToSetup);
-            btnCompleteNow?.addEventListener('click', onTimerComplete);
+            if (taskInput) {
+                taskInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') startSession(); });
+            }
 
             document.getElementById('btn-toggle-lofi')?.addEventListener('click', toggleLofiAudio);
             document.getElementById('sound-volume-range')?.addEventListener('input', (e) => {
                 if (lofiAudio) lofiAudio.volume = parseFloat(e.target.value);
             });
 
-            document.getElementById('btn-mode-micro')?.addEventListener('click', () => setFocusMode('micro'));
-            document.getElementById('btn-mode-pomodoro')?.addEventListener('click', () => setFocusMode('pomodoro'));
             loadPomodoroSettings();
             ['pomodoro-focus-minutes', 'pomodoro-break-minutes', 'pomodoro-long-break-minutes', 'pomodoro-long-break-cycle'].forEach(id => {
                 document.getElementById(id)?.addEventListener('change', savePomodoroSettings);
@@ -1652,60 +1583,94 @@
                 if (customMusicAudio) customMusicAudio.volume = parseFloat(e.target.value);
             });
 
-            btnSaveVictory.addEventListener('click', () => {
-                const timeSpent = Math.max(initialDuration - timeRemaining, 60);
-                const noteInput = document.getElementById('modal-reflection-note');
-                const noteText = noteInput ? noteInput.value.trim() : '';
-                
-                saveJournalEntry(currentTask, timeSpent, noteText);
-                addXP(100); // 100 XP por tarefa concluída!
+            if (btnSaveVictory) {
+                btnSaveVictory.addEventListener('click', () => {
+                    let timeSpent = 0;
+                    if (focusMode === 'measure') {
+                        timeSpent = elapsedSeconds;
+                    } else {
+                        timeSpent = Math.max(initialDuration - timeRemaining, 0);
+                    }
 
-                if (noteInput) noteInput.value = '';
-                closeModal();
-                resetToSetup();
-            });
+                    const noteInput = document.getElementById('modal-reflection-note');
+                    const noteText = noteInput ? noteInput.value.trim() : '';
+                    
+                    saveJournalEntry(currentTask, timeSpent, noteText);
+                    if (pendingEarnedXP > 0) {
+                        addXP(pendingEarnedXP);
+                        pendingEarnedXP = 0;
+                    }
 
-            btnExtendVictory.addEventListener('click', () => {
-                const timeSpent = Math.max(initialDuration - timeRemaining, 60);
-                const noteInput = document.getElementById('modal-reflection-note');
-                const noteText = noteInput ? noteInput.value.trim() : '';
-                
-                saveJournalEntry(currentTask, timeSpent, noteText);
-                addXP(100);
+                    if (noteInput) noteInput.value = '';
+                    closeModal();
+                    resetToSetup();
+                });
+            }
 
-                if (noteInput) noteInput.value = '';
-                closeModal();
-                timeRemaining = 120;
-                initialDuration = 120;
-                startTimerLoop();
-            });
+            if (btnExtendVictory) {
+                btnExtendVictory.addEventListener('click', () => {
+                    let timeSpent = 0;
+                    if (focusMode === 'measure') timeSpent = elapsedSeconds;
+                    else timeSpent = Math.max(initialDuration - timeRemaining, 0);
 
-            planPrevDate.addEventListener('click', () => {
-                selectedPlanDate.setDate(selectedPlanDate.getDate() - 1);
-                renderPlanningSection();
-            });
-            planNextDate.addEventListener('click', () => {
-                selectedPlanDate.setDate(selectedPlanDate.getDate() + 1);
-                renderPlanningSection();
-            });
-            planTodayBtn.addEventListener('click', () => {
-                selectedPlanDate = new Date();
-                renderPlanningSection();
-            });
+                    const noteInput = document.getElementById('modal-reflection-note');
+                    const noteText = noteInput ? noteInput.value.trim() : '';
+                    
+                    saveJournalEntry(currentTask, timeSpent, noteText);
+                    if (pendingEarnedXP > 0) {
+                        addXP(pendingEarnedXP);
+                        pendingEarnedXP = 0;
+                    }
 
-            btnAddPlan.addEventListener('click', handleSavePlanTask);
+                    if (noteInput) noteInput.value = '';
+                    closeModal();
+                    
+                    sessionStartTime = Date.now();
+                    if (focusMode === 'measure') {
+                        startTimerLoop();
+                    } else {
+                        timeRemaining = 120;
+                        initialDuration = 120;
+                        startTimerLoop();
+                    }
+                });
+            }
+
+            if (planPrevDate) {
+                planPrevDate.addEventListener('click', () => {
+                    selectedPlanDate.setDate(selectedPlanDate.getDate() - 1);
+                    renderPlanningSection();
+                });
+            }
+            if (planNextDate) {
+                planNextDate.addEventListener('click', () => {
+                    selectedPlanDate.setDate(selectedPlanDate.getDate() + 1);
+                    renderPlanningSection();
+                });
+            }
+            if (planTodayBtn) {
+                planTodayBtn.addEventListener('click', () => {
+                    selectedPlanDate = new Date();
+                    renderPlanningSection();
+                });
+            }
+
+            if (btnAddPlan) btnAddPlan.addEventListener('click', handleSavePlanTask);
 
             document.getElementById('btn-toggle-calendar-view')?.addEventListener('click', () => {
                 const grid = document.getElementById('monthly-calendar-container');
+                if (!grid) return;
                 const isHidden = grid.classList.contains('hidden');
                 const t = I18N[currentLang] || I18N.pt;
                 if (isHidden) {
                     grid.classList.remove('hidden');
-                    document.getElementById('calendar-toggle-label').textContent = t.calToggleHide;
+                    const label = document.getElementById('calendar-toggle-label');
+                    if (label) label.textContent = t.calToggleHide;
                     renderMonthlyCalendar();
                 } else {
                     grid.classList.add('hidden');
-                    document.getElementById('calendar-toggle-label').textContent = t.calToggleView;
+                    const label = document.getElementById('calendar-toggle-label');
+                    if (label) label.textContent = t.calToggleView;
                 }
             });
 
@@ -1726,27 +1691,30 @@
             });
             document.getElementById('form-manual-entry')?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const task = document.getElementById('manual-task-input').value;
-                const note = document.getElementById('manual-note-input').value;
+                const task = document.getElementById('manual-task-input')?.value || '';
+                const note = document.getElementById('manual-note-input')?.value || '';
                 saveJournalEntry(task, 0, note);
-                addXP(50);
-                document.getElementById('form-manual-entry').reset();
-                document.getElementById('form-manual-entry').classList.add('hidden');
+                addXP(15);
+                const form = document.getElementById('form-manual-entry');
+                if (form) {
+                    form.reset();
+                    form.classList.add('hidden');
+                }
             });
 
-            document.getElementById('btn-export-backup')?.addEventListener('click', exportBackup);
             document.getElementById('input-import-json')?.addEventListener('change', importBackup);
         });
 
-        // --- CONFIGURAÇÕES DO POMODORO ---
         const POMODORO_SETTINGS_KEY = 'focusmicro_pomodoro_settings';
 
         function getPomodoroSettings() {
             const readMinutes = (id, fallback, min, max) => {
-                const value = Number.parseInt(document.getElementById(id)?.value, 10);
+                const el = document.getElementById(id);
+                const value = Number.parseInt(el ? el.value : fallback, 10);
                 return Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
             };
-            const cycleValue = Number.parseInt(document.getElementById('pomodoro-long-break-cycle')?.value, 10);
+            const cycleEl = document.getElementById('pomodoro-long-break-cycle');
+            const cycleValue = Number.parseInt(cycleEl ? cycleEl.value : 4, 10);
             return {
                 focus: readMinutes('pomodoro-focus-minutes', 25, 1, 180),
                 shortBreak: readMinutes('pomodoro-break-minutes', 5, 1, 60),
@@ -1757,19 +1725,23 @@
 
         function updatePomodoroSummary() {
             const settings = getPomodoroSettings();
-            document.getElementById('pomodoro-focus-summary').textContent = `${settings.focus} min foco`;
-            document.getElementById('pomodoro-break-summary').textContent = `${settings.shortBreak} min pausa`;
-            document.getElementById('pomodoro-long-break-summary').textContent = `Pausa longa de ${settings.longBreak} min a cada ${settings.longBreakCycle} focos.`;
+            const focusSum = document.getElementById('pomodoro-focus-summary');
+            const breakSum = document.getElementById('pomodoro-break-summary');
+            const longSum = document.getElementById('pomodoro-long-break-summary');
+            if (focusSum) focusSum.textContent = `${settings.focus} min foco`;
+            if (breakSum) breakSum.textContent = `${settings.shortBreak} min pausa`;
+            if (longSum) longSum.textContent = `Pausa longa de ${settings.longBreak} min a cada ${settings.longBreakCycle} focos.`;
         }
 
         function savePomodoroSettings() {
             const settings = getPomodoroSettings();
-            document.getElementById('pomodoro-focus-minutes').value = settings.focus;
-            document.getElementById('pomodoro-break-minutes').value = settings.shortBreak;
-            document.getElementById('pomodoro-long-break-minutes').value = settings.longBreak;
+            const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+            setVal('pomodoro-focus-minutes', settings.focus);
+            setVal('pomodoro-break-minutes', settings.shortBreak);
+            setVal('pomodoro-long-break-minutes', settings.longBreak);
             localStorage.setItem(POMODORO_SETTINGS_KEY, JSON.stringify(settings));
             updatePomodoroSummary();
-            if (focusMode === 'pomodoro' && viewTimer.classList.contains('hidden')) {
+            if (focusMode === 'pomodoro' && viewTimer && viewTimer.classList.contains('hidden')) {
                 timeRemaining = settings.focus * 60;
                 initialDuration = timeRemaining;
                 updateTimerDisplay();
@@ -1780,93 +1752,139 @@
             try {
                 const saved = JSON.parse(localStorage.getItem(POMODORO_SETTINGS_KEY) || 'null');
                 if (saved) {
-                    document.getElementById('pomodoro-focus-minutes').value = Math.min(180, Math.max(1, Number.parseInt(saved.focus, 10) || 25));
-                    document.getElementById('pomodoro-break-minutes').value = Math.min(60, Math.max(1, Number.parseInt(saved.shortBreak, 10) || 5));
-                    document.getElementById('pomodoro-long-break-minutes').value = Math.min(90, Math.max(1, Number.parseInt(saved.longBreak, 10) || 15));
-                    document.getElementById('pomodoro-long-break-cycle').value = [2, 3, 4, 5, 6, 8].includes(Number.parseInt(saved.longBreakCycle, 10)) ? String(saved.longBreakCycle) : '4';
+                    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+                    setVal('pomodoro-focus-minutes', Math.min(180, Math.max(1, Number.parseInt(saved.focus, 10) || 25)));
+                    setVal('pomodoro-break-minutes', Math.min(60, Math.max(1, Number.parseInt(saved.shortBreak, 10) || 5)));
+                    setVal('pomodoro-long-break-minutes', Math.min(90, Math.max(1, Number.parseInt(saved.longBreak, 10) || 15)));
+                    setVal('pomodoro-long-break-cycle', [2, 3, 4, 5, 6, 8].includes(Number.parseInt(saved.longBreakCycle, 10)) ? String(saved.longBreakCycle) : '4');
                 }
             } catch (error) {}
             updatePomodoroSummary();
         }
 
-        // --- TIMER LOGIC ---
-        function setFocusMode(mode) {
+        window.setFocusMode = function(mode) {
             focusMode = mode;
             const microBtn = document.getElementById('btn-mode-micro');
             const pomodoroBtn = document.getElementById('btn-mode-pomodoro');
+            const measureBtn = document.getElementById('btn-mode-measure');
+
             const presets = document.getElementById('time-preset-options');
             const pomodoroInfo = document.getElementById('pomodoro-info');
+            const measureInfo = document.getElementById('measure-info');
             const description = document.getElementById('mode-description');
             const t = I18N[currentLang] || I18N.pt;
 
-            btnCompleteNow.classList.toggle('hidden', mode === 'pomodoro');
+            if (presets) presets.classList.add('hidden');
+            if (pomodoroInfo) pomodoroInfo.classList.add('hidden');
+            if (measureInfo) measureInfo.classList.add('hidden');
+
+            const inactiveBtnClass = 'py-3 px-2 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center cursor-pointer';
+            const activeBtnClass = 'py-3 px-2 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center cursor-pointer';
+
+            if (microBtn) microBtn.className = inactiveBtnClass;
+            if (pomodoroBtn) pomodoroBtn.className = inactiveBtnClass;
+            if (measureBtn) measureBtn.className = inactiveBtnClass;
+
+            if (btnCompleteNow) btnCompleteNow.classList.remove('hidden');
+            if (btnAdd2Min) btnAdd2Min.classList.remove('hidden');
+
             if (mode === 'pomodoro') {
-                microBtn.className = 'py-3 px-4 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
-                pomodoroBtn.className = 'py-3 px-4 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
-                presets.classList.add('hidden');
-                pomodoroInfo.classList.remove('hidden');
-                description.textContent = t.modeDescPomo;
+                if (pomodoroBtn) pomodoroBtn.className = activeBtnClass;
+                if (pomodoroInfo) pomodoroInfo.classList.remove('hidden');
+                if (description) description.textContent = t.modeDescPomo;
+                if (btnCompleteNow) btnCompleteNow.classList.add('hidden');
                 timeRemaining = getPomodoroSettings().focus * 60;
                 initialDuration = timeRemaining;
                 pomodoroPhase = 'focus';
+            } else if (mode === 'measure') {
+                if (measureBtn) measureBtn.className = activeBtnClass;
+                if (measureInfo) measureInfo.classList.remove('hidden');
+                if (description) description.textContent = t.modeDescMeasure;
+                if (btnAdd2Min) btnAdd2Min.classList.add('hidden');
+                elapsedSeconds = 0;
             } else {
-                microBtn.className = 'py-3 px-4 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
-                pomodoroBtn.className = 'py-3 px-4 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
-                presets.classList.remove('hidden');
-                pomodoroInfo.classList.add('hidden');
-                description.textContent = t.modeDescMicro;
+                if (microBtn) microBtn.className = activeBtnClass;
+                if (presets) presets.classList.remove('hidden');
+                if (description) description.textContent = t.modeDescMicro;
                 pomodoroPhase = 'focus';
                 const activePreset = document.querySelector('.btn-time-preset.active');
                 timeRemaining = activePreset ? parseInt(activePreset.dataset.time, 10) : 180;
                 initialDuration = timeRemaining;
             }
             updateTimerDisplay();
-        }
+        };
 
-        function startSession() {
-            currentTask = taskInput.value.trim() || 'Micro-Ação Sem Nome';
+        window.startSession = function() {
+            const rawTask = taskInput ? taskInput.value.trim() : '';
+            currentTask = rawTask !== '' ? rawTask : 'Micro-Ação Sem Nome';
             pomodoroPhase = 'focus';
-            timeRemaining = focusMode === 'pomodoro' ? getPomodoroSettings().focus * 60 : timeRemaining;
-            initialDuration = timeRemaining;
-            timerTaskDisplay.textContent = `"${currentTask}"`;
+            sessionStartTime = Date.now();
+            pendingEarnedXP = 0;
+            
+            if (focusMode === 'pomodoro') {
+                timeRemaining = getPomodoroSettings().focus * 60;
+                initialDuration = timeRemaining;
+            } else if (focusMode === 'measure') {
+                elapsedSeconds = 0;
+                const targetVal = parseInt(document.getElementById('measure-target-minutes')?.value, 10);
+                targetMeasureMinutes = Number.isFinite(targetVal) && targetVal > 0 ? targetVal : 15;
+            } else {
+                if (!timeRemaining || timeRemaining <= 0) timeRemaining = 180;
+                initialDuration = timeRemaining;
+            }
+
+            if (timerTaskDisplay) timerTaskDisplay.textContent = `"${currentTask}"`;
             
             const t = I18N[currentLang] || I18N.pt;
-            document.getElementById('timer-status-badge').innerHTML = `<span class="w-2 h-2 rounded-full bg-forest-900 animate-pulse"></span> ${t.statusRunning}`;
+            const statusBadge = document.getElementById('timer-status-badge');
+            if (statusBadge) {
+                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-forest-900 animate-pulse"></span> ${t.statusRunning}`;
+            }
             
-            viewSetup.classList.add('hidden');
-            viewTimer.classList.remove('hidden');
+            if (viewSetup) viewSetup.classList.add('hidden');
+            if (viewTimer) viewTimer.classList.remove('hidden');
             isPaused = false;
-            btnPauseText.textContent = t.btnPause;
+            if (btnPauseText) btnPauseText.textContent = t.btnPause;
             updateTimerDisplay();
             startTimerLoop();
-        }
+        };
 
         function startTimerLoop() {
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 if (!isPaused) {
-                    timeRemaining--;
-                    updateTimerDisplay();
-                    if (timeRemaining <= 0) {
-                        clearInterval(timerInterval);
-                        onTimerComplete();
+                    if (focusMode === 'measure') {
+                        elapsedSeconds++;
+                        updateTimerDisplay();
+                    } else {
+                        timeRemaining--;
+                        updateTimerDisplay();
+                        if (timeRemaining <= 0) {
+                            clearInterval(timerInterval);
+                            onTimerComplete(true);
+                        }
                     }
                 }
             }, 1000);
         }
 
         function updateTimerDisplay() {
-            const mins = Math.floor(timeRemaining / 60);
-            const secs = timeRemaining % 60;
+            let secsToDisplay = timeRemaining;
+            if (focusMode === 'measure') {
+                secsToDisplay = elapsedSeconds;
+            }
+
+            const mins = Math.floor(secsToDisplay / 60);
+            const secs = secsToDisplay % 60;
             const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-            timerCountdown.textContent = formatted;
+            if (timerCountdown) timerCountdown.textContent = formatted;
             document.title = `(${formatted}) FocusMicro`;
         }
 
-        function togglePause() {
+        window.togglePause = function() {
             isPaused = !isPaused;
             const t = I18N[currentLang] || I18N.pt;
-            btnPauseText.textContent = isPaused ? t.btnResume : t.btnPause;
+            if (btnPauseText) btnPauseText.textContent = isPaused ? t.btnResume : t.btnPause;
             if (isPaused) {
                 if (lofiAudio) lofiAudio.pause();
                 if (customMusicAudio) customMusicAudio.pause();
@@ -1874,36 +1892,126 @@
                 if (lofiAudio && isLofiPlaying) lofiAudio.play().catch(()=>{});
                 if (customMusicAudio && isCustomMusicPlaying) customMusicAudio.play().catch(()=>{});
             }
-        }
+        };
 
-        function extendTime(sec) {
+        window.extendTime = function(sec) {
             timeRemaining += sec;
             initialDuration += sec;
             updateTimerDisplay();
-        }
+        };
 
-        function resetToSetup() {
+        window.resetToSetup = function() {
             clearInterval(timerInterval);
             stopLofiAudio();
             stopCustomMusic();
             if (isZenMode) toggleZenMode();
             document.title = 'FocusMicro - Caderno de Progresso Pessoal';
             pomodoroPhase = 'focus';
-            timeRemaining = focusMode === 'pomodoro' ? 25 * 60 : initialDuration;
-            initialDuration = timeRemaining;
-            viewTimer.classList.add('hidden');
-            viewSetup.classList.remove('hidden');
+            
+            if (focusMode === 'pomodoro') timeRemaining = 25 * 60;
+            else timeRemaining = initialDuration;
+            
+            elapsedSeconds = 0;
+            if (viewTimer) viewTimer.classList.add('hidden');
+            if (viewSetup) viewSetup.classList.remove('hidden');
             updateTimerDisplay();
+        };
+
+        function calculateSessionXP(actualSeconds, isNaturalCompletion) {
+            if (actualSeconds < 10) return 0;
+
+            const actualMinutes = actualSeconds / 60;
+            let xp = 0;
+
+            if (focusMode === 'micro') {
+                xp = Math.round(actualMinutes * 15);
+                if (isNaturalCompletion) {
+                    xp += 20; 
+                }
+            } else if (focusMode === 'measure') {
+                xp = Math.round(actualMinutes * 15);
+                const targetSecs = targetMeasureMinutes * 60;
+                const diffSecs = Math.abs(actualSeconds - targetSecs);
+                if (diffSecs <= 120) {
+                    xp += 30;
+                }
+            } else if (focusMode === 'pomodoro') {
+                xp = Math.round(actualMinutes * 15) + 50;
+            }
+
+            return Math.max(0, xp);
         }
 
-        function onTimerComplete() {
+        window.onTimerComplete = function(isNaturalCompletion = false) {
             clearInterval(timerInterval);
             playCompletionChime();
+
+            let actualSecondsFocused = 0;
+            if (focusMode === 'measure') {
+                actualSecondsFocused = elapsedSeconds;
+            } else {
+                actualSecondsFocused = Math.max(initialDuration - timeRemaining, 0);
+            }
+
+            pendingEarnedXP = calculateSessionXP(actualSecondsFocused, isNaturalCompletion);
+
+            const xpBadgeEl = document.getElementById('modal-xp-badge');
+            if (xpBadgeEl) {
+                if (pendingEarnedXP > 0) {
+                    xpBadgeEl.textContent = `+${pendingEarnedXP} XP Ganhos! ✨`;
+                    xpBadgeEl.className = 'inline-block px-3.5 py-1 rounded-full bg-forest-900/10 text-forest-900 font-bold text-xs mt-1 border border-forest-900/20';
+                } else {
+                    xpBadgeEl.textContent = `Sessão curta (0 XP)`;
+                    xpBadgeEl.className = 'inline-block px-3 py-1 rounded-full bg-paper-200 text-charcoal-700 font-bold text-xs mt-1';
+                }
+            }
+
+            const compBox = document.getElementById('modal-time-comparison-box');
+
+            if (focusMode === 'measure') {
+                stopLofiAudio();
+                stopCustomMusic();
+                if (isZenMode) toggleZenMode();
+
+                const actualMins = Math.round(elapsedSeconds / 60);
+                const targetMins = targetMeasureMinutes;
+                
+                const compTarget = document.getElementById('comp-target-time');
+                const compActual = document.getElementById('comp-actual-time');
+                if (compTarget) compTarget.textContent = `${targetMins} min`;
+                if (compActual) compActual.textContent = `${actualMins} min`;
+
+                const diff = actualMins - targetMins;
+                const msgEl = document.getElementById('comp-result-msg');
+                if (msgEl) {
+                    if (diff < 0) {
+                        msgEl.textContent = `⚡ Sensacional! Você fez ${Math.abs(diff)} min mais rápido do que estimava.`;
+                    } else if (diff === 0) {
+                        msgEl.textContent = `🎯 Precisão perfeita! Fez exatamente no tempo estimado. (+30 XP Bônus)`;
+                    } else {
+                        msgEl.textContent = `⏱️ Levou ${diff} min a mais que a meta. Bom ajuste para o próximo planejamento!`;
+                    }
+                }
+
+                if (compBox) compBox.classList.remove('hidden');
+                document.title = '🎉 Tarefa Concluída!';
+                if (modalTaskName) modalTaskName.textContent = `"${currentTask}"`;
+                if (modalCelebration) {
+                    modalCelebration.classList.remove('hidden');
+                    setTimeout(() => modalCelebration.classList.remove('opacity-0'), 10);
+                }
+                return;
+            }
+
+            if (compBox) compBox.classList.add('hidden');
 
             if (focusMode === 'pomodoro') {
                 if (pomodoroPhase === 'focus') {
                     saveJournalEntry(currentTask, initialDuration);
-                    addXP(150); // Pomodoro rende 150 XP por ciclo de foco!
+                    if (pendingEarnedXP > 0) {
+                        addXP(pendingEarnedXP);
+                        pendingEarnedXP = 0;
+                    }
                     pomodoroCompletedSessions++;
 
                     const settings = getPomodoroSettings();
@@ -1912,10 +2020,15 @@
                     pomodoroPhase = 'break';
                     timeRemaining = breakMinutes * 60;
                     initialDuration = timeRemaining;
-                    timerTaskDisplay.textContent = isLongBreak ? 'Pausa longa Pomodoro' : 'Pausa Pomodoro';
-                    document.getElementById('timer-status-badge').innerHTML = `<span class="w-2 h-2 rounded-full bg-terracotta-600 animate-pulse"></span> Pausa — ${breakMinutes} min`;
+                    if (timerTaskDisplay) timerTaskDisplay.textContent = isLongBreak ? 'Pausa longa Pomodoro' : 'Pausa Pomodoro';
+                    
+                    const statusBadge = document.getElementById('timer-status-badge');
+                    if (statusBadge) {
+                        statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-terracotta-600 animate-pulse"></span> Pausa — ${breakMinutes} min`;
+                    }
+                    
                     isPaused = false;
-                    btnPauseText.textContent = (I18N[currentLang] || I18N.pt).btnPause;
+                    if (btnPauseText) btnPauseText.textContent = (I18N[currentLang] || I18N.pt).btnPause;
                     updateTimerDisplay();
                     startTimerLoop();
                     return;
@@ -1924,29 +2037,33 @@
                 stopLofiAudio();
                 stopCustomMusic();
                 if (isZenMode) toggleZenMode();
-                viewTimer.classList.add('hidden');
-                viewSetup.classList.remove('hidden');
+                if (viewTimer) viewTimer.classList.add('hidden');
+                if (viewSetup) viewSetup.classList.remove('hidden');
                 timeRemaining = getPomodoroSettings().focus * 60;
                 initialDuration = timeRemaining;
                 updateTimerDisplay();
                 document.title = 'FocusMicro - Caderno de Progresso Pessoal';
                 return;
             }
+
             stopLofiAudio();
             stopCustomMusic();
             if (isZenMode) toggleZenMode();
             document.title = '🎉 Micro-Vitória!';
-            modalTaskName.textContent = `"${currentTask}"`;
-            modalCelebration.classList.remove('hidden');
-            setTimeout(() => modalCelebration.classList.remove('opacity-0'), 10);
-        }
+            if (modalTaskName) modalTaskName.textContent = `"${currentTask}"`;
+            if (modalCelebration) {
+                modalCelebration.classList.remove('hidden');
+                setTimeout(() => modalCelebration.classList.remove('opacity-0'), 10);
+            }
+        };
 
         function closeModal() {
-            modalCelebration.classList.add('opacity-0');
-            setTimeout(() => modalCelebration.classList.add('hidden'), 300);
+            if (modalCelebration) {
+                modalCelebration.classList.add('opacity-0');
+                setTimeout(() => modalCelebration.classList.add('hidden'), 300);
+            }
         }
 
-        // --- LOCAL STORAGE (JOURNAL) ---
         function getJournalEntries() {
             try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
             catch(e) { return []; }
@@ -1993,7 +2110,6 @@
             return streak;
         }
 
-        // --- LOCAL STORAGE (PLANNING) ---
         function getPlanData() {
             try { return JSON.parse(localStorage.getItem(PLAN_KEY)) || {}; }
             catch(e) { return {}; }
@@ -2010,32 +2126,38 @@
             return `${y}-${m}-${d}`;
         }
 
-        // --- RENDER PLANNING SECTION ---
         function renderPlanningSection() {
             const dateKey = getFormattedDateKey(selectedPlanDate);
             const todayKey = getFormattedDateKey(new Date());
             const isToday = (dateKey === todayKey);
 
-            if (isToday) {
-                planDateDisplay.textContent = 'Hoje';
-                planTodayBtn.classList.add('hidden');
-            } else {
-                planDateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { weekday: 'short', day: '2-digit', month: 'short' });
-                planTodayBtn.classList.remove('hidden');
+            if (planDateDisplay) {
+                if (isToday) {
+                    planDateDisplay.textContent = 'Hoje';
+                    if (planTodayBtn) planTodayBtn.classList.add('hidden');
+                } else {
+                    planDateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { weekday: 'short', day: '2-digit', month: 'short' });
+                    if (planTodayBtn) planTodayBtn.classList.remove('hidden');
+                }
             }
-            planSubdateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { day: 'numeric', month: 'long', year: 'numeric' });
+            if (planSubdateDisplay) {
+                planSubdateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { day: 'numeric', month: 'long', year: 'numeric' });
+            }
 
             const planData = getPlanData();
             const dayTasks = planData[dateKey] || [];
 
-            planCounterBadge.textContent = `${dayTasks.length}/3`;
+            if (planCounterBadge) planCounterBadge.textContent = `${dayTasks.length}/3`;
+            const planFormContainer = document.getElementById('plan-form-container');
             if (dayTasks.length >= 3 && !editingPlanId) {
-                planLimitMsg.classList.remove('hidden');
-                document.getElementById('plan-form-container').classList.add('opacity-50', 'pointer-events-none');
+                if (planLimitMsg) planLimitMsg.classList.remove('hidden');
+                if (planFormContainer) planFormContainer.classList.add('opacity-50', 'pointer-events-none');
             } else {
-                planLimitMsg.classList.add('hidden');
-                document.getElementById('plan-form-container').classList.remove('opacity-50', 'pointer-events-none');
+                if (planLimitMsg) planLimitMsg.classList.add('hidden');
+                if (planFormContainer) planFormContainer.classList.remove('opacity-50', 'pointer-events-none');
             }
+
+            if (!planTaskList) return;
 
             if (dayTasks.length === 0) {
                 planTaskList.innerHTML = `
@@ -2047,7 +2169,7 @@
                 planTaskList.innerHTML = dayTasks.map(item => `
                     <div class="bg-paper-50 border border-paper-200 p-4 rounded-xl flex items-center justify-between gap-3 shadow-xs hover:border-paper-300 transition-all">
                         <div class="flex items-start gap-3 flex-1 min-w-0">
-                            <button type="button" onclick="togglePlanTaskComplete('${dateKey}', '${item.id}')" class="mt-0.5 p-1 rounded hover:bg-paper-100 transition-colors shrink-0" title="Concluir">
+                            <button type="button" onclick="togglePlanTaskComplete('${dateKey}', '${item.id}')" class="mt-0.5 p-1 rounded hover:bg-paper-100 transition-colors shrink-0 cursor-pointer" title="Concluir">
                                 <i data-lucide="${item.completed ? 'check-square' : 'square'}" class="w-4 h-4 ${item.completed ? 'text-forest-900' : 'text-charcoal-700 opacity-40'}"></i>
                             </button>
                             <div class="min-w-0">
@@ -2058,13 +2180,13 @@
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
                             ${!item.completed ? `
-                                <button type="button" onclick="startFocusFromPlan('${escapeHtml(item.title)}')" class="bg-forest-900 hover:bg-forest-800 text-paper-50 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 shadow-xs transition-colors">
+                                <button type="button" onclick="startFocusFromPlan('${escapeHtml(item.title)}')" class="bg-forest-900 hover:bg-forest-800 text-paper-50 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer">
                                     <i data-lucide="play" class="w-3 h-3 fill-current"></i>
                                     <span>Focar</span>
                                 </button>
-                                <button type="button" onclick="editPlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-paper-100 rounded-lg text-charcoal-700 opacity-70 transition-colors"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                                <button type="button" onclick="editPlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-paper-100 rounded-lg text-charcoal-700 opacity-70 transition-colors cursor-pointer"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
                             ` : ''}
-                            <button type="button" onclick="deletePlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-terracotta-600/10 hover:text-terracotta-600 rounded-lg text-charcoal-700 opacity-70 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            <button type="button" onclick="deletePlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-terracotta-600/10 hover:text-terracotta-600 rounded-lg text-charcoal-700 opacity-70 transition-colors cursor-pointer"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                         </div>
                     </div>
                 `).join('');
@@ -2072,7 +2194,6 @@
             safeCreateIcons();
         }
 
-        // --- MONTHLY CALENDAR RENDER ---
         function renderMonthlyCalendar() {
             const label = document.getElementById('cal-month-year-label');
             const grid = document.getElementById('cal-grid-days');
@@ -2110,7 +2231,7 @@
                 else if (isToday) bgClass = 'bg-forest-900/10 text-forest-900 font-bold border border-forest-900/30';
 
                 html += `
-                    <button type="button" onclick="selectDateFromCalendar('${dKey}')" class="p-2.5 rounded-xl flex flex-col items-center justify-center transition-all ${bgClass}">
+                    <button type="button" onclick="selectDateFromCalendar('${dKey}')" class="p-2.5 rounded-xl flex flex-col items-center justify-center transition-all ${bgClass} cursor-pointer">
                         <span>${day}</span>
                         ${count > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-paper-50' : 'bg-forest-900'} mt-1"></span>` : '<span class="w-1.5 h-1.5 mt-1 opacity-0">•</span>'}
                     </button>
@@ -2129,13 +2250,15 @@
 
         window.startFocusFromPlan = function(taskTitle) {
             switchNavTab('foco');
-            taskInput.value = taskTitle;
-            taskInput.focus();
+            if (taskInput) {
+                taskInput.value = taskTitle;
+                taskInput.focus();
+            }
         };
 
         function handleSavePlanTask() {
-            const title = planTitleInput.value.trim();
-            const desc = planDescInput.value.trim();
+            const title = planTitleInput ? planTitleInput.value.trim() : '';
+            const desc = planDescInput ? planDescInput.value.trim() : '';
             if (!title) return;
 
             const dateKey = getFormattedDateKey(selectedPlanDate);
@@ -2149,7 +2272,8 @@
                     planData[dateKey][idx].desc = desc;
                 }
                 editingPlanId = null;
-                document.getElementById('btn-plan-submit-label').textContent = 'Adicionar ao Planejamento';
+                const label = document.getElementById('btn-plan-submit-label');
+                if (label) label.textContent = 'Adicionar ao Planejamento';
             } else {
                 if (planData[dateKey].length >= 3) return;
                 planData[dateKey].push({
@@ -2162,8 +2286,8 @@
             }
 
             savePlanData(planData);
-            planTitleInput.value = '';
-            planDescInput.value = '';
+            if (planTitleInput) planTitleInput.value = '';
+            if (planDescInput) planDescInput.value = '';
             renderPlanningSection();
             renderMonthlyCalendar();
         }
@@ -2179,7 +2303,7 @@
             if (task.completed && !task.journalId) {
                 if (confirm(`Salvar "${task.title}" no seu Diário?`)) {
                     saveJournalEntry(task.title, 0, task.desc || 'Concluído do Planejamento');
-                    addXP(100);
+                    addXP(25);
                     task.journalId = true;
                 }
             }
@@ -2194,11 +2318,12 @@
             const task = tasks.find(t => t.id === taskId);
             if (!task) return;
 
-            planTitleInput.value = task.title;
-            planDescInput.value = task.desc || '';
+            if (planTitleInput) planTitleInput.value = task.title;
+            if (planDescInput) planDescInput.value = task.desc || '';
             editingPlanId = taskId;
-            document.getElementById('btn-plan-submit-label').textContent = 'Salvar Alteração';
-            planTitleInput.focus();
+            const label = document.getElementById('btn-plan-submit-label');
+            if (label) label.textContent = 'Salvar Alteração';
+            if (planTitleInput) planTitleInput.focus();
         };
 
         window.deletePlanTask = function(dateKey, taskId) {
@@ -2212,13 +2337,14 @@
             }
         };
 
-        // --- RENDER SECTIONS & WEEKLY REVIEW ---
         function renderTodaySection() {
             const entries = getJournalEntries();
             const todayStr = new Date().toLocaleDateString('pt-BR');
             const todayEntries = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === todayStr);
 
             const container = document.getElementById('today-entries-list');
+            if (!container) return;
+
             if (todayEntries.length === 0) {
                 container.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">Nenhuma conquista registrada hoje ainda.</div>`;
                 return;
@@ -2283,43 +2409,47 @@
             if (revPeakEl) revPeakEl.textContent = maxCount > 0 ? `${peakDayName} (${maxCount})` : '-';
 
             const chartContainer = document.getElementById('weekly-chart');
-            const maxVal = Math.max(...days.map(d => {
-                const dStr = d.toLocaleDateString('pt-BR');
-                return entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
-            }), 1);
+            if (chartContainer) {
+                const maxVal = Math.max(...days.map(d => {
+                    const dStr = d.toLocaleDateString('pt-BR');
+                    return entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
+                }), 1);
 
-            chartContainer.innerHTML = days.map(d => {
-                const dStr = d.toLocaleDateString('pt-BR');
-                const count = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
-                const heightPct = Math.max((count / maxVal) * 100, 8);
-                const dayLabel = d.toLocaleDateString(currentLang, { weekday: 'narrow' });
+                chartContainer.innerHTML = days.map(d => {
+                    const dStr = d.toLocaleDateString('pt-BR');
+                    const count = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
+                    const heightPct = Math.max((count / maxVal) * 100, 8);
+                    const dayLabel = d.toLocaleDateString(currentLang, { weekday: 'narrow' });
 
-                return `
-                    <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                        <span class="text-[10px] font-bold font-mono text-forest-900">${count > 0 ? count : ''}</span>
-                        <div style="height: ${heightPct}%" class="w-full bg-forest-900 hover:bg-forest-800 rounded-t-md transition-all shadow-xs"></div>
-                        <span class="text-[10px] text-charcoal-700 opacity-70 font-bold uppercase tracking-wider">${dayLabel}</span>
-                    </div>
-                `;
-            }).join('');
-
-            const listContainer = document.getElementById('all-entries-list');
-            if (entries.length === 0) {
-                listContainer.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">Histórico vazio.</div>`;
-                return;
+                    return `
+                        <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                            <span class="text-[10px] font-bold font-mono text-forest-900">${count > 0 ? count : ''}</span>
+                            <div style="height: ${heightPct}%" class="w-full bg-forest-900 hover:bg-forest-800 rounded-t-md transition-all shadow-xs"></div>
+                            <span class="text-[10px] text-charcoal-700 opacity-70 font-bold uppercase tracking-wider">${dayLabel}</span>
+                        </div>
+                    `;
+                }).join('');
             }
 
-            listContainer.innerHTML = entries.map(e => `
-                <div class="bg-paper-50 border border-paper-200 p-3.5 rounded-xl flex items-center justify-between shadow-xs">
-                    <div>
-                        <h4 class="text-xs font-bold text-charcoal-900">${escapeHtml(e.task)}</h4>
-                        <div class="flex items-center gap-2 mt-0.5">
-                            <span class="text-[10px] text-charcoal-700 opacity-60 font-medium">${new Date(e.timestamp).toLocaleDateString(currentLang)} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
-                            ${e.note ? `<span class="text-[10px] text-forest-900 bg-forest-900/10 px-2 py-0.5 rounded-full italic font-medium">"${escapeHtml(e.note)}"</span>` : ''}
+            const listContainer = document.getElementById('all-entries-list');
+            if (listContainer) {
+                if (entries.length === 0) {
+                    listContainer.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">Histórico vazio.</div>`;
+                    return;
+                }
+
+                listContainer.innerHTML = entries.map(e => `
+                    <div class="bg-paper-50 border border-paper-200 p-3.5 rounded-xl flex items-center justify-between shadow-xs">
+                        <div>
+                            <h4 class="text-xs font-bold text-charcoal-900">${escapeHtml(e.task)}</h4>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="text-[10px] text-charcoal-700 opacity-60 font-medium">${new Date(e.timestamp).toLocaleDateString(currentLang)} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                                ${e.note ? `<span class="text-[10px] text-forest-900 bg-forest-900/10 px-2 py-0.5 rounded-full italic font-medium">"${escapeHtml(e.note)}"</span>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
         }
 
         function updateAllDisplays() {
@@ -2327,15 +2457,15 @@
             const todayStr = new Date().toLocaleDateString('pt-BR');
             const todayCount = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === todayStr).length;
 
-            statToday.textContent = todayCount;
-            statTotal.textContent = entries.length;
+            const statTodayEl = document.getElementById('stat-today');
+            if (statTodayEl) statTodayEl.textContent = todayCount;
 
             const streak = calculateStreak(entries);
-            document.getElementById('stat-streak').textContent = streak;
+            const statStreakEl = document.getElementById('stat-streak');
+            if (statStreakEl) statStreakEl.textContent = streak;
         }
 
-        // --- EXPORTAÇÃO MARKDOWN ---
-        function exportMarkdownSummary() {
+        window.exportMarkdownSummary = function() {
             const entries = getJournalEntries();
             if (entries.length === 0) {
                 alert("Nenhum histórico para exportar.");
@@ -2360,10 +2490,9 @@
             }).catch(() => {
                 alert("Não foi possível copiar automaticamente.");
             });
-        }
+        };
 
-        // --- EXPORT & IMPORT BACKUP JSON ---
-        function exportBackup() {
+        window.exportBackup = function() {
             const dump = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
@@ -2374,7 +2503,7 @@
             a.href = URL.createObjectURL(blob);
             a.download = `focusmicro-backup-${new Date().toISOString().slice(0, 10)}.json`;
             a.click();
-        }
+        };
 
         function importBackup(event) {
             const file = event.target.files[0];
