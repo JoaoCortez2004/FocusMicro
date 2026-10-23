@@ -15,6 +15,7 @@
                             50: '#FAF8F5',
                             100: '#F4F0EA',
                             200: '#E8E2D8',
+                            300: '#DCD4C7',
                         },
                         forest: {
                             800: '#23382B',
@@ -25,6 +26,7 @@
                             700: '#A34634',
                         },
                         charcoal: {
+                            700: '#4A4C4C',
                             800: '#2B2C2C',
                             900: '#1C1D1D',
                         }
@@ -41,7 +43,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
@@ -49,8 +51,8 @@
             font-family: 'DM Sans', sans-serif;
             background-color: #FAF8F5;
             color: #1C1D1D;
-            background-image: radial-gradient(#E8E2D8 0.75px, transparent 0.75px);
-            background-size: 16px 16px;
+            background-image: radial-gradient(#E2DACD 0.8px, transparent 0.8px);
+            background-size: 20px 20px;
         }
         .font-serif-title {
             font-family: 'Playfair Display', Georgia, serif;
@@ -60,169 +62,289 @@
         }
         .custom-scrollbar::-webkit-scrollbar {
             width: 5px;
+            height: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.02);
+            background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #E8E2D8;
+            background: #DCD4C7;
             border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #C05A46;
+        }
+        
+        input[type="text"], input[type="number"], select, textarea {
+            background-color: #FAF8F5;
+            border: 1px solid #E8E2D8;
+            transition: all 0.2s ease;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            border-color: #19281F;
+            box-shadow: 0 0 0 2px rgba(25, 40, 31, 0.08);
         }
     </style>
 </head>
-<body class="min-h-full flex flex-col justify-between selection:bg-forest-800 selection:text-paper-50">
+<body class="min-h-full flex flex-col justify-between selection:bg-forest-900 selection:text-paper-50 antialiased">
 
     <!-- HEADER & NAV -->
-    <header class="border-b border-paper-200 bg-paper-50/90 backdrop-blur-md sticky top-0 z-40">
-        <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="switchNavTab('foco')">
-                <div class="w-7 h-7 rounded-md bg-forest-900 text-paper-50 flex items-center justify-center font-serif-title font-bold text-sm">
+    <header class="border-b border-paper-200 bg-paper-50/95 backdrop-blur-md sticky top-0 z-40 shadow-xs">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+            <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchNavTab('foco')">
+                <div class="w-8 h-8 rounded-lg bg-forest-900 text-paper-50 flex items-center justify-center font-serif-title font-bold text-base shadow-xs group-hover:bg-forest-800 transition-colors">
                     F
                 </div>
-                <span class="font-serif-title font-bold text-lg text-charcoal-900 tracking-tight">FocusMicro</span>
+                <div class="flex flex-col">
+                    <span class="font-serif-title font-bold text-xl text-charcoal-900 tracking-tight leading-none">FocusMicro</span>
+                    <span id="txt-app-subtitle" class="text-[10px] text-charcoal-700 font-medium tracking-wide opacity-70">Caderno de Foco</span>
+                </div>
             </div>
 
-            <!-- Stats Header Badge -->
-            <div class="flex items-center gap-2 text-xs">
-                <div class="bg-paper-100 border border-paper-200 px-3 py-1 rounded-full flex items-center gap-2">
-                    <span class="text-charcoal-800 opacity-70">Hoje:</span>
-                    <span id="stat-today" class="font-bold text-forest-900">0</span>
+            <!-- Header Right Section: Language + Stats + Streak -->
+            <div class="flex items-center gap-2 text-xs ml-auto">
+                <!-- Seletor de Idioma -->
+                <div class="relative inline-flex items-center">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-charcoal-700 opacity-60 absolute left-2.5 pointer-events-none"></i>
+                    <select id="lang-select" onchange="changeLanguage(this.value)" class="bg-paper-100/80 border border-paper-200/90 rounded-full pl-8 pr-3 py-1 text-[11px] font-semibold text-charcoal-800 focus:outline-none cursor-pointer hover:bg-paper-200/60 transition-colors">
+                        <option value="pt">PT-BR</option>
+                        <option value="en">EN</option>
+                        <option value="es">ES</option>
+                        <option value="ja">JA</option>
+                        <option value="zh">ZH</option>
+                    </select>
                 </div>
-                <div class="bg-paper-100 border border-paper-200 px-3 py-1 rounded-full flex items-center gap-2">
-                    <span class="text-charcoal-800 opacity-70">Total:</span>
-                    <span id="stat-total" class="font-bold text-charcoal-900">0</span>
+
+                <!-- 1. STREAK / OFENSIVA SUAVE -->
+                <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs" title="Dias seguidos com registo de foco">
+                    <span class="text-xs">🔥</span>
+                    <span id="stat-streak" class="font-bold text-terracotta-600 font-mono">0</span>
+                    <span id="txt-streak-label" class="text-[10px] text-charcoal-700 opacity-70 hidden sm:inline">dias</span>
+                </div>
+
+                <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
+                    <span id="txt-stat-today" class="text-charcoal-700 opacity-70 font-medium">Hoje:</span>
+                    <span id="stat-today" class="font-bold text-forest-900 font-mono">0</span>
+                </div>
+                <div class="bg-paper-100/80 border border-paper-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs hidden sm:flex">
+                    <span id="txt-stat-total" class="text-charcoal-700 opacity-70 font-medium">Total:</span>
+                    <span id="stat-total" class="font-bold text-charcoal-900 font-mono">0</span>
                 </div>
             </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <nav class="max-w-2xl mx-auto px-4 flex border-t border-paper-200/60 text-xs sm:text-sm overflow-x-auto custom-scrollbar">
-            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
+        <nav class="max-w-4xl mx-auto px-4 sm:px-6 flex border-t border-paper-200/60 text-xs sm:text-sm overflow-x-auto custom-scrollbar gap-1 sm:gap-4">
+            <button data-nav="foco" onclick="switchNavTab('foco')" class="nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0">
                 <i data-lucide="timer" class="w-4 h-4"></i>
-                Foco
+                <span id="nav-foco">Foco</span>
             </button>
-            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
+            <button data-nav="planejamento" onclick="switchNavTab('planejamento')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
                 <i data-lucide="calendar" class="w-4 h-4"></i>
-                Meu planejamento
+                <span id="nav-planejamento">Meu Planeamento</span>
             </button>
-            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
+            <button data-nav="meu-dia" onclick="switchNavTab('meu-dia')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
                 <i data-lucide="sun" class="w-4 h-4"></i>
-                Meu dia
+                <span id="nav-meu-dia">Meu Dia</span>
             </button>
-            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0">
+            <button data-nav="meu-progresso" onclick="switchNavTab('meu-progresso')" class="nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium">
                 <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-                Meu progresso
+                <span id="nav-meu-progresso">Meu Progresso</span>
             </button>
         </nav>
     </header>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <main class="max-w-xl mx-auto w-full px-4 py-6 flex-1 flex flex-col justify-center">
+    <main class="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 flex-1 flex flex-col justify-center">
 
         <!-- SECTION 1: FOCO (TIMER) -->
-        <div id="section-foco" class="space-y-6">
+        <div id="section-foco" class="space-y-8 max-w-xl mx-auto w-full">
             
             <!-- Setup View -->
             <section id="view-setup" class="space-y-6">
                 <div class="text-center space-y-2">
-                    <span class="inline-block px-3 py-1 rounded-full bg-paper-100 border border-paper-200 text-forest-900 text-xs font-medium">
-                        ✦ Vencendo a inércia em pequenos passos
+                    <span id="txt-hero-tag" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-paper-100 border border-paper-200/90 text-forest-900 text-xs font-semibold tracking-wide">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-forest-900"></i>
+                        Vencendo a inércia em pequenos passos
                     </span>
-                    <h1 class="text-2xl sm:text-3xl font-serif-title font-bold text-charcoal-900 leading-snug">
-                        Comece pelo que dá <br><span class="text-forest-900 italic font-normal">pra fazer agora.</span>
+                    <h1 id="txt-hero-title" class="text-3xl sm:text-4xl font-serif-title font-bold text-charcoal-900 leading-tight">
+                        Comece pelo que dá <br><span class="text-forest-900 italic font-normal">para fazer agora.</span>
                     </h1>
-                    <p class="text-xs sm:text-sm text-charcoal-800 opacity-75 max-w-sm mx-auto">
+                    <p id="txt-hero-desc" class="text-xs sm:text-sm text-charcoal-700 opacity-80 max-w-sm mx-auto">
                         Qual é a menor ação possível neste momento? Reduza a resistência ao mínimo.
                     </p>
                 </div>
 
-                <div class="bg-paper-100 border border-paper-200 p-5 rounded-2xl shadow-sm space-y-5">
-                    <div class="space-y-1.5">
-                        <label for="task-input" class="block text-xs font-semibold text-charcoal-800 uppercase tracking-wider">Sua Micro-Tarefa</label>
-                        <input type="text" id="task-input" placeholder="Ex: Lavar 2 copos, abrir o projeto..." 
-                            class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-3 text-charcoal-900 placeholder-charcoal-800/40 focus:outline-none focus:border-forest-900 transition-all text-sm">
+                <div class="bg-paper-50 border border-paper-200/90 p-6 rounded-2xl shadow-xs space-y-6">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label id="lbl-task-input" for="task-input" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Sua Micro-Tarefa</label>
+                            
+                            <!-- 3. MODO RÁPIDO "ENTRAR NO FLUXO" -->
+                            <button type="button" onclick="startQuickFlow()" class="text-[11px] text-forest-900 hover:text-forest-800 font-bold flex items-center gap-1 hover:underline transition-all">
+                                <i data-lucide="zap" class="w-3 h-3"></i>
+                                <span id="btn-quick-start">Entrar no Fluxo (2 min)</span>
+                            </button>
+                        </div>
+                        <input type="text" id="task-input" placeholder="Ex: Escrever o primeiro parágrafo, abrir o projeto..." 
+                            class="w-full bg-paper-50 border border-paper-200 rounded-xl px-4 py-3 text-charcoal-900 placeholder-charcoal-700/40 focus:outline-none focus:border-forest-900 text-sm">
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-charcoal-800 uppercase tracking-wider">Tempo Estimado</label>
-                        <div class="grid grid-cols-3 gap-2.5">
-                            <button type="button" data-time="120" class="btn-time-preset py-2.5 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-200/50 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center">
-                                <span class="font-bold text-sm">2 min</span>
-                                <span class="text-[10px] opacity-60">Direto ao ponto</span>
+                    <div class="space-y-2">
+                        <label id="lbl-mode" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Método de Foco</label>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button id="btn-mode-micro" type="button" class="py-3 px-4 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span id="lbl-mode-micro">Micro-tarefa</span>
                             </button>
-                            <button type="button" data-time="180" class="btn-time-preset active py-2.5 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center">
-                                <span class="font-bold text-sm">3 min</span>
-                                <span class="text-[10px] text-forest-900/80">Recomendado</span>
+                            <button id="btn-mode-pomodoro" type="button" class="py-3 px-4 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="clock" class="w-3.5 h-3.5"></i> <span id="lbl-mode-pomo">Pomodoro</span>
                             </button>
-                            <button type="button" data-time="300" class="btn-time-preset py-2.5 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-200/50 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center">
-                                <span class="font-bold text-sm">5 min</span>
-                                <span class="text-[10px] opacity-60">Aprofundado</span>
+                        </div>
+                        <p id="mode-description" class="text-[11px] text-charcoal-700 opacity-70 italic">Pequenos blocos de 2, 3 ou 5 minutos para começar sem pressão.</p>
+                    </div>
+
+                    <div id="time-preset-options" class="space-y-2">
+                        <label id="lbl-duration" class="block text-xs font-bold text-charcoal-800 uppercase tracking-wider">Duração Inicial</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button type="button" data-time="120" class="btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5">
+                                <span class="font-mono font-bold text-sm">2 min</span>
+                                <span id="preset-2m-sub" class="text-[10px] opacity-60">Direto ao ponto</span>
+                            </button>
+                            <button type="button" data-time="180" class="btn-time-preset active py-3 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5">
+                                <span class="font-mono font-bold text-sm">3 min</span>
+                                <span id="preset-3m-sub" class="text-[10px] text-forest-900/80 font-semibold">Recomendado</span>
+                            </button>
+                            <button type="button" data-time="300" class="btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5">
+                                <span class="font-mono font-bold text-sm">5 min</span>
+                                <span id="preset-5m-sub" class="text-[10px] opacity-60">Aprofundado</span>
                             </button>
                         </div>
                     </div>
 
-                    <button id="btn-start" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-medium py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
+                    <div id="pomodoro-info" class="hidden rounded-xl border border-paper-200/90 bg-paper-100/40 p-4 space-y-4 text-xs text-charcoal-800">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="space-y-1">
+                                <label id="lbl-pomo-focus" for="pomodoro-focus-minutes" class="block font-semibold text-charcoal-900">Tempo de Foco (min)</label>
+                                <input id="pomodoro-focus-minutes" type="number" min="1" max="180" value="25" inputmode="numeric" class="w-full bg-paper-50 border border-paper-200 rounded-lg px-3 py-2 text-sm text-charcoal-900 focus:outline-none focus:border-forest-900">
+                            </div>
+                            <div class="space-y-1">
+                                <label id="lbl-pomo-short" for="pomodoro-break-minutes" class="block font-semibold text-charcoal-900">Pausa Curta (min)</label>
+                                <input id="pomodoro-break-minutes" type="number" min="1" max="60" value="5" inputmode="numeric" class="w-full bg-paper-50 border border-paper-200 rounded-lg px-3 py-2 text-sm text-charcoal-900 focus:outline-none focus:border-forest-900">
+                            </div>
+                            <div class="space-y-1">
+                                <label id="lbl-pomo-long" for="pomodoro-long-break-minutes" class="block font-semibold text-charcoal-900">Pausa Longa (min)</label>
+                                <input id="pomodoro-long-break-minutes" type="number" min="1" max="90" value="15" inputmode="numeric" class="w-full bg-paper-50 border border-paper-200 rounded-lg px-3 py-2 text-sm text-charcoal-900 focus:outline-none focus:border-forest-900">
+                            </div>
+                            <div class="space-y-1">
+                                <label id="lbl-pomo-cycle" for="pomodoro-long-break-cycle" class="block font-semibold text-charcoal-900">Pausa Longa a cada</label>
+                                <select id="pomodoro-long-break-cycle" class="w-full bg-paper-50 border border-paper-200 rounded-lg px-3 py-2 text-sm text-charcoal-900 focus:outline-none focus:border-forest-900">
+                                    <option value="2">2 focos</option><option value="3">3 focos</option><option value="4" selected>4 focos</option><option value="5">5 focos</option><option value="6">6 focos</option><option value="8">8 focos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="rounded-xl bg-paper-100 border border-paper-200 p-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <span id="pomodoro-focus-summary" class="font-bold text-forest-900">25 min de foco</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-charcoal-700 opacity-40"></i>
+                                <span id="pomodoro-break-summary" class="font-bold text-terracotta-600">5 min de pausa</span>
+                            </div>
+                            <p id="pomodoro-long-break-summary" class="mt-1 opacity-70 text-[11px]">Pausa longa de 15 min a cada 4 focos.</p>
+                        </div>
+                    </div>
+
+                    <button id="btn-start" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md active:scale-[0.99] cursor-pointer">
                         <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-                        <span>Iniciar Foco</span>
+                        <span id="txt-btn-start">Iniciar Foco Agora</span>
                     </button>
                 </div>
             </section>
 
             <!-- Timer Running View -->
             <section id="view-timer" class="hidden space-y-6 text-center">
-                <div class="bg-paper-100 border border-paper-200 rounded-2xl p-4">
-                    <span class="text-[11px] uppercase tracking-wider text-charcoal-800 opacity-60 font-medium block mb-0.5">Em Foco</span>
-                    <p id="timer-task-display" class="text-charcoal-900 font-serif-title font-bold text-lg line-clamp-2">"Lavar 2 copos"</p>
+                <div class="bg-paper-100/70 border border-paper-200 rounded-2xl p-4 sm:p-5 shadow-xs max-w-lg mx-auto">
+                    <span id="txt-timer-badge-top" class="text-[11px] font-bold uppercase tracking-widest text-charcoal-700 opacity-70 block mb-1">Em Foco</span>
+                    <p id="timer-task-display" class="text-charcoal-900 font-serif-title font-bold text-xl sm:text-2xl line-clamp-2">"Lavar 2 copos"</p>
                 </div>
 
-                <div class="py-4 space-y-2">
-                    <div id="timer-countdown" class="font-mono-timer text-7xl font-bold tracking-tight text-charcoal-900">
+                <div class="py-6 px-4 bg-paper-50 border border-paper-200 rounded-3xl shadow-sm max-w-lg mx-auto space-y-3">
+                    <div id="timer-countdown" class="font-mono-timer text-7xl sm:text-8xl font-bold tracking-tight text-forest-900 my-2">
                         03:00
                     </div>
                     <div class="flex items-center justify-center gap-2 text-xs">
-                        <span id="timer-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-900/10 text-forest-900 font-medium">
+                        <span id="timer-status-badge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-900/10 text-forest-900 font-semibold border border-forest-900/20">
                             <span class="w-2 h-2 rounded-full bg-forest-900 animate-pulse"></span>
-                            Em andamento
+                            <span id="txt-status-running">Sessão em andamento</span>
                         </span>
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <button id="btn-complete-now" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-medium py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
+                <div class="space-y-4 max-w-lg mx-auto">
+                    <button id="btn-complete-now" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-sm active:scale-[0.99]">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                        <span>Concluir Tarefa Agora</span>
+                        <span id="txt-btn-complete">Concluir Tarefa Agora</span>
                     </button>
 
-                    <div class="flex items-center justify-center gap-2">
-                        <button id="btn-pause" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-medium py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs">
+                    <div class="flex items-center justify-center gap-2.5">
+                        <button id="btn-pause" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-charcoal-900 font-semibold py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-2 text-xs shadow-xs">
                             <i id="pause-icon" data-lucide="pause" class="w-4 h-4"></i>
                             <span id="btn-pause-text">Pausar</span>
                         </button>
 
-                        <button id="btn-add-2min" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-forest-900 font-medium py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs">
+                        <button id="btn-add-2min" type="button" class="flex-1 bg-paper-100 hover:bg-paper-200 text-forest-900 font-semibold py-2.5 px-3 rounded-xl transition-all border border-paper-200 flex items-center justify-center gap-1.5 text-xs shadow-xs">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             <span>+2 Min</span>
                         </button>
 
-                        <button id="btn-reset" type="button" class="bg-paper-100 hover:bg-terracotta-600/10 hover:text-terracotta-600 text-charcoal-800 font-medium p-2.5 rounded-xl transition-all border border-paper-200" title="Descartar Sessão Sem Guardar">
+                        <button id="btn-reset" type="button" class="bg-paper-100 hover:bg-terracotta-600/10 hover:text-terracotta-600 text-charcoal-800 font-medium p-2.5 rounded-xl transition-all border border-paper-200 shadow-xs" title="Descartar Sessão">
                             <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                         </button>
                     </div>
 
-                    <!-- BOTÃO ÚNICO PEDIDO NO WHATSAPP: LOFI + CHUVA -->
-                    <div class="bg-paper-100 border border-paper-200 rounded-xl p-3 space-y-2">
-                        <button id="btn-toggle-lofi" type="button" class="w-full bg-paper-50 hover:bg-paper-200 border border-paper-200 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs text-charcoal-900 transition-all font-medium">
-                            <div class="flex items-center gap-2">
+                    <!-- SOM AMBIENTE -->
+                    <div class="bg-paper-100/60 border border-paper-200 rounded-xl p-3.5 space-y-2.5 text-left">
+                        <button id="btn-toggle-lofi" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-4 py-3 flex items-center justify-between text-xs text-charcoal-900 transition-all font-semibold shadow-xs">
+                            <div class="flex items-center gap-2.5">
                                 <i data-lucide="music" class="w-4 h-4 text-forest-900"></i>
-                                <span>Som Ambiente (Lofi + Chuva Baixinho)</span>
+                                <span id="txt-lofi-label">Som Ambiente (Lofi + Chuva Suave)</span>
                             </div>
-                            <span id="lofi-status-badge" class="opacity-60 text-[11px]">Desativado</span>
+                            <span id="lofi-status-badge" class="opacity-60 text-[11px] font-normal">Desativado</span>
                         </button>
 
-                        <div id="volume-control-box" class="flex items-center gap-2 pt-1 hidden">
-                            <i data-lucide="volume-1" class="w-3.5 h-3.5 text-charcoal-800 opacity-60"></i>
-                            <input type="range" id="sound-volume-range" min="0" max="1" step="0.05" value="0.25" class="w-full h-1 bg-paper-200 rounded-lg appearance-none cursor-pointer">
-                            <span class="text-[10px] text-charcoal-800 opacity-60 font-mono">Volume</span>
+                        <div id="volume-control-box" class="flex items-center gap-3 pt-1 px-1 hidden">
+                            <i data-lucide="volume-1" class="w-4 h-4 text-charcoal-700 opacity-60"></i>
+                            <input type="range" id="sound-volume-range" min="0" max="1" step="0.05" value="0.25" class="w-full h-1.5 bg-paper-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-[10px] text-charcoal-800 opacity-70 font-mono font-medium">Volume</span>
+                        </div>
+                    </div>
+
+                    <!-- MÚSICA PERSONALIZADA -->
+                    <div class="bg-paper-100/60 border border-paper-200 rounded-xl p-3.5 space-y-3 text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="headphones" class="w-4 h-4 text-forest-900"></i>
+                                <span id="txt-custom-music-title" class="text-xs font-bold text-charcoal-900">Sua Música Local</span>
+                            </div>
+                            <span id="txt-custom-music-badge" class="text-[10px] text-charcoal-700 opacity-60 font-medium">Arquivo Local</span>
+                        </div>
+                        
+                        <input id="custom-music-file" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a" class="hidden">
+                        
+                        <button id="btn-choose-music" type="button" class="w-full bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-xl px-3 py-2.5 text-xs font-medium text-charcoal-900 flex items-center justify-center gap-2 transition-all shadow-xs">
+                            <i data-lucide="folder-open" class="w-4 h-4 text-forest-900"></i>
+                            <span id="txt-btn-choose-file">Escolher Áudio</span>
+                        </button>
+                        
+                        <p id="custom-music-name" class="text-[11px] text-charcoal-800 opacity-70 truncate italic px-1">Nenhum arquivo selecionado</p>
+                        
+                        <div class="flex gap-2">
+                            <button id="btn-toggle-custom-music" type="button" disabled class="flex-1 bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg py-2 text-xs font-semibold text-charcoal-900 disabled:opacity-40 transition-all">Tocar música</button>
+                            <button id="btn-stop-custom-music" type="button" disabled class="bg-paper-50 hover:bg-paper-100 border border-paper-200 rounded-lg px-3 py-2 text-xs font-semibold text-charcoal-900 disabled:opacity-40 transition-all">Parar</button>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 px-1">
+                            <i data-lucide="volume-2" class="w-3.5 h-3.5 text-charcoal-700 opacity-60"></i>
+                            <input type="range" id="custom-music-volume" min="0" max="1" step="0.05" value="0.5" class="w-full h-1.5 bg-paper-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-[10px] text-charcoal-800 opacity-70 font-mono">Volume</span>
                         </div>
                     </div>
                 </div>
@@ -231,69 +353,69 @@
 
         <!-- SECTION 2: MEU PLANEJAMENTO -->
         <div id="section-planejamento" class="hidden space-y-6">
-            <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
-                <div class="flex items-center justify-between border-b border-paper-200/80 pb-2.5">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Planejamento Diário</span>
-                    <button id="btn-toggle-calendar-view" type="button" class="text-xs text-forest-900 font-medium hover:underline flex items-center gap-1">
-                        <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
+            <div class="bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-4">
+                <div class="flex items-center justify-between border-b border-paper-200 pb-3">
+                    <span id="txt-plan-section-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Planejamento Diário</span>
+                    <button id="btn-toggle-calendar-view" type="button" class="text-xs text-forest-900 font-bold hover:underline flex items-center gap-1.5">
+                        <i data-lucide="calendar-days" class="w-4 h-4"></i>
                         <span id="calendar-toggle-label">Ver Calendário Mensal</span>
                     </button>
                 </div>
 
                 <div id="day-navigation-bar" class="flex items-center justify-between pt-1">
-                    <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Dia Anterior">
-                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    <button id="plan-prev-date" type="button" class="p-2 hover:bg-paper-100 rounded-lg transition-colors text-charcoal-900">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
                     </button>
                     <div class="text-center">
-                        <h2 id="plan-date-display" class="font-serif-title font-bold text-base text-charcoal-900">Hoje</h2>
-                        <span id="plan-subdate-display" class="text-[11px] text-charcoal-800 opacity-60">21 de Outubro</span>
+                        <h2 id="plan-date-display" class="font-serif-title font-bold text-lg text-charcoal-900">Hoje</h2>
+                        <span id="plan-subdate-display" class="text-xs text-charcoal-700 opacity-70 font-medium">-</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <button id="plan-today-btn" type="button" class="text-[11px] font-semibold bg-paper-200 hover:bg-paper-200/80 px-2.5 py-1 rounded-md text-charcoal-900 transition-colors hidden">
+                        <button id="plan-today-btn" type="button" class="text-xs font-semibold bg-paper-200 hover:bg-paper-300 px-3 py-1.5 rounded-lg text-charcoal-900 transition-colors hidden shadow-xs">
                             Ir para Hoje
                         </button>
-                        <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-200/60 rounded-lg transition-colors text-charcoal-900" title="Próximo Dia">
-                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        <button id="plan-next-date" type="button" class="p-2 hover:bg-paper-100 rounded-lg transition-colors text-charcoal-900">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div id="monthly-calendar-container" class="hidden bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+            <div id="monthly-calendar-container" class="hidden bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-4">
                 <div class="flex items-center justify-between">
-                    <button id="cal-prev-month" type="button" class="p-1.5 hover:bg-paper-200 rounded-lg text-charcoal-900"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                    <h3 id="cal-month-year-label" class="font-serif-title font-bold text-sm text-charcoal-900">Outubro 2026</h3>
-                    <button id="cal-next-month" type="button" class="p-1.5 hover:bg-paper-200 rounded-lg text-charcoal-900"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    <button id="cal-prev-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <h3 id="cal-month-year-label" class="font-serif-title font-bold text-base text-charcoal-900">-</h3>
+                    <button id="cal-next-month" type="button" class="p-2 hover:bg-paper-100 rounded-lg text-charcoal-900"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
-                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-charcoal-800 opacity-60 uppercase">
+                <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-charcoal-700 opacity-60 uppercase tracking-wider">
                     <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                 </div>
-                <div id="cal-grid-days" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+                <div id="cal-grid-days" class="grid grid-cols-7 gap-1.5 text-center text-xs font-medium"></div>
             </div>
 
-            <div id="plan-form-container" class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
+            <div id="plan-form-container" class="bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-3.5">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800">Planejar Micro-Tarefa (Máx 3)</span>
-                    <span id="plan-counter-badge" class="text-xs font-bold text-forest-900">0/3</span>
+                    <span id="txt-plan-form-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Nova Micro-Tarefa (Máx 3)</span>
+                    <span id="plan-counter-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-forest-900/10 text-forest-900 border border-forest-900/20">0/3</span>
                 </div>
                 <input type="text" id="plan-title-input" placeholder="O que você precisa fazer?" 
-                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2.5 text-sm text-charcoal-900 placeholder-charcoal-800/40 focus:outline-none focus:border-forest-900">
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-4 py-2.5 text-sm text-charcoal-900 placeholder-charcoal-700/40">
                 <input type="text" id="plan-desc-input" placeholder="Detalhe opcional ou instrução rápida..." 
-                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2 text-xs text-charcoal-900 placeholder-charcoal-800/40 focus:outline-none focus:border-forest-900">
-                <button id="btn-add-plan" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-medium py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-4 py-2 text-xs text-charcoal-900 placeholder-charcoal-700/40">
+                <button id="btn-add-plan" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i>
                     <span id="btn-plan-submit-label">Adicionar ao Planejamento</span>
                 </button>
             </div>
 
-            <div id="plan-limit-msg" class="hidden bg-forest-900/10 border border-forest-900/20 p-3 rounded-xl text-xs text-forest-900 flex items-center gap-2">
+            <div id="plan-limit-msg" class="hidden bg-terracotta-600/10 border border-terracotta-600/20 p-4 rounded-xl text-xs text-terracotta-700 font-medium flex items-center gap-2">
                 <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
-                <span>Limite diário de 3 tarefas atingido. Conclua ou edite uma para adicionar outra.</span>
+                <span id="txt-plan-limit">Limite diário de 3 tarefas atingido. Conclua ou remova uma para adicionar outra.</span>
             </div>
 
             <div class="space-y-3">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Tarefas do Dia</h3>
-                <div id="plan-task-list" class="space-y-2"></div>
+                <h3 id="txt-tasks-header" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Tarefas do Dia</h3>
+                <div id="plan-task-list" class="space-y-2.5"></div>
             </div>
         </div>
 
@@ -301,66 +423,72 @@
         <div id="section-meu-dia" class="hidden space-y-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-serif-title font-bold text-charcoal-900">Meu Dia</h2>
-                    <p class="text-xs text-charcoal-800 opacity-60">Suas vitórias e registros de hoje</p>
+                    <h2 id="txt-meu-dia-title" class="text-2xl font-serif-title font-bold text-charcoal-900">Meu Dia</h2>
+                    <p id="txt-meu-dia-sub" class="text-xs text-charcoal-700 opacity-70">Suas vitórias e registros de hoje</p>
                 </div>
-                <button id="btn-add-manual" type="button" class="bg-paper-100 border border-paper-200 hover:bg-paper-200 text-charcoal-900 text-xs font-medium py-2 px-3 rounded-xl flex items-center gap-1.5 transition-colors">
-                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                    <span>Registro Manual</span>
+                <button id="btn-add-manual" type="button" class="bg-paper-50 border border-paper-200 hover:bg-paper-100 text-charcoal-900 text-xs font-semibold py-2 px-3.5 rounded-xl flex items-center gap-1.5 transition-colors shadow-xs">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5 text-forest-900"></i>
+                    <span id="txt-btn-manual">Registro Manual</span>
                 </button>
             </div>
 
-            <form id="form-manual-entry" class="hidden bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Novo Registro Manual</h3>
+            <form id="form-manual-entry" class="hidden bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-3.5">
+                <h3 id="txt-manual-form-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800">Novo Registro Manual</h3>
                 <input type="text" id="manual-task-input" placeholder="O que você concluiu?" required
-                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-forest-900">
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2.5 text-xs text-charcoal-900">
                 <textarea id="manual-note-input" placeholder="Anotação opcional..." rows="2"
-                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-forest-900"></textarea>
+                    class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3.5 py-2 text-xs text-charcoal-900"></textarea>
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="bg-forest-900 text-paper-50 text-xs font-medium px-3 py-2 rounded-lg">Salvar</button>
-                    <button type="button" id="btn-cancel-manual" class="text-xs text-charcoal-800 opacity-60 px-2 py-2">Cancelar</button>
+                    <button type="submit" class="bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold px-4 py-2 rounded-lg transition-colors">Salvar Registro</button>
+                    <button type="button" id="btn-cancel-manual" class="text-xs font-medium text-charcoal-700 hover:text-charcoal-900 px-3 py-2">Cancelar</button>
                 </div>
             </form>
 
-            <div id="today-entries-list" class="space-y-2"></div>
+            <div id="today-entries-list" class="space-y-2.5"></div>
         </div>
 
         <!-- SECTION 4: MEU PROGRESSO -->
         <div id="section-meu-progresso" class="hidden space-y-6">
             <div>
-                <h2 class="text-xl font-serif-title font-bold text-charcoal-900">Meu Progresso</h2>
-                <p class="text-xs text-charcoal-800 opacity-60">Visão acumulada do seu esforço</p>
+                <h2 id="txt-progresso-title" class="text-2xl font-serif-title font-bold text-charcoal-900">Meu Progresso</h2>
+                <p id="txt-progresso-sub" class="text-xs text-charcoal-700 opacity-70">Visão acumulada do seu esforço e dedicação</p>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                <div class="bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
-                    <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Foco na Semana</span>
-                    <p id="rev-week-time" class="text-base font-bold text-forest-900">0 min</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div class="bg-paper-50 border border-paper-200 p-4 rounded-2xl shadow-xs space-y-1">
+                    <span id="txt-kpi-week-time" class="text-[10px] uppercase font-bold text-charcoal-700 opacity-60 tracking-wider">Foco na Semana</span>
+                    <p id="rev-week-time" class="text-xl font-bold font-mono text-forest-900">0 min</p>
                 </div>
-                <div class="bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
-                    <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Vitórias (7d)</span>
-                    <p id="rev-week-count" class="text-base font-bold text-charcoal-900">0 conquistas</p>
+                <div class="bg-paper-50 border border-paper-200 p-4 rounded-2xl shadow-xs space-y-1">
+                    <span id="txt-kpi-week-wins" class="text-[10px] uppercase font-bold text-charcoal-700 opacity-60 tracking-wider">Vitórias (7d)</span>
+                    <p id="rev-week-count" class="text-xl font-bold font-serif-title text-charcoal-900">0 conquistas</p>
                 </div>
-                <div class="col-span-2 sm:col-span-1 bg-paper-100 border border-paper-200 p-3.5 rounded-2xl space-y-1">
-                    <span class="text-[10px] uppercase font-semibold text-charcoal-800 opacity-60">Dia Mais Ativo</span>
-                    <p id="rev-peak-day" class="text-base font-bold text-forest-900">-</p>
+                <div class="col-span-2 sm:col-span-1 bg-paper-50 border border-paper-200 p-4 rounded-2xl shadow-xs space-y-1">
+                    <span id="txt-kpi-peak-day" class="text-[10px] uppercase font-bold text-charcoal-700 opacity-60 tracking-wider">Dia Mais Ativo</span>
+                    <p id="rev-peak-day" class="text-xl font-bold text-forest-900 font-serif-title">-</p>
                 </div>
             </div>
 
-            <div class="bg-paper-100 border border-paper-200 p-4 rounded-2xl space-y-3">
-                <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Últimos 7 dias</span>
-                <div id="weekly-chart" class="flex items-end justify-between gap-2 h-28 pt-4"></div>
+            <div class="bg-paper-50 border border-paper-200 p-5 rounded-2xl shadow-xs space-y-3">
+                <span id="txt-chart-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Últimos 7 Dias</span>
+                <div id="weekly-chart" class="flex items-end justify-between gap-3 h-32 pt-6"></div>
             </div>
 
             <div class="space-y-3">
-                <div class="flex items-center justify-between flex-wrap gap-2">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
+                <div class="flex items-center justify-between flex-wrap gap-2 border-b border-paper-200 pb-2">
+                    <h3 id="txt-history-title" class="text-xs font-bold uppercase tracking-wider text-charcoal-800 opacity-70">Histórico Completo</h3>
                     <div class="flex items-center gap-3">
-                        <button id="btn-export-backup" type="button" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-medium">
-                            <i data-lucide="download" class="w-3 h-3"></i> Backup JSON
+
+                        <!-- 5. EXPORTAÇÃO MARKDOWN -->
+                        <button id="btn-export-markdown" type="button" onclick="exportMarkdownSummary()" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold">
+                            <i data-lucide="file-text" class="w-3.5 h-3.5"></i> <span id="txt-btn-md">Copiar Markdown</span>
                         </button>
-                        <label class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-medium cursor-pointer">
-                            <i data-lucide="upload" class="w-3 h-3"></i> Importar JSON
+
+                        <button id="btn-export-backup" type="button" class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup JSON
+                        </button>
+                        <label class="text-[11px] text-forest-900 hover:underline flex items-center gap-1 font-bold cursor-pointer">
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i> <span id="txt-btn-import">Importar JSON</span>
                             <input type="file" id="input-import-json" accept=".json" class="hidden">
                         </label>
                     </div>
@@ -372,25 +500,32 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-paper-200/60 py-4 text-center text-xs text-charcoal-800 opacity-50">
-        <p>FocusMicro — um dia de cada vez, sem pressa nem culpa.</p>
+    <footer class="border-t border-paper-200/80 py-5 text-center text-xs text-charcoal-700 opacity-60">
+        <p id="txt-footer">FocusMicro — um dia de cada vez, sem pressa nem culpa.</p>
     </footer>
 
-    <!-- CELEBRATION MODAL -->
+    <!-- CELEBRATION MODAL WITH REFLECTION NOTE -->
     <div id="modal-celebration" class="fixed inset-0 bg-charcoal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-paper-50 border border-paper-200 rounded-2xl p-6 max-w-sm w-full shadow-xl text-center space-y-5">
-            <div class="w-12 h-12 bg-forest-900/10 text-forest-900 rounded-full flex items-center justify-center mx-auto">
-                <i data-lucide="award" class="w-6 h-6"></i>
+        <div class="bg-paper-50 border border-paper-200 rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4">
+            <div class="w-14 h-14 bg-forest-900/10 text-forest-900 rounded-full flex items-center justify-center mx-auto border border-forest-900/20">
+                <i data-lucide="award" class="w-7 h-7"></i>
             </div>
-            <div class="space-y-1">
-                <h3 class="font-serif-title font-bold text-xl text-charcoal-900">Micro-vitória concluída!</h3>
+            <div class="space-y-1.5">
+                <h3 id="modal-title" class="font-serif-title font-bold text-2xl text-charcoal-900">Micro-vitória concluída!</h3>
                 <p id="modal-task-name" class="text-xs text-charcoal-800 opacity-80 italic">"..."</p>
             </div>
-            <div class="space-y-2">
-                <button id="btn-save-victory" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-medium py-3 rounded-xl transition-all">
+
+            <!-- 2. REFLEXÃO / NOTA RÁPIDA -->
+            <div class="text-left space-y-1">
+                <label id="lbl-modal-note" for="modal-reflection-note" class="block text-[11px] font-bold text-charcoal-700 uppercase tracking-wider">Como foi essa sessão? (Opcional)</label>
+                <input type="text" id="modal-reflection-note" placeholder="Ex: Fluíu super bem, foco total..." class="w-full bg-paper-50 border border-paper-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none">
+            </div>
+
+            <div class="space-y-2.5 pt-1">
+                <button id="btn-save-victory" type="button" class="w-full bg-forest-900 hover:bg-forest-800 text-paper-50 text-xs font-bold py-3.5 rounded-xl transition-all shadow-md">
                     Guardar no Diário
                 </button>
-                <button id="btn-extend-victory" type="button" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-medium py-2.5 rounded-xl border border-paper-200 transition-all">
+                <button id="btn-extend-victory" type="button" class="w-full bg-paper-100 hover:bg-paper-200 text-charcoal-900 text-xs font-semibold py-3 rounded-xl border border-paper-200 transition-all">
                     +2 min de impulso
                 </button>
             </div>
@@ -405,10 +540,395 @@
             }
         }
 
-        // --- SISTEMA DE ÁUDIO LOFI + CHUVA SUAVE ---
-        // Áudio Lofi relaxante com textura de chuva ambiente
+        // --- 4. SINTETIZADOR DE SOM DE CONCLUSÃO (WEB AUDIO API - TIGELA TIBETANA) ---
+        function playCompletionChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                
+                const frequencies = [528, 660, 792]; // Acorde harmónico relaxante
+                frequencies.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                    
+                    gain.gain.setValueAtTime(0, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.12 - (idx * 0.03), ctx.currentTime + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start(ctx.currentTime + (idx * 0.08));
+                    osc.stop(ctx.currentTime + 2.6);
+                });
+            } catch(e) {}
+        }
+
+        // --- TRANSLATIONS (I18N) ---
+        const I18N = {
+            pt: {
+                appSubtitle: "Caderno de Foco",
+                streakLabel: "dias",
+                statToday: "Hoje:",
+                statTotal: "Total:",
+                navFoco: "Foco",
+                navPlanejamento: "Meu Planeamento",
+                navMeuDia: "Meu Dia",
+                navMeuProgresso: "Meu Progresso",
+                heroTag: "Vencendo a inércia em pequenos passos",
+                heroTitle: 'Comece pelo que dá <br><span class="text-forest-900 italic font-normal">para fazer agora.</span>',
+                heroDesc: "Qual é a menor ação possível neste momento? Reduza a resistência ao mínimo.",
+                taskInputLbl: "Sua Micro-Tarefa",
+                quickStart: "Entrar no Fluxo (2 min)",
+                modeLbl: "Método de Foco",
+                modeMicro: "Micro-tarefa",
+                modePomo: "Pomodoro",
+                modeDescMicro: "Pequenos blocos de 2, 3 ou 5 minutos para começar sem pressão.",
+                modeDescPomo: "Ciclos estruturados de foco e pausa para tarefas que exigem mais tempo.",
+                durationLbl: "Duração Inicial",
+                btnStart: "Iniciar Foco Agora",
+                timerBadgeTop: "Em Foco",
+                statusRunning: "Sessão em andamento",
+                btnComplete: "Concluir Tarefa Agora",
+                btnPause: "Pausar",
+                btnResume: "Continuar",
+                lofiLabel: "Som Ambiente (Lofi + Chuva Suave)",
+                customMusicTitle: "Sua Música Local",
+                customMusicBadge: "Arquivo Local",
+                btnChooseFile: "Escolher Áudio",
+                planSectionTitle: "Planejamento Diário",
+                calToggleView: "Ver Calendário Mensal",
+                calToggleHide: "Ocultar Calendário",
+                planFormTitle: "Nova Micro-Tarefa (Máx 3)",
+                planLimit: "Limite diário de 3 tarefas atingido. Conclua ou remova uma para adicionar outra.",
+                tasksHeader: "Tarefas do Dia",
+                meuDiaTitle: "Meu Dia",
+                meuDiaSub: "Suas vitórias e registros de hoje",
+                btnManual: "Registro Manual",
+                manualFormTitle: "Novo Registro Manual",
+                progressoTitle: "Meu Progresso",
+                progressoSub: "Visão acumulada do seu esforço e dedicação",
+                kpiWeekTime: "Foco na Semana",
+                kpiWeekWins: "Vitórias (7d)",
+                kpiPeakDay: "Dia Mais Ativo",
+                chartTitle: "Últimos 7 Dias",
+                historyTitle: "Histórico Completo",
+                btnMd: "Copiar Markdown",
+                btnImport: "Importar JSON",
+                footer: "FocusMicro — um dia de cada vez, sem pressa nem culpa.",
+                modalTitle: "Micro-vitória concluída!",
+                modalNoteLbl: "Como foi essa sessão? (Opcional)",
+                modalSave: "Guardar no Diário",
+                modalExtend: "+2 min de impulso"
+            },
+            en: {
+                appSubtitle: "Focus Notebook",
+                streakLabel: "days",
+                statToday: "Today:",
+                statTotal: "Total:",
+                navFoco: "Focus",
+                navPlanejamento: "My Planning",
+                navMeuDia: "My Day",
+                navMeuProgresso: "My Progress",
+                heroTag: "Overcoming inertia in small steps",
+                heroTitle: 'Start with what you <br><span class="text-forest-900 italic font-normal">can do right now.</span>',
+                heroDesc: "What is the smallest possible action right now? Lower resistance to a minimum.",
+                taskInputLbl: "Your Micro-Task",
+                quickStart: "Enter Flow (2 min)",
+                modeLbl: "Focus Method",
+                modeMicro: "Micro-task",
+                modePomo: "Pomodoro",
+                modeDescMicro: "Small 2, 3, or 5-minute blocks to start without pressure.",
+                modeDescPomo: "Structured focus and break cycles for longer tasks.",
+                durationLbl: "Initial Duration",
+                btnStart: "Start Focus Now",
+                timerBadgeTop: "In Focus",
+                statusRunning: "Session in progress",
+                btnComplete: "Complete Task Now",
+                btnPause: "Pause",
+                btnResume: "Resume",
+                lofiLabel: "Ambient Sound (Lofi + Soft Rain)",
+                customMusicTitle: "Your Local Music",
+                customMusicBadge: "Local File",
+                btnChooseFile: "Choose Audio",
+                planSectionTitle: "Daily Planning",
+                calToggleView: "View Monthly Calendar",
+                calToggleHide: "Hide Calendar",
+                planFormTitle: "New Micro-Task (Max 3)",
+                planLimit: "Daily limit of 3 tasks reached. Complete or delete one to add another.",
+                tasksHeader: "Tasks for the Day",
+                meuDiaTitle: "My Day",
+                meuDiaSub: "Your victories and logs for today",
+                btnManual: "Manual Log",
+                manualFormTitle: "New Manual Log",
+                progressoTitle: "My Progress",
+                progressoSub: "Accumulated view of your effort and dedication",
+                kpiWeekTime: "Focus This Week",
+                kpiWeekWins: "Victories (7d)",
+                kpiPeakDay: "Most Active Day",
+                chartTitle: "Last 7 Days",
+                historyTitle: "Full History",
+                btnMd: "Copy Markdown",
+                btnImport: "Import JSON",
+                footer: "FocusMicro — one day at a time, no rush, no guilt.",
+                modalTitle: "Micro-victory unlocked!",
+                modalNoteLbl: "How was this session? (Optional)",
+                modalSave: "Save to Journal",
+                modalExtend: "+2 min momentum"
+            },
+            es: {
+                appSubtitle: "Cuaderno de Enfoque",
+                streakLabel: "días",
+                statToday: "Hoy:",
+                statTotal: "Total:",
+                navFoco: "Enfoque",
+                navPlanejamento: "Mi Planificación",
+                navMeuDia: "Mi Día",
+                navMeuProgresso: "Mi Progreso",
+                heroTag: "Venciendo la inercia paso a paso",
+                heroTitle: 'Empieza con lo que <br><span class="text-forest-900 italic font-normal">puedes hacer ahora.</span>',
+                heroDesc: "¿Cuál es la acción más pequeña posible? Reduce la resistencia al mínimo.",
+                taskInputLbl: "Tu Microtarea",
+                quickStart: "Entrar en Flujo (2 min)",
+                modeLbl: "Método de Enfoque",
+                modeMicro: "Microtarea",
+                modePomo: "Pomodoro",
+                modeDescMicro: "Pequeños bloques de 2, 3 o 5 minutos para empezar sin presión.",
+                modeDescPomo: "Ciclos estructurados de enfoque y descanso para tareas más largas.",
+                durationLbl: "Duración Inicial",
+                btnStart: "Iniciar Enfoque Ahora",
+                timerBadgeTop: "En Enfoque",
+                statusRunning: "Sesión en curso",
+                btnComplete: "Completar Tarea Ahora",
+                btnPause: "Pausar",
+                btnResume: "Continuar",
+                lofiLabel: "Sonido Ambiente (Lofi + Lluvia Suave)",
+                customMusicTitle: "Tu Música Local",
+                customMusicBadge: "Archivo Local",
+                btnChooseFile: "Elegir Audio",
+                planSectionTitle: "Planificación Diaria",
+                calToggleView: "Ver Calendario Mensual",
+                calToggleHide: "Ocultar Calendario",
+                planFormTitle: "Nueva Microtarea (Máx 3)",
+                planLimit: "Límite diario de 3 tareas alcanzado. Completa o elimina una para agregar otra.",
+                tasksHeader: "Tareas del Día",
+                meuDiaTitle: "Mi Día",
+                meuDiaSub: "Tus victorias y registros de hoy",
+                btnManual: "Registro Manual",
+                manualFormTitle: "Nuevo Registro Manual",
+                progressoTitle: "Mi Progreso",
+                progressoSub: "Visión acumulada de tu esfuerzo y dedicación",
+                kpiWeekTime: "Enfoque esta Semana",
+                kpiWeekWins: "Victorias (7d)",
+                kpiPeakDay: "Día más Activo",
+                chartTitle: "Últimos 7 Días",
+                historyTitle: "Historial Completo",
+                btnMd: "Copiar Markdown",
+                btnImport: "Importar JSON",
+                footer: "FocusMicro — un día a la vez, sin prisa y sin culpa.",
+                modalTitle: "¡Microvictoria conseguida!",
+                modalNoteLbl: "¿Cómo fue esta sesión? (Opcional)",
+                modalSave: "Guardar en el Diario",
+                modalExtend: "+2 min de impulso"
+            },
+            ja: {
+                appSubtitle: "集中ノート",
+                streakLabel: "日連続",
+                statToday: "今日:",
+                statTotal: "合計:",
+                navFoco: "集中",
+                navPlanejamento: "計画",
+                navMeuDia: "今日の一日",
+                navMeuProgresso: "進捗状況",
+                heroTag: "小さな一歩で慣性を克服する",
+                heroTitle: '今すぐできることから <br><span class="text-forest-900 italic font-normal">始めましょう。</span>',
+                heroDesc: "今できる最小のアクションは何ですか？抵抗を最小限に抑えましょう。",
+                taskInputLbl: "マイクロタスク",
+                quickStart: "フローに入る (2分)",
+                modeLbl: "集中モード",
+                modeMicro: "マイクロタスク",
+                modePomo: "ポモドーロ",
+                modeDescMicro: "プレッシャーなく始めるための2分、3分、5分の小さなブロック。",
+                modeDescPomo: "より長いタスクのための構造化された集中と休みのサイクル。",
+                durationLbl: "初期時間",
+                btnStart: "今すぐ集中を開始",
+                timerBadgeTop: "集中中",
+                statusRunning: "セッション進行中",
+                btnComplete: "今すぐタスクを完了",
+                btnPause: "一時停止",
+                btnResume: "再開",
+                lofiLabel: "環境音 (Lofi + 静かな雨)",
+                customMusicTitle: "ローカル音楽",
+                customMusicBadge: "ローカルファイル",
+                btnChooseFile: "音声を選択",
+                planSectionTitle: "毎日の計画",
+                calToggleView: "月間カレンダーを表示",
+                calToggleHide: "カレンダーを隠す",
+                planFormTitle: "新しいマイクロタスク (最大3つ)",
+                planLimit: "1日の制限(3タスク)に達しました。追加するには1つ完了するか削除してください。",
+                tasksHeader: "今日のタスク",
+                meuDiaTitle: "今日の一日",
+                meuDiaSub: "今日の勝利と記録",
+                btnManual: "手動記録",
+                manualFormTitle: "新しい手動記録",
+                progressoTitle: "進捗状況",
+                progressoSub: "あなたの努力と献身の累積ビュー",
+                kpiWeekTime: "今週の集中時間",
+                kpiWeekWins: "勝利数 (7日間)",
+                kpiPeakDay: "最も活発な日",
+                chartTitle: "過去7日間",
+                historyTitle: "完全な履歴",
+                btnMd: "Markdownをコピー",
+                btnImport: "JSONインポート",
+                footer: "FocusMicro — 焦らず、責めず、一日一歩ずつ。",
+                modalTitle: "小さな勝利を達成！",
+                modalNoteLbl: "このセッションはどうでしたか？ (任意)",
+                modalSave: "日記に保存",
+                modalExtend: "+2分ブースト"
+            },
+            zh: {
+                appSubtitle: "专注笔记",
+                streakLabel: "天",
+                statToday: "今天:",
+                statTotal: "总计:",
+                navFoco: "专注",
+                navPlanejamento: "我的计划",
+                navMeuDia: "我的今天",
+                navMeuProgresso: "我的进度",
+                heroTag: "循序渐进，战胜惰性",
+                heroTitle: '从你现在能做的事情 <br><span class="text-forest-900 italic font-normal">开始。</span>',
+                heroDesc: "此时此刻最小的可行行动是什么？将阻力降到最低。",
+                taskInputLbl: "微任务",
+                quickStart: "进入状态 (2分钟)",
+                modeLbl: "专注方法",
+                modeMicro: "微任务",
+                modePomo: "番茄钟",
+                modeDescMicro: "2、3 或 5 分钟的小时间块，轻松开始毫无压力。",
+                modeDescPomo: "针对长任务的结构化专注与休息循环。",
+                durationLbl: "初始时长",
+                btnStart: "立即开始专注",
+                timerBadgeTop: "专注中",
+                statusRunning: "进行中",
+                btnComplete: "立即完成任务",
+                btnPause: "暂停",
+                btnResume: "继续",
+                lofiLabel: "环境音 (Lofi + 柔和雨声)",
+                customMusicTitle: "本地音乐",
+                customMusicBadge: "本地文件",
+                btnChooseFile: "选择音频",
+                planSectionTitle: "每日计划",
+                calToggleView: "查看月历",
+                calToggleHide: "隐藏月历",
+                planFormTitle: "新微任务 (最多3个)",
+                planLimit: "已达到每日3个任务的上限。请完成或删除一个以添加新任务。",
+                tasksHeader: "今天的任务",
+                meuDiaTitle: "我的今天",
+                meuDiaSub: "你今天的胜利与记录",
+                btnManual: "手动记录",
+                manualFormTitle: "新建手动记录",
+                progressoTitle: "我的进度",
+                progressoSub: "你的努力与专注的累积视图",
+                kpiWeekTime: "本周专注时长",
+                kpiWeekWins: "胜利数 (7天)",
+                kpiPeakDay: "最活跃的一天",
+                chartTitle: "最近7天",
+                historyTitle: "完整历史",
+                btnMd: "复制 Markdown",
+                btnImport: "导入 JSON",
+                footer: "FocusMicro — 一天一步，不急不躁，心安理得。",
+                modalTitle: "解开微小的胜利！",
+                modalNoteLbl: "这次专注感觉如何？ (可选)",
+                modalSave: "保存到日记",
+                modalExtend: "+2分钟冲刺"
+            }
+        };
+
+        const LANG_KEY = 'focusmicro_language';
+        let currentLang = 'pt';
+
+        function changeLanguage(lang) {
+            if (!I18N[lang]) return;
+            currentLang = lang;
+            localStorage.setItem(LANG_KEY, lang);
+            document.getElementById('lang-select').value = lang;
+            applyTranslations();
+            renderPlanningSection();
+            renderTodaySection();
+            renderProgressSection();
+        }
+
+        function applyTranslations() {
+            const t = I18N[currentLang] || I18N.pt;
+            
+            const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+            setTxt('txt-app-subtitle', t.appSubtitle);
+            setTxt('txt-streak-label', t.streakLabel);
+            setTxt('txt-stat-today', t.statToday);
+            setTxt('txt-stat-total', t.statTotal);
+            setTxt('nav-foco', t.navFoco);
+            setTxt('nav-planejamento', t.navPlanejamento);
+            setTxt('nav-meu-dia', t.navMeuDia);
+            setTxt('nav-meu-progresso', t.navMeuProgresso);
+
+            setHtml('txt-hero-tag', `<i data-lucide="sparkles" class="w-3.5 h-3.5 text-forest-900"></i> ${t.heroTag}`);
+            setHtml('txt-hero-title', t.heroTitle);
+            setTxt('txt-hero-desc', t.heroDesc);
+            setTxt('lbl-task-input', t.taskInputLbl);
+            setTxt('btn-quick-start', t.quickStart);
+            setTxt('lbl-mode', t.modeLbl);
+            setTxt('lbl-mode-micro', t.modeMicro);
+            setTxt('lbl-mode-pomo', t.modePomo);
+            setTxt('mode-description', focusMode === 'pomodoro' ? t.modeDescPomo : t.modeDescMicro);
+            setTxt('lbl-duration', t.durationLbl);
+            setTxt('txt-btn-start', t.btnStart);
+
+            setTxt('txt-timer-badge-top', t.timerBadgeTop);
+            setTxt('txt-status-running', t.statusRunning);
+            setTxt('txt-btn-complete', t.btnComplete);
+            setTxt('btn-pause-text', isPaused ? t.btnResume : t.btnPause);
+
+            setTxt('txt-lofi-label', t.lofiLabel);
+            setTxt('txt-custom-music-title', t.customMusicTitle);
+            setTxt('txt-custom-music-badge', t.customMusicBadge);
+            setTxt('txt-btn-choose-file', t.btnChooseFile);
+
+            setTxt('txt-plan-section-title', t.planSectionTitle);
+            setTxt('txt-plan-form-title', t.planFormTitle);
+            setTxt('txt-plan-limit', t.planLimit);
+            setTxt('txt-tasks-header', t.tasksHeader);
+
+            setTxt('txt-meu-dia-title', t.meuDiaTitle);
+            setTxt('txt-meu-dia-sub', t.meuDiaSub);
+            setTxt('txt-btn-manual', t.btnManual);
+            setTxt('txt-manual-form-title', t.manualFormTitle);
+
+            setTxt('txt-progresso-title', t.progressoTitle);
+            setTxt('txt-progresso-sub', t.progressoSub);
+            setTxt('txt-kpi-week-time', t.kpiWeekTime);
+            setTxt('txt-kpi-week-wins', t.kpiWeekWins);
+            setTxt('txt-kpi-peak-day', t.kpiPeakDay);
+            setTxt('txt-chart-title', t.chartTitle);
+            setTxt('txt-history-title', t.historyTitle);
+            setTxt('txt-btn-md', t.btnMd);
+            setTxt('txt-btn-import', t.btnImport);
+            setTxt('txt-footer', t.footer);
+
+            setTxt('modal-title', t.modalTitle);
+            setTxt('lbl-modal-note', t.modalNoteLbl);
+            setTxt('btn-save-victory', t.modalSave);
+            setTxt('btn-extend-victory', t.modalExtend);
+
+            safeCreateIcons();
+        }
+
+        // --- SISTEMA DE ÁUDIO LOFI ---
         const LOFI_RAIN_URL = 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3';
-        
         let lofiAudio = null;
         let isLofiPlaying = false;
 
@@ -427,7 +947,7 @@
                 lofiAudio.pause();
                 isLofiPlaying = false;
                 statusBadge.textContent = 'Desativado';
-                statusBadge.className = 'opacity-60 text-[11px]';
+                statusBadge.className = 'opacity-60 text-[11px] font-normal';
                 btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
                 btn.classList.add('bg-paper-50', 'text-charcoal-900');
                 volumeBox.classList.add('hidden');
@@ -440,7 +960,7 @@
                     btn.classList.add('bg-forest-900', 'text-paper-50', 'border-forest-900');
                     volumeBox.classList.remove('hidden');
                 }).catch(err => {
-                    alert('Toque na tela para autorizar o áudio no celular!');
+                    alert('Toque na tela para autorizar o áudio!');
                 });
             }
         }
@@ -457,13 +977,71 @@
 
             if (statusBadge) {
                 statusBadge.textContent = 'Desativado';
-                statusBadge.className = 'opacity-60 text-[11px]';
+                statusBadge.className = 'opacity-60 text-[11px] font-normal';
             }
             if (btn) {
                 btn.classList.remove('bg-forest-900', 'text-paper-50', 'border-forest-900');
                 btn.classList.add('bg-paper-50', 'text-charcoal-900');
             }
             if (volumeBox) volumeBox.classList.add('hidden');
+        }
+
+        // --- MÚSICA LOCAL ---
+        function handleCustomMusicFile(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('audio/') && !/\.(mp3|wav|ogg|m4a|aac|flac|opus)$/i.test(file.name)) {
+                alert('Escolha um arquivo de áudio válido.');
+                event.target.value = '';
+                return;
+            }
+            stopCustomMusic();
+            if (customMusicObjectUrl) URL.revokeObjectURL(customMusicObjectUrl);
+            customMusicObjectUrl = URL.createObjectURL(file);
+            customMusicAudio = new Audio(customMusicObjectUrl);
+            customMusicAudio.loop = true;
+            customMusicAudio.volume = parseFloat(document.getElementById('custom-music-volume').value || 0.5);
+            customMusicAudio.addEventListener('ended', () => {
+                isCustomMusicPlaying = false;
+                updateCustomMusicControls();
+            });
+            document.getElementById('custom-music-name').textContent = file.name;
+            document.getElementById('btn-toggle-custom-music').disabled = false;
+            document.getElementById('btn-stop-custom-music').disabled = false;
+            isCustomMusicPlaying = false;
+            updateCustomMusicControls();
+        }
+
+        function toggleCustomMusic() {
+            if (!customMusicAudio) return;
+            if (isCustomMusicPlaying) {
+                customMusicAudio.pause();
+                isCustomMusicPlaying = false;
+                updateCustomMusicControls();
+            } else {
+                customMusicAudio.play().then(() => {
+                    isCustomMusicPlaying = true;
+                    updateCustomMusicControls();
+                }).catch(() => alert('Erro ao reproduzir áudio.'));
+            }
+        }
+
+        function stopCustomMusic() {
+            if (customMusicAudio) {
+                customMusicAudio.pause();
+                customMusicAudio.currentTime = 0;
+            }
+            isCustomMusicPlaying = false;
+            updateCustomMusicControls();
+        }
+
+        function updateCustomMusicControls() {
+            const toggleBtn = document.getElementById('btn-toggle-custom-music');
+            const stopBtn = document.getElementById('btn-stop-custom-music');
+            if (!toggleBtn || !stopBtn) return;
+            toggleBtn.textContent = isCustomMusicPlaying ? 'Pausar' : 'Tocar';
+            toggleBtn.disabled = !customMusicAudio;
+            stopBtn.disabled = !customMusicAudio;
         }
 
         // --- APP STATE & KEYS ---
@@ -475,6 +1053,12 @@
         let initialDuration = 180;
         let isPaused = false;
         let currentTask = '';
+        let focusMode = 'micro';
+        let pomodoroPhase = 'focus';
+        let pomodoroCompletedSessions = 0;
+        let customMusicAudio = null;
+        let customMusicObjectUrl = null;
+        let isCustomMusicPlaying = false;
 
         let selectedPlanDate = new Date();
         let calendarCurrentMonth = new Date();
@@ -515,14 +1099,22 @@
 
         let editingPlanId = null;
 
+        // --- 3. QUICK START "ENTRAR NO FLUXO" ---
+        function startQuickFlow() {
+            taskInput.value = (I18N[currentLang] || I18N.pt).quickStart || "Apenas começar";
+            timeRemaining = 120;
+            initialDuration = 120;
+            startSession();
+        }
+
         // --- GLOBAL NAVIGATION ---
         window.switchNavTab = function(target) {
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(t => {
                 if (t.dataset.nav === target) {
-                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-semibold py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0';
+                    t.className = 'nav-tab border-b-2 border-forest-900 text-forest-900 font-bold py-3 px-3 flex items-center gap-2 transition-colors shrink-0';
                 } else {
-                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-800 opacity-70 hover:opacity-100 py-2.5 px-3 flex items-center gap-1.5 transition-colors shrink-0';
+                    t.className = 'nav-tab border-b-2 border-transparent text-charcoal-700 opacity-75 hover:opacity-100 py-3 px-3 flex items-center gap-2 transition-colors shrink-0 font-medium';
                 }
             });
 
@@ -541,15 +1133,18 @@
 
         // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem(LANG_KEY) || 'pt';
+            changeLanguage(savedLang);
+
             safeCreateIcons();
             updateAllDisplays();
 
             timePresetBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     timePresetBtns.forEach(b => {
-                        b.className = 'btn-time-preset py-2.5 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-200/50 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center';
+                        b.className = 'btn-time-preset py-3 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100/80 text-charcoal-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5';
                     });
-                    btn.className = 'btn-time-preset active py-2.5 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center';
+                    btn.className = 'btn-time-preset active py-3 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-medium text-xs transition-all flex flex-col items-center gap-0.5';
                     timeRemaining = parseInt(btn.dataset.time);
                     initialDuration = timeRemaining;
                 });
@@ -567,16 +1162,37 @@
                 if (lofiAudio) lofiAudio.volume = parseFloat(e.target.value);
             });
 
+            document.getElementById('btn-mode-micro')?.addEventListener('click', () => setFocusMode('micro'));
+            document.getElementById('btn-mode-pomodoro')?.addEventListener('click', () => setFocusMode('pomodoro'));
+            loadPomodoroSettings();
+            ['pomodoro-focus-minutes', 'pomodoro-break-minutes', 'pomodoro-long-break-minutes', 'pomodoro-long-break-cycle'].forEach(id => {
+                document.getElementById(id)?.addEventListener('change', savePomodoroSettings);
+            });
+            document.getElementById('btn-choose-music')?.addEventListener('click', () => document.getElementById('custom-music-file')?.click());
+            document.getElementById('custom-music-file')?.addEventListener('change', handleCustomMusicFile);
+            document.getElementById('btn-toggle-custom-music')?.addEventListener('click', toggleCustomMusic);
+            document.getElementById('btn-stop-custom-music')?.addEventListener('click', stopCustomMusic);
+            document.getElementById('custom-music-volume')?.addEventListener('input', (e) => {
+                if (customMusicAudio) customMusicAudio.volume = parseFloat(e.target.value);
+            });
+
+            // 2. SALVAR COM NOTA DE REFLEXÃO
             btnSaveVictory.addEventListener('click', () => {
                 const timeSpent = Math.max(initialDuration - timeRemaining, 60);
-                saveJournalEntry(currentTask, timeSpent);
+                const noteInput = document.getElementById('modal-reflection-note');
+                const noteText = noteInput ? noteInput.value.trim() : '';
+                saveJournalEntry(currentTask, timeSpent, noteText);
+                if (noteInput) noteInput.value = '';
                 closeModal();
                 resetToSetup();
             });
 
             btnExtendVictory.addEventListener('click', () => {
                 const timeSpent = Math.max(initialDuration - timeRemaining, 60);
-                saveJournalEntry(currentTask, timeSpent);
+                const noteInput = document.getElementById('modal-reflection-note');
+                const noteText = noteInput ? noteInput.value.trim() : '';
+                saveJournalEntry(currentTask, timeSpent, noteText);
+                if (noteInput) noteInput.value = '';
                 closeModal();
                 timeRemaining = 120;
                 initialDuration = 120;
@@ -601,13 +1217,14 @@
             document.getElementById('btn-toggle-calendar-view')?.addEventListener('click', () => {
                 const grid = document.getElementById('monthly-calendar-container');
                 const isHidden = grid.classList.contains('hidden');
+                const t = I18N[currentLang] || I18N.pt;
                 if (isHidden) {
                     grid.classList.remove('hidden');
-                    document.getElementById('calendar-toggle-label').textContent = 'Ocultar Calendário';
+                    document.getElementById('calendar-toggle-label').textContent = t.calToggleHide;
                     renderMonthlyCalendar();
                 } else {
                     grid.classList.add('hidden');
-                    document.getElementById('calendar-toggle-label').textContent = 'Ver Calendário Mensal';
+                    document.getElementById('calendar-toggle-label').textContent = t.calToggleView;
                 }
             });
 
@@ -633,23 +1250,111 @@
                 saveJournalEntry(task, 0, note);
                 document.getElementById('form-manual-entry').reset();
                 document.getElementById('form-manual-entry').classList.add('hidden');
-                updateAllDisplays();
             });
 
             document.getElementById('btn-export-backup')?.addEventListener('click', exportBackup);
             document.getElementById('input-import-json')?.addEventListener('change', importBackup);
         });
 
+        // --- CONFIGURAÇÕES DO POMODORO ---
+        const POMODORO_SETTINGS_KEY = 'focusmicro_pomodoro_settings';
+
+        function getPomodoroSettings() {
+            const readMinutes = (id, fallback, min, max) => {
+                const value = Number.parseInt(document.getElementById(id)?.value, 10);
+                return Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
+            };
+            const cycleValue = Number.parseInt(document.getElementById('pomodoro-long-break-cycle')?.value, 10);
+            return {
+                focus: readMinutes('pomodoro-focus-minutes', 25, 1, 180),
+                shortBreak: readMinutes('pomodoro-break-minutes', 5, 1, 60),
+                longBreak: readMinutes('pomodoro-long-break-minutes', 15, 1, 90),
+                longBreakCycle: [2, 3, 4, 5, 6, 8].includes(cycleValue) ? cycleValue : 4
+            };
+        }
+
+        function updatePomodoroSummary() {
+            const settings = getPomodoroSettings();
+            document.getElementById('pomodoro-focus-summary').textContent = `${settings.focus} min foco`;
+            document.getElementById('pomodoro-break-summary').textContent = `${settings.shortBreak} min pausa`;
+            document.getElementById('pomodoro-long-break-summary').textContent = `Pausa longa de ${settings.longBreak} min a cada ${settings.longBreakCycle} focos.`;
+        }
+
+        function savePomodoroSettings() {
+            const settings = getPomodoroSettings();
+            document.getElementById('pomodoro-focus-minutes').value = settings.focus;
+            document.getElementById('pomodoro-break-minutes').value = settings.shortBreak;
+            document.getElementById('pomodoro-long-break-minutes').value = settings.longBreak;
+            localStorage.setItem(POMODORO_SETTINGS_KEY, JSON.stringify(settings));
+            updatePomodoroSummary();
+            if (focusMode === 'pomodoro' && viewTimer.classList.contains('hidden')) {
+                timeRemaining = settings.focus * 60;
+                initialDuration = timeRemaining;
+                updateTimerDisplay();
+            }
+        }
+
+        function loadPomodoroSettings() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(POMODORO_SETTINGS_KEY) || 'null');
+                if (saved) {
+                    document.getElementById('pomodoro-focus-minutes').value = Math.min(180, Math.max(1, Number.parseInt(saved.focus, 10) || 25));
+                    document.getElementById('pomodoro-break-minutes').value = Math.min(60, Math.max(1, Number.parseInt(saved.shortBreak, 10) || 5));
+                    document.getElementById('pomodoro-long-break-minutes').value = Math.min(90, Math.max(1, Number.parseInt(saved.longBreak, 10) || 15));
+                    document.getElementById('pomodoro-long-break-cycle').value = [2, 3, 4, 5, 6, 8].includes(Number.parseInt(saved.longBreakCycle, 10)) ? String(saved.longBreakCycle) : '4';
+                }
+            } catch (error) {}
+            updatePomodoroSummary();
+        }
+
         // --- TIMER LOGIC ---
+        function setFocusMode(mode) {
+            focusMode = mode;
+            const microBtn = document.getElementById('btn-mode-micro');
+            const pomodoroBtn = document.getElementById('btn-mode-pomodoro');
+            const presets = document.getElementById('time-preset-options');
+            const pomodoroInfo = document.getElementById('pomodoro-info');
+            const description = document.getElementById('mode-description');
+            const t = I18N[currentLang] || I18N.pt;
+
+            btnCompleteNow.classList.toggle('hidden', mode === 'pomodoro');
+            if (mode === 'pomodoro') {
+                microBtn.className = 'py-3 px-4 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
+                pomodoroBtn.className = 'py-3 px-4 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
+                presets.classList.add('hidden');
+                pomodoroInfo.classList.remove('hidden');
+                description.textContent = t.modeDescPomo;
+                timeRemaining = getPomodoroSettings().focus * 60;
+                initialDuration = timeRemaining;
+                pomodoroPhase = 'focus';
+            } else {
+                microBtn.className = 'py-3 px-4 rounded-xl border border-forest-900 bg-forest-900/10 text-forest-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
+                pomodoroBtn.className = 'py-3 px-4 rounded-xl border border-paper-200 bg-paper-50 hover:bg-paper-100 text-charcoal-900 font-bold text-xs transition-all flex items-center justify-center gap-2';
+                presets.classList.remove('hidden');
+                pomodoroInfo.classList.add('hidden');
+                description.textContent = t.modeDescMicro;
+                pomodoroPhase = 'focus';
+                const activePreset = document.querySelector('.btn-time-preset.active');
+                timeRemaining = activePreset ? parseInt(activePreset.dataset.time, 10) : 180;
+                initialDuration = timeRemaining;
+            }
+            updateTimerDisplay();
+        }
+
         function startSession() {
             currentTask = taskInput.value.trim() || 'Micro-Ação Sem Nome';
+            pomodoroPhase = 'focus';
+            timeRemaining = focusMode === 'pomodoro' ? getPomodoroSettings().focus * 60 : timeRemaining;
+            initialDuration = timeRemaining;
             timerTaskDisplay.textContent = `"${currentTask}"`;
+            
+            const t = I18N[currentLang] || I18N.pt;
+            document.getElementById('timer-status-badge').innerHTML = `<span class="w-2 h-2 rounded-full bg-forest-900 animate-pulse"></span> ${t.statusRunning}`;
             
             viewSetup.classList.add('hidden');
             viewTimer.classList.remove('hidden');
             isPaused = false;
-            btnPauseText.textContent = 'Pausar';
-            
+            btnPauseText.textContent = t.btnPause;
             updateTimerDisplay();
             startTimerLoop();
         }
@@ -678,9 +1383,15 @@
 
         function togglePause() {
             isPaused = !isPaused;
-            btnPauseText.textContent = isPaused ? 'Continuar' : 'Pausar';
-            if (isPaused && lofiAudio) lofiAudio.pause();
-            else if (!isPaused && lofiAudio && isLofiPlaying) lofiAudio.play().catch(()=>{});
+            const t = I18N[currentLang] || I18N.pt;
+            btnPauseText.textContent = isPaused ? t.btnResume : t.btnPause;
+            if (isPaused) {
+                if (lofiAudio) lofiAudio.pause();
+                if (customMusicAudio) customMusicAudio.pause();
+            } else {
+                if (lofiAudio && isLofiPlaying) lofiAudio.play().catch(()=>{});
+                if (customMusicAudio && isCustomMusicPlaying) customMusicAudio.play().catch(()=>{});
+            }
         }
 
         function extendTime(sec) {
@@ -692,15 +1403,53 @@
         function resetToSetup() {
             clearInterval(timerInterval);
             stopLofiAudio();
+            stopCustomMusic();
             document.title = 'FocusMicro - Caderno de Progresso Pessoal';
-            timeRemaining = initialDuration;
+            pomodoroPhase = 'focus';
+            timeRemaining = focusMode === 'pomodoro' ? 25 * 60 : initialDuration;
+            initialDuration = timeRemaining;
             viewTimer.classList.add('hidden');
             viewSetup.classList.remove('hidden');
+            updateTimerDisplay();
         }
 
         function onTimerComplete() {
             clearInterval(timerInterval);
+            
+            // 4. Tocar som relaxante de conclusão
+            playCompletionChime();
+
+            if (focusMode === 'pomodoro') {
+                if (pomodoroPhase === 'focus') {
+                    saveJournalEntry(currentTask, initialDuration);
+                    pomodoroCompletedSessions++;
+                    const settings = getPomodoroSettings();
+                    const isLongBreak = pomodoroCompletedSessions % settings.longBreakCycle === 0;
+                    const breakMinutes = isLongBreak ? settings.longBreak : settings.shortBreak;
+                    pomodoroPhase = 'break';
+                    timeRemaining = breakMinutes * 60;
+                    initialDuration = timeRemaining;
+                    timerTaskDisplay.textContent = isLongBreak ? 'Pausa longa Pomodoro' : 'Pausa Pomodoro';
+                    document.getElementById('timer-status-badge').innerHTML = `<span class="w-2 h-2 rounded-full bg-terracotta-600 animate-pulse"></span> Pausa — ${breakMinutes} min`;
+                    isPaused = false;
+                    btnPauseText.textContent = (I18N[currentLang] || I18N.pt).btnPause;
+                    updateTimerDisplay();
+                    startTimerLoop();
+                    return;
+                }
+                pomodoroPhase = 'focus';
+                stopLofiAudio();
+                stopCustomMusic();
+                viewTimer.classList.add('hidden');
+                viewSetup.classList.remove('hidden');
+                timeRemaining = getPomodoroSettings().focus * 60;
+                initialDuration = timeRemaining;
+                updateTimerDisplay();
+                document.title = 'FocusMicro - Caderno de Progresso Pessoal';
+                return;
+            }
             stopLofiAudio();
+            stopCustomMusic();
             document.title = '🎉 Micro-Vitória!';
             modalTaskName.textContent = `"${currentTask}"`;
             modalCelebration.classList.remove('hidden');
@@ -732,6 +1481,33 @@
             entries.unshift(newEntry);
             localStorage.setItem(HISTORY_KEY, JSON.stringify(entries));
             updateAllDisplays();
+            renderTodaySection();
+            renderProgressSection();
+        }
+
+        // --- 1. CÁLCULO DA OFENSIVA / STREAK ---
+        function calculateStreak(entries) {
+            if (!entries || entries.length === 0) return 0;
+
+            const daysSet = new Set(
+                entries.map(e => new Date(e.timestamp).toISOString().slice(0, 10))
+            );
+
+            let streak = 0;
+            let checkDate = new Date();
+
+            // Se hoje não tem registo, começa a testar a partir de ontem
+            const todayStr = checkDate.toISOString().slice(0, 10);
+            if (!daysSet.has(todayStr)) {
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            while (daysSet.has(checkDate.toISOString().slice(0, 10))) {
+                streak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            return streak;
         }
 
         // --- LOCAL STORAGE (PLANNING) ---
@@ -761,10 +1537,10 @@
                 planDateDisplay.textContent = 'Hoje';
                 planTodayBtn.classList.add('hidden');
             } else {
-                planDateDisplay.textContent = selectedPlanDate.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' });
+                planDateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { weekday: 'short', day: '2-digit', month: 'short' });
                 planTodayBtn.classList.remove('hidden');
             }
-            planSubdateDisplay.textContent = selectedPlanDate.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+            planSubdateDisplay.textContent = selectedPlanDate.toLocaleDateString(currentLang, { day: 'numeric', month: 'long', year: 'numeric' });
 
             const planData = getPlanData();
             const dayTasks = planData[dateKey] || [];
@@ -780,32 +1556,32 @@
 
             if (dayTasks.length === 0) {
                 planTaskList.innerHTML = `
-                    <div class="bg-paper-100/50 border border-dashed border-paper-200 p-6 rounded-xl text-center text-xs text-charcoal-800 opacity-60">
+                    <div class="bg-paper-50 border border-dashed border-paper-200 p-8 rounded-2xl text-center text-xs text-charcoal-700 opacity-70">
                         Nenhuma micro-tarefa planejada para este dia.
                     </div>
                 `;
             } else {
                 planTaskList.innerHTML = dayTasks.map(item => `
-                    <div class="bg-paper-100 border border-paper-200 p-3 rounded-xl flex items-center justify-between gap-2">
-                        <div class="flex items-start gap-2.5 flex-1 min-w-0">
-                            <button type="button" onclick="togglePlanTaskComplete('${dateKey}', '${item.id}')" class="mt-0.5 p-1 rounded hover:bg-paper-200 transition-colors shrink-0" title="Marcar como concluído">
-                                <i data-lucide="${item.completed ? 'check-square' : 'square'}" class="w-4 h-4 ${item.completed ? 'text-forest-900' : 'text-charcoal-800 opacity-40'}"></i>
+                    <div class="bg-paper-50 border border-paper-200 p-4 rounded-xl flex items-center justify-between gap-3 shadow-xs hover:border-paper-300 transition-all">
+                        <div class="flex items-start gap-3 flex-1 min-w-0">
+                            <button type="button" onclick="togglePlanTaskComplete('${dateKey}', '${item.id}')" class="mt-0.5 p-1 rounded hover:bg-paper-100 transition-colors shrink-0" title="Concluir">
+                                <i data-lucide="${item.completed ? 'check-square' : 'square'}" class="w-4 h-4 ${item.completed ? 'text-forest-900' : 'text-charcoal-700 opacity-40'}"></i>
                             </button>
                             <div class="min-w-0">
-                                <h4 class="text-xs font-semibold truncate ${item.completed ? 'line-through text-charcoal-800 opacity-50' : 'text-charcoal-900'}">${escapeHtml(item.title)}</h4>
-                                ${item.desc ? `<p class="text-[11px] text-charcoal-800 opacity-70 mt-0.5 truncate">${escapeHtml(item.desc)}</p>` : ''}
-                                ${item.journalId ? `<span class="inline-flex items-center gap-1 text-[10px] text-forest-900 font-medium mt-1">✦ Salvo no Diário</span>` : ''}
+                                <h4 class="text-xs font-bold truncate ${item.completed ? 'line-through text-charcoal-700 opacity-50' : 'text-charcoal-900'}">${escapeHtml(item.title)}</h4>
+                                ${item.desc ? `<p class="text-[11px] text-charcoal-700 opacity-80 mt-0.5 truncate">${escapeHtml(item.desc)}</p>` : ''}
+                                ${item.journalId ? `<span class="inline-flex items-center gap-1 text-[10px] text-forest-900 font-bold mt-1">✦ Salvo no Diário</span>` : ''}
                             </div>
                         </div>
-                        <div class="flex items-center gap-1 shrink-0">
+                        <div class="flex items-center gap-1.5 shrink-0">
                             ${!item.completed ? `
-                                <button type="button" onclick="startFocusFromPlan('${escapeHtml(item.title)}')" class="bg-forest-900 hover:bg-forest-800 text-paper-50 px-2 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors" title="Focar nesta tarefa agora">
+                                <button type="button" onclick="startFocusFromPlan('${escapeHtml(item.title)}')" class="bg-forest-900 hover:bg-forest-800 text-paper-50 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 shadow-xs transition-colors">
                                     <i data-lucide="play" class="w-3 h-3 fill-current"></i>
                                     <span>Focar</span>
                                 </button>
-                                <button type="button" onclick="editPlanTask('${dateKey}', '${item.id}')" class="p-1 hover:bg-paper-200 rounded text-charcoal-800 opacity-60" title="Editar"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                                <button type="button" onclick="editPlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-paper-100 rounded-lg text-charcoal-700 opacity-70 transition-colors"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
                             ` : ''}
-                            <button type="button" onclick="deletePlanTask('${dateKey}', '${item.id}')" class="p-1 hover:bg-terracotta-600/10 hover:text-terracotta-600 rounded text-charcoal-800 opacity-60" title="Excluir"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            <button type="button" onclick="deletePlanTask('${dateKey}', '${item.id}')" class="p-1.5 hover:bg-terracotta-600/10 hover:text-terracotta-600 rounded-lg text-charcoal-700 opacity-70 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                         </div>
                     </div>
                 `).join('');
@@ -822,7 +1598,7 @@
             const year = calendarCurrentMonth.getFullYear();
             const month = calendarCurrentMonth.getMonth();
 
-            label.textContent = calendarCurrentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+            label.textContent = calendarCurrentMonth.toLocaleDateString(currentLang, { month: 'long', year: 'numeric' });
 
             const firstDayIndex = new Date(year, month, 1).getDay();
             const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
@@ -846,14 +1622,14 @@
                 const isSelected = (dKey === selectedKey);
                 const isToday = (dKey === todayKey);
 
-                let bgClass = 'hover:bg-paper-200 text-charcoal-900';
-                if (isSelected) bgClass = 'bg-forest-900 text-paper-50 font-bold';
+                let bgClass = 'hover:bg-paper-100 text-charcoal-900';
+                if (isSelected) bgClass = 'bg-forest-900 text-paper-50 font-bold shadow-xs';
                 else if (isToday) bgClass = 'bg-forest-900/10 text-forest-900 font-bold border border-forest-900/30';
 
                 html += `
-                    <button type="button" onclick="selectDateFromCalendar('${dKey}')" class="p-2 rounded-lg flex flex-col items-center justify-center transition-all ${bgClass}">
+                    <button type="button" onclick="selectDateFromCalendar('${dKey}')" class="p-2.5 rounded-xl flex flex-col items-center justify-center transition-all ${bgClass}">
                         <span>${day}</span>
-                        ${count > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-paper-50' : 'bg-forest-900'} mt-0.5"></span>` : '<span class="w-1.5 h-1.5 mt-0.5"></span>'}
+                        ${count > 0 ? `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-paper-50' : 'bg-forest-900'} mt-1"></span>` : '<span class="w-1.5 h-1.5 mt-1 opacity-0">•</span>'}
                     </button>
                 `;
             }
@@ -918,8 +1694,8 @@
             task.completed = !task.completed;
 
             if (task.completed && !task.journalId) {
-                if (confirm(`Deseja salvar "${task.title}" como uma conquista no seu Diário?`)) {
-                    saveJournalEntry(task.title, 0, task.desc || 'Concluído do Planejamento Diário');
+                if (confirm(`Salvar "${task.title}" no seu Diário?`)) {
+                    saveJournalEntry(task.title, 0, task.desc || 'Concluído do Planejamento');
                     task.journalId = true;
                 }
             }
@@ -952,7 +1728,7 @@
             }
         };
 
-        // --- RENDER OTHER SECTIONS & WEEKLY REVIEW ---
+        // --- RENDER SECTIONS & WEEKLY REVIEW ---
         function renderTodaySection() {
             const entries = getJournalEntries();
             const todayStr = new Date().toLocaleDateString('pt-BR');
@@ -960,15 +1736,18 @@
 
             const container = document.getElementById('today-entries-list');
             if (todayEntries.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-xs text-charcoal-800 opacity-60 bg-paper-100 rounded-2xl">Nenhuma conquista registrada hoje ainda.</div>`;
+                container.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">Nenhuma conquista registrada hoje ainda.</div>`;
                 return;
             }
 
             container.innerHTML = todayEntries.map(e => `
-                <div class="bg-paper-100 border border-paper-200 p-3 rounded-xl flex items-center justify-between">
+                <div class="bg-paper-50 border border-paper-200 p-4 rounded-xl flex items-center justify-between shadow-xs">
                     <div>
-                        <h4 class="text-xs font-semibold text-charcoal-900">${escapeHtml(e.task)}</h4>
-                        <span class="text-[10px] text-charcoal-800 opacity-60">${new Date(e.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                        <h4 class="text-xs font-bold text-charcoal-900">${escapeHtml(e.task)}</h4>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[10px] text-charcoal-700 opacity-60 font-medium">${new Date(e.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                            ${e.note ? `<span class="text-[10px] text-forest-900 bg-forest-900/10 px-2 py-0.5 rounded-full italic font-medium">"${escapeHtml(e.note)}"</span>` : ''}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -1005,7 +1784,7 @@
             const revPeakEl = document.getElementById('rev-peak-day');
 
             if (revTimeEl) revTimeEl.textContent = `${Math.round(weekTotalSecs / 60)} min`;
-            if (revCountEl) revCountEl.textContent = `${weekTotalCount} vitória(s)`;
+            if (revCountEl) revCountEl.textContent = `${weekTotalCount}`;
 
             let maxCount = 0;
             let peakDayName = '-';
@@ -1014,7 +1793,7 @@
                     maxCount = dayCounts[dStr];
                     const parts = dStr.split('/');
                     const dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
-                    peakDayName = dateObj.toLocaleDateString('pt-BR', { weekday: 'short' });
+                    peakDayName = dateObj.toLocaleDateString(currentLang, { weekday: 'short' });
                 }
             });
             if (revPeakEl) revPeakEl.textContent = maxCount > 0 ? `${peakDayName} (${maxCount})` : '-';
@@ -1029,28 +1808,31 @@
                 const dStr = d.toLocaleDateString('pt-BR');
                 const count = entries.filter(e => new Date(e.timestamp).toLocaleDateString('pt-BR') === dStr).length;
                 const heightPct = Math.max((count / maxVal) * 100, 8);
-                const dayLabel = d.toLocaleDateString('pt-BR', { weekday: 'narrow' });
+                const dayLabel = d.toLocaleDateString(currentLang, { weekday: 'narrow' });
 
                 return `
-                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
-                        <span class="text-[10px] font-bold text-forest-900">${count > 0 ? count : ''}</span>
-                        <div style="height: ${heightPct}%" class="w-full bg-forest-900/80 hover:bg-forest-900 rounded-t-md transition-all"></div>
-                        <span class="text-[10px] text-charcoal-800 opacity-60 font-medium">${dayLabel}</span>
+                    <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                        <span class="text-[10px] font-bold font-mono text-forest-900">${count > 0 ? count : ''}</span>
+                        <div style="height: ${heightPct}%" class="w-full bg-forest-900 hover:bg-forest-800 rounded-t-md transition-all shadow-xs"></div>
+                        <span class="text-[10px] text-charcoal-700 opacity-70 font-bold uppercase tracking-wider">${dayLabel}</span>
                     </div>
                 `;
             }).join('');
 
             const listContainer = document.getElementById('all-entries-list');
             if (entries.length === 0) {
-                listContainer.innerHTML = `<div class="p-6 text-center text-xs text-charcoal-800 opacity-60 bg-paper-100 rounded-2xl">Histórico vazio.</div>`;
+                listContainer.innerHTML = `<div class="p-8 text-center text-xs text-charcoal-700 opacity-70 bg-paper-50 border border-paper-200 rounded-2xl">Histórico vazio.</div>`;
                 return;
             }
 
             listContainer.innerHTML = entries.map(e => `
-                <div class="bg-paper-100 border border-paper-200 p-3 rounded-xl flex items-center justify-between">
+                <div class="bg-paper-50 border border-paper-200 p-3.5 rounded-xl flex items-center justify-between shadow-xs">
                     <div>
-                        <h4 class="text-xs font-semibold text-charcoal-900">${escapeHtml(e.task)}</h4>
-                        <span class="text-[10px] text-charcoal-800 opacity-60">${new Date(e.timestamp).toLocaleDateString('pt-BR')} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                        <h4 class="text-xs font-bold text-charcoal-900">${escapeHtml(e.task)}</h4>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[10px] text-charcoal-700 opacity-60 font-medium">${new Date(e.timestamp).toLocaleDateString(currentLang)} ${e.duration > 0 ? `• ${Math.round(e.duration/60)} min` : ''}</span>
+                            ${e.note ? `<span class="text-[10px] text-forest-900 bg-forest-900/10 px-2 py-0.5 rounded-full italic font-medium">"${escapeHtml(e.note)}"</span>` : ''}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -1063,6 +1845,38 @@
 
             statToday.textContent = todayCount;
             statTotal.textContent = entries.length;
+
+            // 1. Atualiza contador de ofensiva
+            const streak = calculateStreak(entries);
+            document.getElementById('stat-streak').textContent = streak;
+        }
+
+        // --- 5. EXPORTAÇÃO MARKDOWN ---
+        function exportMarkdownSummary() {
+            const entries = getJournalEntries();
+            if (entries.length === 0) {
+                alert("Nenhum histórico para exportar.");
+                return;
+            }
+
+            let md = `# 📖 FocusMicro - Diário de Progresso\n\n`;
+            md += `*Exportado em: ${new Date().toLocaleDateString('pt-BR')}*\n\n`;
+            md += `--- \n\n`;
+
+            entries.slice(0, 30).forEach(e => {
+                const dateFormatted = new Date(e.timestamp).toLocaleDateString('pt-BR');
+                const timeFormatted = new Date(e.timestamp).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                const durationMinutes = e.duration > 0 ? ` (${Math.round(e.duration/60)} min)` : '';
+                
+                md += `- [x] **${e.task}**${durationMinutes} — *${dateFormatted} ${timeFormatted}*\n`;
+                if (e.note) md += `  > 💭 *${e.note}*\n`;
+            });
+
+            navigator.clipboard.writeText(md).then(() => {
+                alert("Resumo em Markdown copiado para a área de transferência!");
+            }).catch(() => {
+                alert("Não foi possível copiar automaticamente.");
+            });
         }
 
         // --- EXPORT & IMPORT BACKUP JSON ---
@@ -1087,7 +1901,7 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (confirm('Deseja restaurar este backup? Os seus dados locais atuais serão sobrescritos.')) {
+                    if (confirm('Deseja restaurar este backup? Seus dados atuais serão sobrescritos.')) {
                         Object.keys(data).forEach(key => {
                             if (key.startsWith('focusmicro')) {
                                 localStorage.setItem(key, data[key]);
@@ -1100,7 +1914,7 @@
                         renderProgressSection();
                     }
                 } catch(err) {
-                    alert('Erro ao ler o ficheiro JSON. Certifique-se de que é um backup válido do FocusMicro.');
+                    alert('Erro ao ler o ficheiro JSON.');
                 }
             };
             reader.readAsText(file);
